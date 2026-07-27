@@ -102,8 +102,9 @@ verified, and no device test has been performed.
   `be978cb2da2426bde9c08c2ecf5df91fe5203f2c`
 - Active device-verification preparation branch:
   `feature/prepare-image-reader-device-verification-v1`
-- Active device-verification preparation pull request: draft to be opened into
-  `main`
+- Active device-verification preparation pull request:
+  [#7 — Prepare AutoJs6 Image Reader Device Verification V1.0](https://github.com/cyh86086/contributor-ai/pull/7)
+- Device-verification preparation pull request state: open draft; not merged
 - Release status: no production release
 
 ## Historical target module status
