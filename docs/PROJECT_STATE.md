@@ -67,7 +67,9 @@ historical target modules have not yet been migrated.
 - Source branch: `feature/bootstrap-project` deleted after merge
 - Active specification branch:
   `feature/spec-android-image-input-adapter-v1`
-- Active specification pull request: draft to be opened into `main`
+- Active specification pull request:
+  [#2 — Specify Android Image Input Adapter V1.0](https://github.com/cyh86086/contributor-ai/pull/2)
+- Active specification pull request state: open draft; not merged
 - Release status: no production release
 
 ## Historical target module status
