@@ -86,7 +86,9 @@ boundary; no production reader or other Android/AutoJs6 source is included.
   `939f87c2f522fe9e0f7faae180c76feb1e3d6827`
 - Active classified-error branch:
   `feature/classified-image-reader-errors-v1`
-- Active classified-error pull request: draft to be opened into `main`
+- Active classified-error pull request:
+  [#5 — Support Classified Image Reader Errors V1.0](https://github.com/cyh86086/contributor-ai/pull/5)
+- Active classified-error pull request state: open draft; not merged
 - Release status: no production release
 
 ## Historical target module status
