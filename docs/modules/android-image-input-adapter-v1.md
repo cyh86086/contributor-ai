@@ -5,9 +5,11 @@
 - Historical target module: Android Image Input Adapter V1.0
 - Migration status: **NOT YET MIGRATED**
 - Specification status: authoritative; specification PR #2 merged
-- Portable core status: active implementation milestone; see
+- Portable core status: merged in PR #3; see
   [`android-image-input-core-v1.md`](android-image-input-core-v1.md)
-- Production Android/AutoJs6 implementation: not included
+- Production reader status: specification milestone; no implementation
+- Production reader specification:
+  [`autojs6-android-image-reader-v1.md`](autojs6-android-image-reader-v1.md)
 - Production runtime: Android and AutoJs6
 
 This document defines the contract and verification requirements for a future
