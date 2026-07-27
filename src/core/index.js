@@ -1,8 +1,10 @@
 export { validateAndroidImageUri } from "./image-reference.js";
 export {
+  ClassifiedImageReaderError,
   detectImageMimeType,
   encodeBytesToBase64,
   IMAGE_INPUT_ERROR_CODES,
+  IMAGE_READER_ERROR_CLASSIFICATIONS,
   ImageInputError,
   normalizeMimeType,
   prepareImageInput,

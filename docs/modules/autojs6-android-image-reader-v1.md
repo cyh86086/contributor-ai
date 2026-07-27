@@ -2,7 +2,7 @@
 
 ## Status
 
-- Specification status: proposed
+- Specification status: authoritative; specification PR #4 merged
 - Implementation status: not implemented
 - Production runtime: Android with AutoJs6
 - Current known runtime target: AutoJs6 v6.7.0, `arm64-v8a`
@@ -155,15 +155,20 @@ can map to its stable errors:
 
 An access revocation or `SecurityException` may occur after `canAccess`
 succeeds but before or during `read`. The required result remains
-`URI_ACCESS_DENIED`. The current portable core converts every exception from
-`reader.read()` to `IMAGE_READ_FAILED`, so classified reader-error propagation
-is an explicit integration decision that must be resolved in a reviewed
-portable-core change before production implementation. This specification does
-not change source code.
+`URI_ACCESS_DENIED`. Before crossing the portable boundary, the future
+production reader must translate that Android or Java failure into
+`ClassifiedImageReaderError` with classification `URI_ACCESS_DENIED`.
+
+Other expected read failures must use the only other allowed classification,
+`IMAGE_READ_FAILED`. Unknown reader exceptions, malformed classifications, and
+unsupported classifications become `IMAGE_READ_FAILED`. The reader must not
+use the classified boundary to inject MIME, size, empty-image, or encoding
+decisions owned by the portable core.
 
 The reader must never emit image bytes, Base64, credentials, URI query values,
 filenames, canonical paths, or sensitive filesystem paths in error messages,
-logs, telemetry, or wrapped causes.
+logs, telemetry, or wrapped causes. The public portable error does not retain
+the original Android or Java exception as a cause.
 
 ## 8. Resource lifecycle
 

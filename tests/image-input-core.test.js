@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  ClassifiedImageReaderError,
   IMAGE_INPUT_ERROR_CODES,
+  IMAGE_READER_ERROR_CLASSIFICATIONS,
   ImageInputError,
   normalizeMimeType,
   prepareImageInput,
@@ -26,6 +28,21 @@ const WEBP_BYTES = bytes(
   0x42,
   0x50,
 );
+
+test("public errors and reader classifications remain narrowly scoped", () => {
+  assert.deepEqual(Object.keys(IMAGE_INPUT_ERROR_CODES), [
+    "UNSUPPORTED_MIME_TYPE",
+    "EMPTY_IMAGE",
+    "IMAGE_TOO_LARGE",
+    "IMAGE_READ_FAILED",
+    "ENCODING_FAILED",
+    "URI_ACCESS_DENIED",
+  ]);
+  assert.deepEqual(Object.keys(IMAGE_READER_ERROR_CLASSIFICATIONS), [
+    "URI_ACCESS_DENIED",
+    "IMAGE_READ_FAILED",
+  ]);
+});
 
 test("prepares valid JPEG input", async () => {
   const result = await prepare(JPEG_BYTES, "image/jpeg");
@@ -204,6 +221,110 @@ test("maps a reader read failure to IMAGE_READ_FAILED", async () => {
   );
 });
 
+test("maps a classified reader URI access error to URI_ACCESS_DENIED", async () => {
+  await rejectsWithCode(
+    () =>
+      prepare(JPEG_BYTES, "image/jpeg", {
+        reader: throwingReader(
+          new ClassifiedImageReaderError(
+            IMAGE_READER_ERROR_CLASSIFICATIONS.URI_ACCESS_DENIED,
+          ),
+        ),
+      }),
+    IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED,
+  );
+});
+
+test("maps a classified image read error to IMAGE_READ_FAILED", async () => {
+  await rejectsWithCode(
+    () =>
+      prepare(JPEG_BYTES, "image/jpeg", {
+        reader: throwingReader(
+          new ClassifiedImageReaderError(
+            IMAGE_READER_ERROR_CLASSIFICATIONS.IMAGE_READ_FAILED,
+          ),
+        ),
+      }),
+    IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+  );
+});
+
+test("maps a malformed reader classification to IMAGE_READ_FAILED", async () => {
+  await rejectsWithCode(
+    () =>
+      prepare(JPEG_BYTES, "image/jpeg", {
+        reader: throwingReader({
+          classification: IMAGE_READER_ERROR_CLASSIFICATIONS.URI_ACCESS_DENIED,
+        }),
+      }),
+    IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+  );
+});
+
+test("rejects unsupported reader classifications as IMAGE_READ_FAILED", async () => {
+  const error = new ClassifiedImageReaderError(
+    IMAGE_INPUT_ERROR_CODES.EMPTY_IMAGE,
+  );
+  assert.equal(error.classification, null);
+
+  await rejectsWithCode(
+    () =>
+      prepare(JPEG_BYTES, "image/jpeg", {
+        reader: throwingReader(error),
+      }),
+    IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+  );
+});
+
+test("classified reader messages cannot leak into the public error", async () => {
+  const sensitiveValue = "classified-message-secret";
+  const error = new ClassifiedImageReaderError(
+    IMAGE_READER_ERROR_CLASSIFICATIONS.URI_ACCESS_DENIED,
+  );
+  error.message = sensitiveValue;
+
+  await assertSanitizedReaderFailure(error, sensitiveValue);
+});
+
+test("classified reader stacks cannot leak into the public error", async () => {
+  const sensitiveValue = "classified-stack-secret";
+  const error = new ClassifiedImageReaderError(
+    IMAGE_READER_ERROR_CLASSIFICATIONS.URI_ACCESS_DENIED,
+  );
+  error.stack = sensitiveValue;
+
+  await assertSanitizedReaderFailure(error, sensitiveValue);
+});
+
+test("sensitive URI, path, and token text cannot leak from classified errors", async () => {
+  const sensitiveValue =
+    "content://media/item?token=private-token /private/photo.jpg";
+  const error = new ClassifiedImageReaderError(
+    IMAGE_READER_ERROR_CLASSIFICATIONS.URI_ACCESS_DENIED,
+  );
+  error.message = sensitiveValue;
+  error.stack = sensitiveValue;
+
+  await assertSanitizedReaderFailure(error, sensitiveValue);
+});
+
+test("canAccess false still maps to URI_ACCESS_DENIED", async () => {
+  await rejectsWithCode(
+    () =>
+      prepare(JPEG_BYTES, "image/jpeg", {
+        reader: {
+          async canAccess() {
+            return false;
+          },
+          async read() {
+            return { bytes: JPEG_BYTES, mimeType: "image/jpeg" };
+          },
+        },
+      }),
+    IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED,
+  );
+});
+
 test("maps an encoder failure to ENCODING_FAILED", async () => {
   await rejectsWithCode(
     () =>
@@ -281,6 +402,17 @@ function readerFor(sourceBytes, mimeType) {
   };
 }
 
+function throwingReader(error) {
+  return {
+    async canAccess() {
+      return true;
+    },
+    async read() {
+      throw error;
+    },
+  };
+}
+
 function bytes(...values) {
   return new Uint8Array(values);
 }
@@ -313,4 +445,22 @@ async function rejectsWithCode(action, expectedCode) {
     assert.equal(error.code, expectedCode);
     return true;
   });
+}
+
+async function assertSanitizedReaderFailure(readerError, sensitiveValue) {
+  await assert.rejects(
+    () =>
+      prepare(JPEG_BYTES, "image/jpeg", {
+        reader: throwingReader(readerError),
+      }),
+    (error) => {
+      assert.ok(error instanceof ImageInputError);
+      assert.equal(error.code, IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED);
+      assert.equal(error.message, "The image URI is not accessible.");
+      assert.equal(error.message.includes(sensitiveValue), false);
+      assert.equal((error.stack ?? "").includes(sensitiveValue), false);
+      assert.equal("cause" in error, false);
+      return true;
+    },
+  );
 }

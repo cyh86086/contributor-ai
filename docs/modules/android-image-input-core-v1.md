@@ -48,6 +48,33 @@ success or failure.
 
 No Android production reader or AutoJs6 adapter is included in this work.
 
+## Classified reader error boundary
+
+The portable core exports `ClassifiedImageReaderError` and
+`IMAGE_READER_ERROR_CLASSIFICATIONS` for an injected reader to classify a
+failure before it crosses the runtime boundary. The only allowed
+classifications are:
+
+- `URI_ACCESS_DENIED`;
+- `IMAGE_READ_FAILED`.
+
+An explicitly classified `URI_ACCESS_DENIED` thrown by `reader.read()` becomes
+the existing public `ImageInputError` with code `URI_ACCESS_DENIED`. An
+explicitly classified `IMAGE_READ_FAILED`, an unknown exception, a malformed
+tagged value, or an unsupported classification becomes `IMAGE_READ_FAILED`.
+
+The reader cannot use this contract to inject `EMPTY_IMAGE`,
+`IMAGE_TOO_LARGE`, `UNSUPPORTED_MIME_TYPE`, or `ENCODING_FAILED`; those
+decisions remain exclusively owned by the portable core.
+
+The public error is newly constructed from the existing fixed code and
+message. The reader exception is not attached as a cause, and its message,
+stack, URI values, paths, filenames, bytes, Base64, credentials, and runtime
+details are not copied.
+
+Future Android and Java exceptions must be translated by the production reader
+to one of the two allowed classifications before crossing this boundary.
+
 ## Offline verification
 
 `tests/image-input-core.test.js` runs under Node.js as a deterministic offline
