@@ -3,7 +3,12 @@ import globals from "globals";
 
 export default [
   {
-    ignores: ["coverage/", "dist/", "node_modules/"],
+    ignores: [
+      "coverage/",
+      "dist/",
+      "node_modules/",
+      "scripts/autojs6/d01-jpeg-device-check.js",
+    ],
   },
   eslint.configs.recommended,
   {
