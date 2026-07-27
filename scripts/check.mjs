@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 
 const checks = [
+  ["AutoJs6 D01 bundle", ["run", "build:autojs6:d01:check"]],
   ["lint", ["run", "lint"]],
   ["format", ["run", "format:check"]],
   ["test", ["test"]],
