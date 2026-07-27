@@ -110,9 +110,9 @@ compatibility is not yet verified, and no device test has been performed.
   `fbf12737be6f661f52969325489a1c19bce86163`
 - Active D01 launcher branch:
   `feature/autojs6-d01-one-click-launcher-v1`
-- Active D01 launcher pull request: pending creation
-- D01 launcher state: repository implementation and offline verification in
-  progress; no real-device result
+- Active D01 launcher pull request:
+  [#8 — Prepare AutoJs6 D01 One-Click JPEG Device Check V1.0](https://github.com/cyh86086/contributor-ai/pull/8)
+- D01 launcher pull request state: open draft; no real-device result
 - Release status: no production release
 
 ## Historical target module status
