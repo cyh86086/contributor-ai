@@ -1,0 +1,25 @@
+{
+  "name": "contributor-ai",
+  "version": "0.1.0",
+  "description": "Provider-agnostic automation for repository contribution workflows.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "start": "node src/launcher/index.js",
+    "test": "node --test",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "node scripts/check.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.0",
+    "globals": "^17.8.0",
+    "prettier": "^3.6.2"
+  }
+}
