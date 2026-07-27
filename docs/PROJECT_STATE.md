@@ -94,7 +94,9 @@ dependencies and offline tests. Device compatibility is not yet verified.
   `a462f8fe6533f10c23d8445d31d57b4f38d3f90b`
 - Active production-reader branch:
   `feature/implement-autojs6-image-reader-v1`
-- Active production-reader pull request: draft to be opened into `main`
+- Active production-reader pull request:
+  [#6 — Implement AutoJs6 Android Image Reader V1.0](https://github.com/cyh86086/contributor-ai/pull/6)
+- Production-reader pull request state: open draft; not merged
 - Release status: no production release
 
 ## Historical target module status
@@ -145,8 +147,8 @@ These blockers do not prevent offline core validation or documentation work.
 
 ## Next planned actions
 
-1. Implement and review AutoJs6 Android Image Reader V1.0 source, offline
-   adapter tests, and portable-core integration tests.
+1. Review draft PR #6 for the AutoJs6 Android Image Reader V1.0 source,
+   offline adapter tests, and portable-core integration tests.
 2. Keep the complete Android Image Input Adapter V1.0 historical module
    `NOT YET MIGRATED`.
 3. Do not add network, provider, queue, Contributor app, submission, or
