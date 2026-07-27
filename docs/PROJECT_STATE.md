@@ -78,7 +78,9 @@ no production reader or other Android/AutoJs6 source is included.
   `234a7ff02d0451ba014a2219147a41366357a3a6`
 - Active reader-specification branch:
   `feature/spec-autojs6-image-reader-v1`
-- Active reader-specification pull request: draft to be opened into `main`
+- Active reader-specification pull request:
+  [#4 — Specify AutoJs6 Android Image Reader V1.0](https://github.com/cyh86086/contributor-ai/pull/4)
+- Active reader-specification pull request state: open draft; not merged
 - Release status: no production release
 
 ## Historical target module status
