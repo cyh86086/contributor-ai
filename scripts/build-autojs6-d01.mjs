@@ -6,7 +6,10 @@ import assert from "node:assert/strict";
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
+import Babel from "@babel/standalone";
 import { build } from "esbuild";
+
+import { assertAutoJs6D01SyntaxCompatible } from "./autojs6-d01-syntax-compatibility.mjs";
 
 const entry = fileURLToPath(
   new URL("./autojs6/source/d01-jpeg-device-check.entry.js", import.meta.url),
@@ -26,12 +29,31 @@ const result = await build({
   charset: "ascii",
   legalComments: "none",
   sourcemap: false,
-  banner: {
-    js: '"ui";\n/* GENERATED: non-production AutoJs6 D01 device-verification support only. */',
-  },
 });
 
-const generated = result.outputFiles[0].text;
+const transpiled = Babel.transform(result.outputFiles[0].text, {
+  presets: [
+    [
+      "env",
+      {
+        modules: false,
+        targets: { ie: "11" },
+        useBuiltIns: false,
+      },
+    ],
+  ],
+  ast: false,
+  comments: false,
+  compact: false,
+  sourceMaps: false,
+  sourceType: "script",
+}).code;
+const generated = `"ui";
+/* GENERATED: non-production AutoJs6 D01 device-verification support only. */
+${transpiled}
+`;
+
+assertAutoJs6D01SyntaxCompatible(generated);
 
 if (checkOnly) {
   const committed = await readFile(output, "utf8");

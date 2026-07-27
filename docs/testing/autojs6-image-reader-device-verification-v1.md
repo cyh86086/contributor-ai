@@ -7,21 +7,37 @@ This is the executable verification plan for:
 - **Device:** Vivo X Fold5
 - **Runtime:** AutoJs6 v6.7.0, `arm64-v8a`
 - **Module:** AutoJs6 Android Image Reader V1.0
-- **Verification-package baseline:** repository `main` commit
-  `fbf12737be6f661f52969325489a1c19bce86163`
+- **Tested D01 baseline:** repository `main` commit
+  `0324d640e390da7c2c905fb9d2d8e134ee1e7149`
 
-No device test has been performed or passed as part of this package. The
-Android Image Input Adapter V1.0 remains **NOT YET MIGRATED**. This plan does
-not test or authorize provider, network, queue, Contributor app, or submission
-behavior.
+The first device execution stopped at bundle parsing and did not reach the
+Android picker. It is not a D01 PASS. The Android Image Input Adapter V1.0
+remains **NOT YET MIGRATED**. This plan does not test or authorize provider,
+network, queue, Contributor app, or submission behavior.
 
-The D01 one-click launcher is being prepared on
-`feature/autojs6-d01-one-click-launcher-v1`. Its generated, verification-only
-entry is `scripts/autojs6/d01-jpeg-device-check.js`, with a Traditional Chinese
-guide at
+The D01 one-click launcher was merged in PR #8. Its generated,
+verification-only entry is `scripts/autojs6/d01-jpeg-device-check.js`, with a
+Traditional Chinese guide at
 [`../user-guides/autojs6-d01-jpeg-check-zh-tw.md`](../user-guides/autojs6-d01-jpeg-check-zh-tw.md).
-The launcher is ready for repository review only. It has not been run on the
-target device, and AutoJs6 compatibility remains unverified.
+The confirmed parse failure is being corrected on
+`fix/autojs6-d01-reserved-class-keyword-v1`. Real-device retesting is required,
+and AutoJs6 compatibility remains unverified.
+
+### Recorded D01 device evidence
+
+- **Device:** Vivo X Fold5
+- **Runtime:** AutoJs6 v6.7.0, `arm64-v8a`
+- **Tested main SHA:** `0324d640e390da7c2c905fb9d2d8e134ee1e7149`
+- **Result:** FAIL at parse stage
+- **Project-level classification:** runtime compatibility blocker
+- **Observed message:** reserved keyword `class`
+- **Observed generated location:** `d01-jpeg-device-check.js`, line 59
+- **Picker state:** Android picker did not open
+- **Image state:** no image was selected or read
+- **Privacy observation:** the script did not output Base64, a complete URI,
+  a local path, a filename, image content, a stack trace, or credentials
+- **D01 status:** no PASS
+- **Adapter status:** **NOT YET MIGRATED**
 
 ## 1. Preconditions
 
@@ -107,6 +123,21 @@ sources because AutoJs6 v6.7.0 does not provide a verified native ESM loading
 path for this project. The committed generated file must match
 `npm run build:autojs6:d01:check`; it is test support, not a second production
 implementation.
+
+The generated entry must also pass `npm run scan:autojs6:d01`. That AST-based
+offline scan rejects `class`, arrow functions, `const`/`let`, optional
+chaining, nullish coalescing, async/await, generators, template literals,
+spread/rest, private fields, static blocks, shorthand or computed object
+properties, non-simple catch bindings, Unicode-mode regular expressions, and
+module syntax. Passing this offline scan corrects the observed parse syntax
+but does not replace the required AutoJs6 device retest.
+
+The deterministic build uses one build-only `@babel/standalone` pass after
+esbuild. This extra transpilation is necessary because esbuild cannot lower
+the complete bundle to the legacy Rhino syntax boundary by itself; it rejects
+required transformations such as `const` for that target. Babel is not
+included as an AutoJs6 runtime dependency, and no second implementation is
+maintained.
 
 Before the first D01 image read:
 

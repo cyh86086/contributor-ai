@@ -11,6 +11,11 @@
 送出任何內容。尚未在實機上完成驗證；Android Image Input Adapter V1.0
 仍是 **NOT YET MIGRATED**。
 
+第一次 Vivo X Fold5／AutoJs6 v6.7.0 測試在解析舊版 generated bundle 時，
+因保留關鍵字 `class` 停止；選圖器沒有開啟，也沒有選取或讀取圖片。這不是
+D01 PASS。請只在相容性修正完成審查並合併後，使用新的 authoritative main
+版本重新測試。
+
 ## 執行前準備
 
 1. 使用 **Vivo X Fold5** 與 **AutoJs6 v6.7.0 `arm64-v8a`**。

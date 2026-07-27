@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 
@@ -7,10 +7,18 @@ import {
   D01_TEST_CASE_ID,
   runD01OneClick,
 } from "../scripts/autojs6/d01-launcher-core.js";
+import {
+  assertAutoJs6D01SyntaxCompatible,
+  findAutoJs6D01SyntaxIncompatibilities,
+} from "../scripts/autojs6-d01-syntax-compatibility.mjs";
 import { IMAGE_INPUT_ERROR_CODES } from "../src/core/index.js";
 
 const PRIVATE_URI =
   "content://private.provider/image/41?account=private&name=secret.jpg";
+const D01_BUNDLE_URL = new URL(
+  "../scripts/autojs6/d01-jpeg-device-check.js",
+  import.meta.url,
+);
 
 test("valid picker result produces the exact D01 JPEG PASS record", async () => {
   const { record, reports } = await runWith();
@@ -178,15 +186,46 @@ test("metadata reporter receives exactly one frozen record", async () => {
 });
 
 test("D01 bundle is parseable, self-contained, and marked non-production", async () => {
-  const bundle = await readFile(
-    new URL("../scripts/autojs6/d01-jpeg-device-check.js", import.meta.url),
-    "utf8",
-  );
+  const bundle = await readFile(D01_BUNDLE_URL, "utf8");
 
   assert.doesNotThrow(() => new vm.Script(bundle));
   assert.match(bundle, /^"ui";/u);
   assert.match(bundle, /GENERATED: non-production AutoJs6 D01/u);
   assert.doesNotMatch(bundle, /^\s*(?:import|export)\s/mu);
+});
+
+test("regression: generated errors do not use the reserved class expression", async () => {
+  const bundle = await readFile(D01_BUNDLE_URL, "utf8");
+
+  assert.doesNotMatch(bundle, /var ImageInputError\s*=\s*class\b/u);
+  assert.doesNotMatch(bundle, /var ClassifiedImageReaderError\s*=\s*class\b/u);
+  assert.match(bundle, /var ImageInputError\s*=\s*function\b/u);
+  assert.match(bundle, /var ClassifiedImageReaderError\s*=\s*function\b/u);
+});
+
+test("D01 bundle contains no known AutoJs6 legacy-incompatible syntax", async () => {
+  const bundle = await readFile(D01_BUNDLE_URL, "utf8");
+
+  assert.deepEqual(findAutoJs6D01SyntaxIncompatibilities(bundle), []);
+  assert.doesNotThrow(() => assertAutoJs6D01SyntaxCompatible(bundle));
+});
+
+test("compatibility scan detects the observed reserved class regression", () => {
+  const incompatible =
+    "var ImageInputError = class extends Error { constructor() {} };";
+
+  assert.deepEqual(findAutoJs6D01SyntaxIncompatibilities(incompatible), [
+    {
+      label: "class declaration or expression",
+      line: 1,
+    },
+  ]);
+});
+
+test("D01 deterministic build emits no source map", async () => {
+  await assert.rejects(access(new URL(`${D01_BUNDLE_URL.href}.map`)));
+  const bundle = await readFile(D01_BUNDLE_URL, "utf8");
+  assert.doesNotMatch(bundle, /sourceMappingURL/u);
 });
 
 test("D01 runtime source contains no prohibited integration behavior", async () => {
