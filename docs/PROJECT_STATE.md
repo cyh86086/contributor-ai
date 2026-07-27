@@ -50,7 +50,7 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: project bootstrap and authority baseline.**
+**Phase: project bootstrap and authority baseline complete.**
 
 The repository contains product scope and architecture documentation,
 runtime-neutral validation for the current metadata contract, and a Node.js
@@ -59,10 +59,11 @@ have not yet been migrated.
 
 ## Current branch and pull request
 
-- Branch: `feature/bootstrap-project`
+- Authoritative branch: `main`
 - Pull request: [#1 — Bootstrap Contributor AI AutoJs6 project](https://github.com/cyh86086/contributor-ai/pull/1)
 - Target branch: `main`
-- Pull request state at this update: open draft; not merged
+- Pull request state for this baseline: squash-merged
+- Source branch: `feature/bootstrap-project` deleted after merge
 - Release status: no production release
 
 ## Historical target module status
@@ -110,8 +111,8 @@ These blockers do not prevent offline core validation or documentation work.
 
 ## Next planned actions
 
-1. Review and merge the bootstrap PR only after repository review is complete.
-2. Select the first historical target module for migration.
+1. Wait for user direction before beginning another implementation task.
+2. Select the first historical target module for migration when directed.
 3. Commit its authoritative source or specification before implementation.
 4. Define its runtime designation and integration boundary.
 5. Implement and test it in a focused branch and pull request.
