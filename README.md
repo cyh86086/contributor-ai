@@ -9,6 +9,10 @@ Contributor AI does **not** submit content automatically. The user remains
 responsible for reviewing the generated description and keywords and manually
 confirming submission in the Contributor app.
 
+`cyh86086/contributor-ai` is the single source of truth. Chat history,
+generated ZIPs, and local examples are non-authoritative unless committed to
+this repository.
+
 ## Intended workflow
 
 1. The user selects multiple photos from the Android gallery.
@@ -32,6 +36,7 @@ In particular, this bootstrap does not recreate:
 - AI Engine V1.0
 - Queue-AI Orchestrator V1.0
 - Contributor Engine V1.0
+- Mock UI Adapter
 - Vision Provider Interface V1.0
 - AutoJs6 HTTP Adapter
 - Android Image Input Adapter V1.0
@@ -58,6 +63,8 @@ Contributor app.
 
 See:
 
+- [Current authoritative project state](docs/PROJECT_STATE.md)
+- [Binding architectural decisions](docs/DECISIONS.md)
 - [Product scope](docs/product-scope.md)
 - [Architecture](docs/architecture.md)
 - [Runtime matrix](docs/runtime-matrix.md)
@@ -90,4 +97,6 @@ selected and authorized by the user.
 Keep runtime-neutral rules independent of Node.js and AutoJs6 APIs. Place
 Node-specific development utilities in `src/offline_harness/`. Do not add or
 infer historical module implementations without an authoritative
-specification.
+specification. Every development task must first read
+[`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md) and
+[`docs/DECISIONS.md`](docs/DECISIONS.md).

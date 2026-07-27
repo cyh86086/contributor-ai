@@ -5,6 +5,10 @@ constraints. Keeping their boundaries explicit prevents the Node.js
 development tooling from being mistaken for the Android production
 application.
 
+The binding project state and architecture decisions are recorded in
+[`PROJECT_STATE.md`](PROJECT_STATE.md) and
+[`DECISIONS.md`](DECISIONS.md).
+
 ## Runtime-neutral core modules
 
 `src/core/` contains small JavaScript rules that do not depend on Node.js,
@@ -47,6 +51,29 @@ without:
 
 Node.js is not the production runtime.
 
+## Remote AI Vision providers
+
+OpenAI or Gemini may provide remote image analysis in the production flow.
+They are external services, not local runtime modules. Future calls must pass
+through an approved production interface or AutoJs6 adapter, use credentials
+supplied outside Git, and return the JSON contract defined in
+[`product-scope.md`](product-scope.md).
+
+No remote provider integration exists in this bootstrap.
+
+## Contributor Android app
+
+The Contributor app is an external Android application controlled through a
+future approved AutoJs6 UI boundary. Contributor AI may open the app and fill
+the Description and Keywords fields. It must stop for user review; the user
+manually confirms final submission.
+
+## GitHub and Codex development environment
+
+GitHub stores the authoritative code and release history. Codex performs
+repository implementation, tests, commits, branches, and pull request work.
+Neither GitHub nor Codex is part of the production Android data flow.
+
 ## Intended production data flow
 
 ```text
@@ -71,6 +98,7 @@ generic folders or placeholder classes:
 - AI Engine V1.0
 - Queue-AI Orchestrator V1.0
 - Contributor Engine V1.0
+- Mock UI Adapter
 - Vision Provider Interface V1.0
 - AutoJs6 HTTP Adapter
 - Android Image Input Adapter V1.0

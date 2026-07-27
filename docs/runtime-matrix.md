@@ -1,20 +1,22 @@
 # Runtime matrix
 
-| Capability                             | Runtime-neutral core | AutoJs6 Android runtime       | Node.js offline harness |
-| -------------------------------------- | -------------------- | ----------------------------- | ----------------------- |
-| Validate `content://` URI shape        | Yes                  | Uses core rule                | Uses sample URIs        |
-| Validate description constraints       | Yes                  | Uses core rule                | Uses sample metadata    |
-| Enforce exactly seven English keywords | Yes                  | Uses core rule                | Uses sample metadata    |
-| Read Android gallery content           | No                   | Intended, not implemented     | No                      |
-| Send images to an AI Vision provider   | No                   | Intended, not implemented     | No                      |
-| Open the Contributor Android app       | No                   | Intended, not implemented     | No                      |
-| Fill Description and Keywords fields   | No                   | Intended, not implemented     | No                      |
-| Confirm final submission               | No                   | User only                     | No                      |
-| Require API keys                       | No                   | Provider-dependent at runtime | No                      |
+| Environment or component               | Responsibilities                                                                                                                     | Allowed dependencies                                                                                                                    | Test method                                                                                     | User intervention required                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Android / AutoJs6 production runtime   | Coordinate gallery selection, read `content://` images, call production adapters, open the Contributor app, and fill metadata fields | AutoJs6 APIs, approved Android APIs, runtime-neutral core, approved production adapters                                                 | Authorized Android device or emulator integration tests plus manual workflow verification       | Yes: permissions, photo selection, provider authorization, review, and final confirmation          |
+| Runtime-neutral core                   | Validate portable input and output rules, including URI shape and AI metadata constraints                                            | JavaScript language features and other runtime-neutral modules only; no Node.js, AutoJs6, Android, provider SDK, or app UI dependencies | Shared deterministic unit tests, including the Node.js offline suite                            | No during automated validation; user approval is required for contract changes                     |
+| Node.js offline harness                | Run unit tests, deterministic examples, linting, formatting, secret scans, and CI checks                                             | Runtime-neutral core and development-only Node.js tooling; no production Android responsibilities                                       | `npm run check`, `npm start`, and the repository secret-pattern scan                            | No for automated checks; it cannot replace Android acceptance testing                              |
+| OpenAI or Gemini remote provider       | Analyze authorized images and return the required description and exactly seven English keywords                                     | Provider HTTPS API through an approved production interface or adapter; runtime credentials supplied outside Git                        | Contract tests with mocks plus authorized provider integration tests that do not expose secrets | Yes: provider selection, consent, credentials, account access, and any usage cost                  |
+| Contributor Android app                | Present Description and Keywords fields, show populated metadata, and provide the final submission control                           | Its own Android application runtime; interacted with only through approved AutoJs6 UI automation                                        | Authorized-device UI integration tests and manual acceptance testing                            | Yes: review and manual confirmation of every final submission                                      |
+| GitHub / Codex development environment | Store authoritative code and release history; implement, test, commit, branch, and maintain pull requests                            | Repository files, Git/GitHub tooling, Node.js development harness; no production secrets                                                | Repository checks, secret scan, Git diff review, commit history, and pull request review        | Yes for product decisions, historical source approval, PR review, merge, and release authorization |
 
-## Interpretation
+## Boundary rules
 
-The core is portable validation logic, not an application runtime. The AutoJs6
-column describes the intended production environment but remains unimplemented
-in this bootstrap. The Node.js harness is development tooling and must not be
-packaged or described as the Android product.
+- Android and AutoJs6 are the production runtime.
+- Runtime-neutral core code is portable business logic, not a runtime.
+- Node.js is an offline development and CI harness only.
+- Remote provider calls require user authorization and credentials supplied
+  outside the repository.
+- The Contributor app owns final submission; Contributor AI stops for user
+  review and manual confirmation.
+- GitHub records authoritative project and release history; Codex performs
+  repository implementation and version-control actions.
