@@ -12,6 +12,7 @@
     "start": "node src/offline_harness/index.js",
     "build:autojs6:d01": "node scripts/build-autojs6-d01.mjs",
     "build:autojs6:d01:check": "node scripts/build-autojs6-d01.mjs --check",
+    "scan:autojs6:d01": "node scripts/check-autojs6-d01-syntax.mjs",
     "test": "node --test",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -19,6 +20,7 @@
     "check": "node scripts/check.mjs"
   },
   "devDependencies": {
+    "@babel/standalone": "^8.0.4",
     "@eslint/js": "^10.0.1",
     "esbuild": "^0.28.1",
     "eslint": "^10.8.0",
