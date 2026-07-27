@@ -41,12 +41,13 @@ The portable core owns validation, MIME normalization and signature fallback,
 size enforcement, sanitized stable errors, and Base64 output. It does not open
 streams or acquire platform resources.
 
-A future production reader must own Android permission checks,
+A production reader owns Android permission checks,
 `ContentResolver` access, approved `file://` access, complete byte reads, and
 cleanup of streams, descriptors, cursors, buffers, and URI references after
 success or failure.
 
-No Android production reader or AutoJs6 adapter is included in this work.
+The portable-core PR did not include Android production source. The separately
+reviewed production reader is isolated under `src/autojs6/`.
 
 ## Classified reader error boundary
 
@@ -91,7 +92,8 @@ cleanup.
 
 ## Deferred production verification
 
-Android device or emulator verification remains deferred and requires future
-user action. It must follow the integration-test requirements in
-[`android-image-input-adapter-v1.md`](android-image-input-adapter-v1.md) after
-the Android/AutoJs6 runtime adapter exists.
+Android device verification remains deferred and requires user action. It
+must follow the integration-test requirements in
+[`android-image-input-adapter-v1.md`](android-image-input-adapter-v1.md) and
+the
+[`device-verification plan`](../testing/autojs6-image-reader-device-verification-v1.md).

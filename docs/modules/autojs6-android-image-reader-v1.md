@@ -3,7 +3,7 @@
 ## Status
 
 - Specification status: authoritative; specification PR #4 merged
-- Implementation status: active source milestone; device verification pending
+- Implementation status: merged in PR #6; device verification pending
 - Production source: `src/autojs6/android-image-reader.js`
 - Production runtime: Android with AutoJs6
 - Current known runtime target: AutoJs6 v6.7.0, `arm64-v8a`
@@ -310,6 +310,10 @@ The offline adapter suite lives in
 control flow only; it does not establish AutoJs6 or Android device
 compatibility.
 
+The executable verification plan and non-production harness template are
+documented in
+[`../testing/autojs6-image-reader-device-verification-v1.md`](../testing/autojs6-image-reader-device-verification-v1.md).
+
 ## 13. Required later device tests
 
 User-assisted verification must later run on the **Vivo X Fold5 with
@@ -346,6 +350,5 @@ until all of the following are true:
 7. Android and AutoJs6 device verification is completed with user
    participation.
 
-At this specification milestone, only the first criterion is satisfied. This
-document does not count as production reader source, offline adapter tests, a
-merged implementation pull request, or device verification.
+Criteria 1 through 6 are satisfied after PR #6. Criterion 7 remains
+outstanding, so Android Image Input Adapter V1.0 remains **NOT YET MIGRATED**.

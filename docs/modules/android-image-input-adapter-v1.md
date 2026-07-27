@@ -7,12 +7,14 @@
 - Specification status: authoritative; specification PR #2 merged
 - Portable core status: merged in PR #3; see
   [`android-image-input-core-v1.md`](android-image-input-core-v1.md)
-- Production reader status: implementation milestone; offline checks pass,
-  device verification pending
+- Production reader status: merged in PR #6; offline checks pass, device
+  verification pending
 - Production reader specification:
   [`autojs6-android-image-reader-v1.md`](autojs6-android-image-reader-v1.md)
 - Production reader source: `src/autojs6/android-image-reader.js`; offline
   verification only, device verification pending
+- Device-verification plan:
+  [`../testing/autojs6-image-reader-device-verification-v1.md`](../testing/autojs6-image-reader-device-verification-v1.md)
 - Production runtime: Android and AutoJs6
 
 This document defines the contract and verification requirements for the
