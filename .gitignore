@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build and test output
+coverage/
+dist/
+build/
+.cache/
+*.log
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Package manager state
+.npm/
+.pnpm-store/
+
+# Temporary files
+tmp/
+temp/
