@@ -119,9 +119,10 @@ unverified.
   `0324d640e390da7c2c905fb9d2d8e134ee1e7149`
 - Active D01 compatibility-fix branch:
   `fix/autojs6-d01-reserved-class-keyword-v1`
-- Active D01 compatibility-fix pull request: pending creation
-- D01 compatibility-fix state: local implementation and verification in
-  progress; real-device retest required
+- Active D01 compatibility-fix pull request:
+  [#9 — Fix AutoJs6 D01 Reserved Class Keyword Compatibility V1.0](https://github.com/cyh86086/contributor-ai/pull/9)
+- D01 compatibility-fix pull request state: open draft; real-device retest
+  required
 - Release status: no production release
 
 ## Historical target module status
