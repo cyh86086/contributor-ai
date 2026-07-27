@@ -50,12 +50,13 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: project bootstrap and authority baseline complete.**
+**Phase: historical module migration specification.**
 
 The repository contains product scope and architecture documentation,
 runtime-neutral validation for the current metadata contract, and a Node.js
-offline harness. Production AutoJs6 behavior and historical target modules
-have not yet been migrated.
+offline harness. The current work specifies Android Image Input Adapter V1.0;
+no production implementation is included. Production AutoJs6 behavior and
+historical target modules have not yet been migrated.
 
 ## Current branch and pull request
 
@@ -64,23 +65,26 @@ have not yet been migrated.
 - Target branch: `main`
 - Pull request state for this baseline: squash-merged
 - Source branch: `feature/bootstrap-project` deleted after merge
+- Active specification branch:
+  `feature/spec-android-image-input-adapter-v1`
+- Active specification pull request: draft to be opened into `main`
 - Release status: no production release
 
 ## Historical target module status
 
 All historical target modules are **NOT YET MIGRATED**:
 
-| Historical target module         | Status           |
-| -------------------------------- | ---------------- |
-| Launcher V1.3                    | NOT YET MIGRATED |
-| Queue Engine V1.0                | NOT YET MIGRATED |
-| AI Engine V1.0                   | NOT YET MIGRATED |
-| Queue-AI Orchestrator V1.0       | NOT YET MIGRATED |
-| Contributor Engine V1.0          | NOT YET MIGRATED |
-| Mock UI Adapter                  | NOT YET MIGRATED |
-| Vision Provider Interface V1.0   | NOT YET MIGRATED |
-| AutoJs6 HTTP Adapter             | NOT YET MIGRATED |
-| Android Image Input Adapter V1.0 | NOT YET MIGRATED |
+| Historical target module                                                      | Status           |
+| ----------------------------------------------------------------------------- | ---------------- |
+| Launcher V1.3                                                                 | NOT YET MIGRATED |
+| Queue Engine V1.0                                                             | NOT YET MIGRATED |
+| AI Engine V1.0                                                                | NOT YET MIGRATED |
+| Queue-AI Orchestrator V1.0                                                    | NOT YET MIGRATED |
+| Contributor Engine V1.0                                                       | NOT YET MIGRATED |
+| Mock UI Adapter                                                               | NOT YET MIGRATED |
+| Vision Provider Interface V1.0                                                | NOT YET MIGRATED |
+| AutoJs6 HTTP Adapter                                                          | NOT YET MIGRATED |
+| [Android Image Input Adapter V1.0](modules/android-image-input-adapter-v1.md) | NOT YET MIGRATED |
 
 No historical module may be marked complete unless all of the following exist
 in GitHub:
@@ -111,13 +115,16 @@ These blockers do not prevent offline core validation or documentation work.
 
 ## Next planned actions
 
-1. Wait for user direction before beginning another implementation task.
-2. Select the first historical target module for migration when directed.
-3. Commit its authoritative source or specification before implementation.
-4. Define its runtime designation and integration boundary.
-5. Implement and test it in a focused branch and pull request.
-6. Verify Android-specific behavior on an authorized Android and AutoJs6
-   environment when the first production adapter is introduced.
+1. Complete and review the authoritative Android Image Input Adapter V1.0
+   migration specification.
+2. Keep Android Image Input Adapter V1.0 `NOT YET MIGRATED`; this specification
+   milestone includes no production implementation.
+3. Wait for user direction before beginning adapter implementation.
+4. When directed, implement runtime-neutral logic and the AutoJs6/Android
+   runtime boundary in a focused branch and pull request.
+5. Add the required offline tests and integration documentation.
+6. Verify Android-specific behavior later on an authorized Android and AutoJs6
+   environment with user participation.
 
 ## Verification rules
 
