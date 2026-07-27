@@ -75,6 +75,12 @@ details are not copied.
 Future Android and Java exceptions must be translated by the production reader
 to one of the two allowed classifications before crossing this boundary.
 
+The production reader implementation is isolated at
+`src/autojs6/android-image-reader.js`. Its offline integration tests prove that
+classified read-time revocation reaches this boundary as `URI_ACCESS_DENIED`,
+ordinary failures remain `IMAGE_READ_FAILED`, MIME fallback still runs in the
+core, and actual byte-size policy remains owned by the core.
+
 ## Offline verification
 
 `tests/image-input-core.test.js` runs under Node.js as a deterministic offline

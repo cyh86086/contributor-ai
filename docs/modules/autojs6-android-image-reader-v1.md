@@ -3,14 +3,32 @@
 ## Status
 
 - Specification status: authoritative; specification PR #4 merged
-- Implementation status: not implemented
+- Implementation status: active source milestone; device verification pending
+- Production source: `src/autojs6/android-image-reader.js`
 - Production runtime: Android with AutoJs6
 - Current known runtime target: AutoJs6 v6.7.0, `arm64-v8a`
 - Device compatibility status: unverified; requires later device testing
 
 This document specifies the production reader injected into
 `prepareImageInput()` from `src/core/image-input.js`. It does not include or
-authorize production Android or AutoJs6 source in this pull request.
+authorize network, provider, queue, Contributor app, or submission behavior.
+
+## Implemented dependency contract
+
+`createAutoJs6AndroidImageReader(options)` returns `canAccess(sourceUri)` and
+`read(sourceUri)`. The production source requires injected Android and Java
+boundaries for:
+
+- `context.getContentResolver()` or an explicit `contentResolver`;
+- `parseUri(sourceUri)`;
+- a `javaBridge` that creates Java byte arrays and classifies runtime errors;
+- an approved-file policy, denied by default;
+- a read-only file opener for approved `file://` input;
+- a positive `readerSafetyLimitBytes`;
+- optional chunk, zero-read, byte-conversion, and secure logger settings.
+
+The implementation acquires only `InputStream`-compatible values. It does not
+acquire `Cursor`, `ParcelFileDescriptor`, or `ByteArrayOutputStream`.
 
 ## 1. Purpose
 
@@ -123,6 +141,11 @@ copy the image, references to intermediate buffers must be released promptly.
 An optimization must not return a mutable platform buffer whose lifetime ends
 before the portable core finishes.
 
+The implementation converts each exact read count to a copied `Uint8Array`
+chunk, combines chunks once, and promptly drops intermediate references. Signed
+Java byte values are preserved with `value & 0xff`, including `-128 -> 128`,
+`-1 -> 255`, `0 -> 0`, and `127 -> 127`.
+
 ## 6. MIME handling
 
 - Return the value from `ContentResolver.getType(uri)` when it is available.
@@ -189,6 +212,10 @@ replace the primary sanitized failure, reveal sensitive details, or leave a
 successful result backed by a closed or reused buffer. No cursor or descriptor
 may be acquired unless the implementation actually needs it.
 
+The current source always closes the acquired stream in a `finally` path.
+Cleanup failures are swallowed after an optional fixed, content-free warning
+and never replace the primary sanitized result.
+
 ## 9. Memory controls
 
 - A metadata-reported size may be used as an optional pre-read hint only.
@@ -206,9 +233,14 @@ may be acquired unless the implementation actually needs it.
 - Intermediate full-image buffers must be released as soon as their data has
   been safely transferred.
 
-The concrete safety ceiling is unresolved and must be selected with the
-portable limit, supported devices, and provider constraints before
-implementation.
+The concrete safety ceiling is an integration-time configuration decision. It
+must be selected with the portable limit, supported devices, and provider
+constraints before production use.
+
+The factory therefore requires an explicit positive safe-integer
+`readerSafetyLimitBytes`. It aborts immediately when accumulated bytes would
+exceed the ceiling, never returns truncated success, never performs Base64
+encoding, and never creates a temporary image file.
 
 ## 10. Android permission requirements
 
@@ -272,6 +304,11 @@ mockable boundaries and include deterministic offline tests for:
 
 Mocks may represent Android and Java behavior but must not be described as
 production compatibility tests.
+
+The offline adapter suite lives in
+`tests/autojs6-android-image-reader.test.js`. Passing it verifies injected
+control flow only; it does not establish AutoJs6 or Android device
+compatibility.
 
 ## 13. Required later device tests
 

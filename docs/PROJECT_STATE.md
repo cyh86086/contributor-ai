@@ -50,14 +50,15 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: classified reader-error propagation.**
+**Phase: production reader implementation.**
 
 The repository contains product scope and architecture documentation,
 runtime-neutral validation for the current metadata contract, and a Node.js
 offline harness. The Android Image Input Core V1.0 portable implementation is
 merged. The AutoJs6 Android Image Reader V1.0 specification is merged. The
-active milestone adds a narrowly scoped portable classified reader-error
-boundary; no production reader or other Android/AutoJs6 source is included.
+classified reader-error boundary is merged. The active milestone implements
+the AutoJs6 Android Image Reader V1.0 production source with injected runtime
+dependencies and offline tests. Device compatibility is not yet verified.
 
 ## Current branch and pull request
 
@@ -88,7 +89,14 @@ boundary; no production reader or other Android/AutoJs6 source is included.
   `feature/classified-image-reader-errors-v1`
 - Active classified-error pull request:
   [#5 — Support Classified Image Reader Errors V1.0](https://github.com/cyh86086/contributor-ai/pull/5)
-- Active classified-error pull request state: open draft; not merged
+- Classified-error pull request state: squash-merged
+- Resulting authoritative `main` SHA:
+  `a462f8fe6533f10c23d8445d31d57b4f38d3f90b`
+- Active production-reader branch:
+  `feature/implement-autojs6-image-reader-v1`
+- Active production-reader pull request:
+  [#6 — Implement AutoJs6 Android Image Reader V1.0](https://github.com/cyh86086/contributor-ai/pull/6)
+- Production-reader pull request state: open draft; not merged
 - Release status: no production release
 
 ## Historical target module status
@@ -123,11 +131,10 @@ satisfy these requirements.
 
 ## Current blockers
 
-- There are no device or user-intervention blockers for the current portable
-  classified-error task.
-- Production Android `ContentResolver` and AutoJs6 adapters are not
-  implemented. They are outstanding production work, not part of this portable
-  pull request.
+- There are no device or user-intervention blockers for the current injected
+  implementation and offline-test task.
+- Production reader source is present, but real Android `ContentResolver`,
+  Java bridge, permission, threading, and AutoJs6 behavior remain unverified.
 - Later Android device behavior, permissions, supported formats, MIME
   reporting, cleanup, and AutoJs6 compatibility require user-assisted testing.
   This is a future production blocker, not a blocker for this portable task.
@@ -140,14 +147,14 @@ These blockers do not prevent offline core validation or documentation work.
 
 ## Next planned actions
 
-1. Implement and review the portable classified reader-error boundary and
-   deterministic offline tests.
+1. Review draft PR #6 for the AutoJs6 Android Image Reader V1.0 source,
+   offline adapter tests, and portable-core integration tests.
 2. Keep the complete Android Image Input Adapter V1.0 historical module
    `NOT YET MIGRATED`.
-3. Do not implement Android `ContentResolver` or AutoJs6 source in this
-   portable milestone.
-4. After classified-error review, wait for user direction before production
-   reader work.
+3. Do not add network, provider, queue, Contributor app, submission, or
+   device-specific behavior.
+4. After production-reader review, wait for user direction before device
+   testing.
 5. Verify Android-specific behavior later on the authorized Vivo X Fold5 and
    AutoJs6 environment with user participation.
 
