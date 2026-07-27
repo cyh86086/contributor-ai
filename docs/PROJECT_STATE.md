@@ -50,16 +50,17 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: device-verification preparation.**
+**Phase: D01 one-click device-verification preparation.**
 
 The repository contains product scope and architecture documentation,
 runtime-neutral validation for the current metadata contract, and a Node.js
 offline harness. The Android Image Input Core V1.0 portable implementation is
 merged. The AutoJs6 Android Image Reader V1.0 specification is merged. The
-classified reader-error boundary and AutoJs6 Android Image Reader V1.0
-production source are merged. The active milestone prepares the safe,
-user-assisted device-verification package. Device compatibility is not yet
-verified, and no device test has been performed.
+classified reader-error boundary, AutoJs6 Android Image Reader V1.0 production
+source, and general device-verification package are merged. The active
+milestone prepares the one-click D01 JPEG launcher for safe, user-assisted
+verification on Vivo X Fold5 and AutoJs6 v6.7.0 `arm64-v8a`. Device
+compatibility is not yet verified, and no device test has been performed.
 
 ## Current branch and pull request
 
@@ -104,7 +105,14 @@ verified, and no device test has been performed.
   `feature/prepare-image-reader-device-verification-v1`
 - Active device-verification preparation pull request:
   [#7 — Prepare AutoJs6 Image Reader Device Verification V1.0](https://github.com/cyh86086/contributor-ai/pull/7)
-- Device-verification preparation pull request state: open draft; not merged
+- Device-verification preparation pull request state: squash-merged
+- Resulting authoritative `main` SHA:
+  `fbf12737be6f661f52969325489a1c19bce86163`
+- Active D01 launcher branch:
+  `feature/autojs6-d01-one-click-launcher-v1`
+- Active D01 launcher pull request: pending creation
+- D01 launcher state: repository implementation and offline verification in
+  progress; no real-device result
 - Release status: no production release
 
 ## Historical target module status
@@ -142,7 +150,7 @@ satisfy these requirements.
 - Production reader source is present, but real Android `ContentResolver`,
   Java bridge, permission, threading, and AutoJs6 behavior remain unverified.
 - Vivo X Fold5 and AutoJs6 v6.7.0 `arm64-v8a` testing is the next
-  user-assisted blocker after the verification package is reviewed.
+  user-assisted blocker after the D01 one-click package is reviewed.
 - Android device behavior, permissions, supported formats, MIME reporting,
   cleanup, responsiveness, memory behavior, and AutoJs6 compatibility require
   user-assisted evidence. No such evidence has been collected yet.
@@ -156,12 +164,13 @@ package.
 
 ## Next planned actions
 
-1. Review the device-verification plan and safe runtime harness template.
+1. Review the D01 one-click launcher, deterministic AutoJs6 bundle, offline
+   tests, and Traditional Chinese user guide.
 2. Keep the complete Android Image Input Adapter V1.0 historical module
    `NOT YET MIGRATED`.
 3. Do not add network, provider, queue, Contributor app, submission, or
    device-specific behavior.
-4. After the verification package is reviewed, require user participation
+4. After the D01 package is reviewed and merged, require user participation
    before running it on the Vivo X Fold5 and AutoJs6 environment.
 5. Record sanitized device evidence against the exact authoritative `main`
    SHA under test; do not infer compatibility from offline checks.

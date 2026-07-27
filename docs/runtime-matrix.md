@@ -29,7 +29,10 @@ with fakes only. Real `ContentResolver`, Java bridge, permission, threading,
 memory, and cleanup behavior remain subject to later user-assisted Vivo X
 Fold5 and AutoJs6 verification.
 
-The current active milestone prepares that work through the
+The current active milestone prepares the D01 one-click, metadata-only device
+verification entry through the
 [`AutoJs6 Image Reader V1.0 device-verification plan`](testing/autojs6-image-reader-device-verification-v1.md).
-The plan and its safe harness template are test support, not evidence that a
-device test has passed.
+The entry is a deterministic verification-only bundle of the existing
+production reader and portable core. Its plan, launcher, and offline tests are
+test support, not evidence that a device test has passed. Real Vivo X Fold5
+and AutoJs6 v6.7.0 compatibility remains unverified.

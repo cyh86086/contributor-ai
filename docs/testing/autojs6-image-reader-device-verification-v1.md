@@ -7,19 +7,28 @@ This is the executable verification plan for:
 - **Device:** Vivo X Fold5
 - **Runtime:** AutoJs6 v6.7.0, `arm64-v8a`
 - **Module:** AutoJs6 Android Image Reader V1.0
-- **Production source baseline:** repository `main` commit
-  `be978cb2da2426bde9c08c2ecf5df91fe5203f2c`
+- **Verification-package baseline:** repository `main` commit
+  `fbf12737be6f661f52969325489a1c19bce86163`
 
 No device test has been performed or passed as part of this package. The
 Android Image Input Adapter V1.0 remains **NOT YET MIGRATED**. This plan does
 not test or authorize provider, network, queue, Contributor app, or submission
 behavior.
 
+The D01 one-click launcher is being prepared on
+`feature/autojs6-d01-one-click-launcher-v1`. Its generated, verification-only
+entry is `scripts/autojs6/d01-jpeg-device-check.js`, with a Traditional Chinese
+guide at
+[`../user-guides/autojs6-d01-jpeg-check-zh-tw.md`](../user-guides/autojs6-d01-jpeg-check-zh-tw.md).
+The launcher is ready for repository review only. It has not been run on the
+target device, and AutoJs6 compatibility remains unverified.
+
 ## 1. Preconditions
 
 Complete and record every item before running a case:
 
-1. Check out commit `be978cb2da2426bde9c08c2ecf5df91fe5203f2c`
+1. Check out the exact authoritative `main` commit named by the reviewed
+   device-verification package
    from authoritative `main`. Record `git rev-parse HEAD` in the checklist.
    If testing a later corrected `main`, replace this recorded SHA with that
    exact commit and repeat the complete matrix.
@@ -70,7 +79,7 @@ and sanitize it before sharing.
 
 ## 3. AutoJs6 runtime harness
 
-The non-production template is
+The reusable non-production template is
 [`../../scripts/autojs6/image-reader-device-check.js`](../../scripts/autojs6/image-reader-device-check.js).
 It loads the production reader and portable core, constructs the reader from
 injected runtime dependencies, invokes `prepareImageInput()`, and reports only
@@ -93,14 +102,20 @@ The Java bridge must classify permission or `SecurityException` failures as
 `IMAGE_READ_FAILED`. The launcher must obtain `sourceUri` from the approved
 picker result at runtime. It must not contain a hard-coded URI or device path.
 
-The template deliberately has no implicit AutoJs6 globals. Before the first
-image read:
+The D01 one-click entry is deterministically bundled from the repository ESM
+sources because AutoJs6 v6.7.0 does not provide a verified native ESM loading
+path for this project. The committed generated file must match
+`npm run build:autojs6:d01:check`; it is test support, not a second production
+implementation.
 
-1. verify AutoJs6 can load its ES module imports;
-2. inject the runtime objects listed above;
-3. configure `reportMetadata(record)` to print only the returned record;
-4. run one non-sensitive JPEG case;
-5. inspect the output and logs for sensitive content before continuing.
+Before the first D01 image read:
+
+1. follow the Traditional Chinese D01 user guide;
+2. verify that the standard Android picker opens;
+3. verify that the bundled module starts without a syntax or module error;
+4. select one non-sensitive JPEG;
+5. require `uiResponsive: true`;
+6. inspect the output and logs for sensitive content before continuing.
 
 The harness must never print image bytes, Base64, complete URI query strings,
 file paths, credentials, personal filenames, exception messages, stacks, or
@@ -158,15 +173,16 @@ Evidence output must redact `sourceUri` and `imageBase64`, leaving only:
 
 ```json
 {
-  "testCaseId": "JPEG_VALID",
+  "testCaseId": "D01_JPEG",
   "status": "PASS",
   "mimeType": "image/jpeg",
-  "sizeBytes": 12345
+  "sizeBytes": 12345,
+  "uiResponsive": true
 }
 ```
 
 Failure evidence may contain only the case ID, `FAIL`, and one of these stable
-public codes:
+public codes, plus the boolean `uiResponsive` field:
 
 - `URI_ACCESS_DENIED`
 - `IMAGE_READ_FAILED`
@@ -201,9 +217,12 @@ Stop testing and report the case ID plus sanitized observation instead of
 improvising if:
 
 - AutoJs6 cannot load ES modules;
+- the D01 generated bundle cannot load or the standard Android picker does not
+  open;
 - `context.getContentResolver()` is unavailable;
 - Java imports or byte arrays behave differently than expected;
-- the reader blocks the UI thread;
+- the reader runs on the UI thread, the UI heartbeat cannot be demonstrated,
+  `uiResponsive` is not `true`, or the reader blocks the UI thread;
 - HEIC or HEIF behavior differs from the expected platform support;
 - permission classification is ambiguous;
 - stream cleanup cannot be demonstrated;

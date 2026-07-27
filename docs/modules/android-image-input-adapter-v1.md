@@ -15,6 +15,8 @@
   verification only, device verification pending
 - Device-verification plan:
   [`../testing/autojs6-image-reader-device-verification-v1.md`](../testing/autojs6-image-reader-device-verification-v1.md)
+- D01 one-click device-verification entry: prepared for repository review;
+  no real-device result has been claimed
 - Production runtime: Android and AutoJs6
 
 This document defines the contract and verification requirements for the
