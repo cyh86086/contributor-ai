@@ -9,6 +9,8 @@ This is the executable verification plan for:
 - **Module:** AutoJs6 Android Image Reader V1.0
 - **Tested D01 baseline:** repository `main` commit
   `0324d640e390da7c2c905fb9d2d8e134ee1e7149`
+- **Compatibility-correction baseline:** repository `main` commit
+  `80717606209f3f01c3bfc232a4d16016bf14c368`
 
 The first device execution stopped at bundle parsing and did not reach the
 Android picker. It is not a D01 PASS. The Android Image Input Adapter V1.0
@@ -19,9 +21,9 @@ The D01 one-click launcher was merged in PR #8. Its generated,
 verification-only entry is `scripts/autojs6/d01-jpeg-device-check.js`, with a
 Traditional Chinese guide at
 [`../user-guides/autojs6-d01-jpeg-check-zh-tw.md`](../user-guides/autojs6-d01-jpeg-check-zh-tw.md).
-The confirmed parse failure is being corrected on
-`fix/autojs6-d01-reserved-class-keyword-v1`. Real-device retesting is required,
-and AutoJs6 compatibility remains unverified.
+PR #9 merged the reviewed deterministic legacy-syntax correction. Its feature
+branch is deleted. Real-device retesting against the current authoritative
+`main` is now required, and AutoJs6 compatibility remains unverified.
 
 ### Recorded D01 device evidence
 
