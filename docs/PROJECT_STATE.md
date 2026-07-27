@@ -133,8 +133,9 @@ unverified.
 - Compatibility-fix branch state: deleted locally and remotely
 - Active device-validation documentation branch:
   `docs/d01-device-validation-v1`
-- Active device-validation documentation pull request: draft; number assigned
-  after publication
+- Active device-validation documentation pull request:
+  [#10 — Document D01 Vivo X Fold5 Device Validation V1.0](https://github.com/cyh86086/contributor-ai/pull/10)
+- Device-validation documentation pull request state: open draft
 - Release status: no production release
 
 ## Historical target module status
