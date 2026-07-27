@@ -1,41 +1,88 @@
 # Architecture
 
-Contributor AI follows a small set of explicit boundaries so infrastructure
-choices do not leak into contribution workflows.
+Contributor AI has three architectural areas with different runtime
+constraints. Keeping their boundaries explicit prevents the Node.js
+development tooling from being mistaken for the Android production
+application.
 
-## Components
+## Runtime-neutral core modules
 
-- `launcher` composes the application and owns process-level behavior.
-- `queue` schedules units of work and exposes queue state.
-- `ai_engine` validates prompts and coordinates provider calls.
-- `provider` defines provider contracts and contains integrations.
-- `contributor` implements repository contribution workflows.
-- `ui` converts domain results into user-facing output.
-- `utils` contains stateless, broadly reusable helpers.
+`src/core/` contains small JavaScript rules that do not depend on Node.js,
+AutoJs6, Android, a particular AI provider, or the Contributor app.
 
-## Dependency direction
+The current core validates:
 
-The launcher may depend on every application component. Domain components
-depend on contracts and utilities, not on the launcher or UI. Provider
-implementations satisfy the AI engine contract and should remain replaceable.
+- Android gallery references use the `content://` scheme;
+- a generated description is non-empty, English text under 2,000 characters;
+- a generated result contains exactly seven non-empty English keywords.
+
+The core is not an engine or an orchestrator. It does not perform I/O, schedule
+work, call AI services, launch apps, or submit content.
+
+## AutoJs6 Android adapters
+
+`src/autojs6_adapters/` is reserved for production-runtime integration
+boundaries. Future adapters are expected to cover Android concerns such as
+reading gallery `content://` URIs, making provider HTTP requests through
+AutoJs6, opening the Contributor app, and filling its fields.
+
+No Android adapter is implemented in this bootstrap. The reserved area must
+not be interpreted as a replacement for the historical AutoJs6 HTTP Adapter or
+Android Image Input Adapter V1.0.
+
+The Android layer must stop after field entry. Final submission is a manual
+user action.
+
+## Node.js offline test harness
+
+`src/offline_harness/` exists only for local development and CI. It uses
+deterministic sample metadata to exercise the runtime-neutral validation rules
+without:
+
+- running AutoJs6;
+- accessing an Android content resolver;
+- reading real gallery photos;
+- calling an AI Vision provider;
+- controlling the Contributor app.
+
+Node.js is not the production runtime.
+
+## Intended production data flow
 
 ```text
-launcher -> contributor -> ai_engine -> provider
-        \-> queue                 \-> utils
-        \-> ui
+Android gallery selection
+  -> AutoJs6 image input boundary
+  -> selected content:// URI
+  -> AI Vision request boundary
+  -> description + exactly 7 keywords
+  -> runtime-neutral validation
+  -> Contributor app field-entry boundary
+  -> user review
+  -> manual submission
 ```
 
-## Security baseline
+## Historical module boundary
 
-- Credentials must be supplied at runtime, never stored in source control.
-- External input must be validated at component boundaries.
-- Repository-changing actions should be explicit and auditable.
-- Providers should receive only the minimum context required for a task.
-- Logs must not contain secrets, tokens, or private repository contents.
+The names and versions below refer to historical product modules, not to
+generic folders or placeholder classes:
 
-## Extension points
+- Launcher V1.3
+- Queue Engine V1.0
+- AI Engine V1.0
+- Queue-AI Orchestrator V1.0
+- Contributor Engine V1.0
+- Vision Provider Interface V1.0
+- AutoJs6 HTTP Adapter
+- Android Image Input Adapter V1.0
 
-Add a provider by implementing the `generate(request)` interface described in
-`src/provider/provider.js`. Add durable scheduling behind the queue interface
-without changing contributor workflows. Add UI surfaces by consuming domain
-results rather than importing provider implementations directly.
+They are intentionally absent from the current source tree. Reintroducing any
+of them requires its authoritative contract and is outside this bootstrap.
+
+## Safety boundaries
+
+- Never store API keys in source control.
+- Treat images and generated metadata as potentially sensitive user data.
+- Send image data only to the configured provider.
+- Validate provider output before entering it into another app.
+- Require the user to review all populated fields.
+- Never automate the final submission confirmation.

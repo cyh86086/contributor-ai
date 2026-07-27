@@ -1,7 +1,7 @@
 {
   "name": "contributor-ai",
   "version": "0.1.0",
-  "description": "Provider-agnostic automation for repository contribution workflows.",
+  "description": "Offline test harness for the Contributor AI AutoJs6 Android automation product.",
   "type": "module",
   "private": true,
   "engines": {
@@ -9,7 +9,7 @@
     "npm": ">=10"
   },
   "scripts": {
-    "start": "node src/launcher/index.js",
+    "start": "node src/offline_harness/index.js",
     "test": "node --test",
     "lint": "eslint .",
     "format": "prettier --write .",
