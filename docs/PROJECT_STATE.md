@@ -72,7 +72,9 @@ the [portable core integration document](modules/android-image-input-core-v1.md)
   [#2 — Specify Android Image Input Adapter V1.0](https://github.com/cyh86086/contributor-ai/pull/2)
 - Specification pull request state: squash-merged
 - Active implementation branch: `feature/implement-image-input-core-v1`
-- Active implementation pull request: draft to be opened into `main`
+- Active implementation pull request:
+  [#3 — Implement Android Image Input Core V1.0](https://github.com/cyh86086/contributor-ai/pull/3)
+- Active implementation pull request state: open draft; not merged
 - Release status: no production release
 
 ## Historical target module status
