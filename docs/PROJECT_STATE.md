@@ -50,13 +50,14 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: historical module migration specification.**
+**Phase: runtime-neutral implementation.**
 
 The repository contains product scope and architecture documentation,
 runtime-neutral validation for the current metadata contract, and a Node.js
-offline harness. The current work specifies Android Image Input Adapter V1.0;
-no production implementation is included. Production AutoJs6 behavior and
-historical target modules have not yet been migrated.
+offline harness. The active milestone implements the portable core for Android
+Image Input Adapter V1.0. No Android `ContentResolver`, AutoJs6, network,
+provider, Contributor app, or device-specific implementation is included. See
+the [portable core integration document](modules/android-image-input-core-v1.md).
 
 ## Current branch and pull request
 
@@ -69,7 +70,11 @@ historical target modules have not yet been migrated.
   `feature/spec-android-image-input-adapter-v1`
 - Active specification pull request:
   [#2 — Specify Android Image Input Adapter V1.0](https://github.com/cyh86086/contributor-ai/pull/2)
-- Active specification pull request state: open draft; not merged
+- Specification pull request state: squash-merged
+- Active implementation branch: `feature/implement-image-input-core-v1`
+- Active implementation pull request:
+  [#3 — Implement Android Image Input Core V1.0](https://github.com/cyh86086/contributor-ai/pull/3)
+- Active implementation pull request state: open draft; not merged
 - Release status: no production release
 
 ## Historical target module status
@@ -104,12 +109,15 @@ satisfy these requirements.
 
 ## Current blockers
 
-- Authoritative source and integration specifications for the historical
-  target modules are not committed to the repository.
-- Production AutoJs6 adapters for Android image input, remote provider HTTP,
-  and Contributor app interaction are not implemented.
-- Android device behavior, permissions, Contributor app selectors, and remote
-  provider integration have not been verified in a production runtime.
+- There are no device or user-intervention blockers for the current offline
+  portable-core task.
+- Production Android `ContentResolver` and AutoJs6 adapters are not
+  implemented. They are outstanding production work, not part of this task.
+- Later Android device behavior, permissions, supported formats, MIME
+  reporting, cleanup, and AutoJs6 compatibility require user-assisted testing.
+  This is a future production blocker, not a blocker for offline implementation.
+- Remote provider and Contributor app integration remain unimplemented and
+  outside the active milestone.
 - No provider credential strategy has been approved or implemented. Secrets
   must remain outside Git.
 
@@ -117,15 +125,15 @@ These blockers do not prevent offline core validation or documentation work.
 
 ## Next planned actions
 
-1. Complete and review the authoritative Android Image Input Adapter V1.0
-   migration specification.
-2. Keep Android Image Input Adapter V1.0 `NOT YET MIGRATED`; this specification
-   milestone includes no production implementation.
-3. Wait for user direction before beginning adapter implementation.
-4. When directed, implement runtime-neutral logic and the AutoJs6/Android
-   runtime boundary in a focused branch and pull request.
-5. Add the required offline tests and integration documentation.
-6. Verify Android-specific behavior later on an authorized Android and AutoJs6
+1. Implement and review the Android Image Input Adapter V1.0 portable core,
+   offline tests, and integration documentation.
+2. Keep the complete Android Image Input Adapter V1.0 historical module
+   `NOT YET MIGRATED`.
+3. Do not begin Android `ContentResolver` or AutoJs6 integration in this
+   milestone.
+4. After portable-core review, wait for user direction before production
+   adapter work.
+5. Verify Android-specific behavior later on an authorized Android and AutoJs6
    environment with user participation.
 
 ## Verification rules
