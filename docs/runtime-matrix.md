@@ -20,3 +20,11 @@
   review and manual confirmation.
 - GitHub records authoritative project and release history; Codex performs
   repository implementation and version-control actions.
+
+## Current production-reader status
+
+The AutoJs6 Android image reader source is isolated under `src/autojs6/` and
+uses injected Android and Java dependencies. Node.js verifies its control flow
+with fakes only. Real `ContentResolver`, Java bridge, permission, threading,
+memory, and cleanup behavior remain subject to later user-assisted Vivo X
+Fold5 and AutoJs6 verification.

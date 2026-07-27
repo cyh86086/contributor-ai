@@ -7,15 +7,18 @@
 - Specification status: authoritative; specification PR #2 merged
 - Portable core status: merged in PR #3; see
   [`android-image-input-core-v1.md`](android-image-input-core-v1.md)
-- Production reader status: specification milestone; no implementation
+- Production reader status: implementation milestone; offline checks pass,
+  device verification pending
 - Production reader specification:
   [`autojs6-android-image-reader-v1.md`](autojs6-android-image-reader-v1.md)
+- Production reader source: `src/autojs6/android-image-reader.js`; offline
+  verification only, device verification pending
 - Production runtime: Android and AutoJs6
 
-This document defines the contract and verification requirements for a future
-migration. It does not contain or authorize a placeholder implementation, and
-the specification alone does not satisfy the migration completion criteria in
-[`../PROJECT_STATE.md`](../PROJECT_STATE.md).
+This document defines the contract and verification requirements for the
+historical module migration. The portable core and production reader source
+are reviewed as separate milestones; neither alone satisfies the migration
+completion criteria in [`../PROJECT_STATE.md`](../PROJECT_STATE.md).
 
 ## Purpose
 
