@@ -7,6 +7,15 @@ export const IMAGE_INPUT_ERROR_CODES = Object.freeze({
   URI_ACCESS_DENIED: "URI_ACCESS_DENIED",
 });
 
+export const IMAGE_READER_ERROR_CLASSIFICATIONS = Object.freeze({
+  URI_ACCESS_DENIED: "URI_ACCESS_DENIED",
+  IMAGE_READ_FAILED: "IMAGE_READ_FAILED",
+});
+
+const ALLOWED_READER_ERROR_CLASSIFICATIONS = new Set(
+  Object.values(IMAGE_READER_ERROR_CLASSIFICATIONS),
+);
+
 const ERROR_MESSAGES = Object.freeze({
   [IMAGE_INPUT_ERROR_CODES.UNSUPPORTED_MIME_TYPE]:
     "The image MIME type is not supported.",
@@ -37,6 +46,21 @@ export class ImageInputError extends Error {
     super(ERROR_MESSAGES[code]);
     this.name = "ImageInputError";
     this.code = code;
+  }
+}
+
+export class ClassifiedImageReaderError extends Error {
+  constructor(classification) {
+    super("Classified image reader failure.");
+    this.name = "ClassifiedImageReaderError";
+    Object.defineProperty(this, "classification", {
+      configurable: false,
+      enumerable: true,
+      value: ALLOWED_READER_ERROR_CLASSIFICATIONS.has(classification)
+        ? classification
+        : null,
+      writable: false,
+    });
   }
 }
 
@@ -193,8 +217,15 @@ async function checkRuntimeAccess(reader, sourceUri) {
 async function readImage(reader, sourceUri) {
   try {
     return await reader.read(sourceUri);
-  } catch {
-    throw imageInputError(IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED);
+  } catch (error) {
+    const code =
+      error instanceof ClassifiedImageReaderError &&
+      error.classification ===
+        IMAGE_READER_ERROR_CLASSIFICATIONS.URI_ACCESS_DENIED
+        ? IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED
+        : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED;
+
+    throw imageInputError(code);
   }
 }
 
