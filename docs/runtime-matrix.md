@@ -28,3 +28,8 @@ uses injected Android and Java dependencies. Node.js verifies its control flow
 with fakes only. Real `ContentResolver`, Java bridge, permission, threading,
 memory, and cleanup behavior remain subject to later user-assisted Vivo X
 Fold5 and AutoJs6 verification.
+
+The current active milestone prepares that work through the
+[`AutoJs6 Image Reader V1.0 device-verification plan`](testing/autojs6-image-reader-device-verification-v1.md).
+The plan and its safe harness template are test support, not evidence that a
+device test has passed.
