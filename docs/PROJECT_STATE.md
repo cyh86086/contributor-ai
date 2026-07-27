@@ -50,14 +50,13 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: runtime-neutral implementation.**
+**Phase: production-reader specification.**
 
 The repository contains product scope and architecture documentation,
 runtime-neutral validation for the current metadata contract, and a Node.js
-offline harness. The active milestone implements the portable core for Android
-Image Input Adapter V1.0. No Android `ContentResolver`, AutoJs6, network,
-provider, Contributor app, or device-specific implementation is included. See
-the [portable core integration document](modules/android-image-input-core-v1.md).
+offline harness. The Android Image Input Core V1.0 portable implementation is
+merged. The active milestone specifies the AutoJs6 Android Image Reader V1.0;
+no production reader or other Android/AutoJs6 source is included.
 
 ## Current branch and pull request
 
@@ -74,7 +73,12 @@ the [portable core integration document](modules/android-image-input-core-v1.md)
 - Active implementation branch: `feature/implement-image-input-core-v1`
 - Active implementation pull request:
   [#3 — Implement Android Image Input Core V1.0](https://github.com/cyh86086/contributor-ai/pull/3)
-- Active implementation pull request state: open draft; not merged
+- Implementation pull request state: squash-merged
+- Resulting authoritative `main` SHA:
+  `234a7ff02d0451ba014a2219147a41366357a3a6`
+- Active reader-specification branch:
+  `feature/spec-autojs6-image-reader-v1`
+- Active reader-specification pull request: draft to be opened into `main`
 - Release status: no production release
 
 ## Historical target module status
@@ -109,13 +113,17 @@ satisfy these requirements.
 
 ## Current blockers
 
-- There are no device or user-intervention blockers for the current offline
-  portable-core task.
+- There are no device or user-intervention blockers for the current
+  specification-only task.
 - Production Android `ContentResolver` and AutoJs6 adapters are not
-  implemented. They are outstanding production work, not part of this task.
+  implemented. They are outstanding production work, not part of this
+  specification pull request.
 - Later Android device behavior, permissions, supported formats, MIME
   reporting, cleanup, and AutoJs6 compatibility require user-assisted testing.
-  This is a future production blocker, not a blocker for offline implementation.
+  This is a future production blocker, not a blocker for this specification.
+- Classified propagation of an access revocation occurring during
+  `reader.read()` must be resolved before production implementation because the
+  current core sanitizes all read exceptions as `IMAGE_READ_FAILED`.
 - Remote provider and Contributor app integration remain unimplemented and
   outside the active milestone.
 - No provider credential strategy has been approved or implemented. Secrets
@@ -125,16 +133,17 @@ These blockers do not prevent offline core validation or documentation work.
 
 ## Next planned actions
 
-1. Implement and review the Android Image Input Adapter V1.0 portable core,
-   offline tests, and integration documentation.
+1. Complete and review the AutoJs6 Android Image Reader V1.0 specification.
 2. Keep the complete Android Image Input Adapter V1.0 historical module
    `NOT YET MIGRATED`.
-3. Do not begin Android `ContentResolver` or AutoJs6 integration in this
-   milestone.
-4. After portable-core review, wait for user direction before production
-   adapter work.
-5. Verify Android-specific behavior later on an authorized Android and AutoJs6
-   environment with user participation.
+3. Do not implement Android `ContentResolver` or AutoJs6 source in this
+   specification milestone.
+4. Resolve the classified read-time access error boundary before production
+   implementation.
+5. After specification review, wait for user direction before production
+   reader work.
+6. Verify Android-specific behavior later on the authorized Vivo X Fold5 and
+   AutoJs6 environment with user participation.
 
 ## Verification rules
 
