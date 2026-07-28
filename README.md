@@ -61,6 +61,12 @@ This is a single scoped device result, not full Android Image Input Adapter
 V1.0 migration or complete device compatibility. See the
 [D01 device-validation record](docs/testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md).
 
+Deterministic one-click launchers and offline checks are prepared for
+`D02_PNG`, `D03_WEBP`, `D04_HEIC`, and `D05_HEIF`. They share one case
+manifest, runtime-neutral launcher core, and AutoJs6 runtime adapter with D01.
+They have not passed device verification. See the
+[Traditional Chinese D02-D05 device guide](docs/user-guides/autojs6-d02-d05-format-checks-zh-tw.md).
+
 ## Project layout
 
 ```text
