@@ -50,7 +50,7 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: awaiting D01 AutoJs6 real-device verification.**
+**Phase: D01 validated; remaining Android device verification pending.**
 
 The repository contains product scope and architecture documentation,
 runtime-neutral validation for the current metadata contract, and a Node.js
@@ -61,9 +61,14 @@ source, general device-verification package, and one-click D01 JPEG launcher
 are merged. The first Vivo X Fold5 and AutoJs6 v6.7.0 `arm64-v8a` execution
 stopped at bundle parsing before the Android picker opened. PR #9 merged the
 reviewed deterministic legacy-syntax correction and passed the complete
-offline verification suite. The active milestone is now a user-assisted D01
-retest on the target device and runtime. No D01 PASS is claimed, and device
-compatibility remains unverified.
+offline verification suite. D01 subsequently passed on Vivo X Fold5 with
+AutoJs6 v6.7.0 `arm64-v8a` against authoritative main SHA
+`5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`. The scoped evidence is recorded
+in
+[`testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md).
+The active milestone documents this result and prepares for the remaining
+formats, failures, limits, cleanup, repetition, and memory cases, which remain
+unverified.
 
 ## Current branch and pull request
 
@@ -126,7 +131,11 @@ compatibility remains unverified.
 - Resulting authoritative `main` SHA:
   `80717606209f3f01c3bfc232a4d16016bf14c368`
 - Compatibility-fix branch state: deleted locally and remotely
-- Active pull request: none; awaiting user-assisted D01 device evidence
+- Active device-validation documentation branch:
+  `docs/d01-device-validation-v1`
+- Active device-validation documentation pull request:
+  [#10 — Document D01 Vivo X Fold5 Device Validation V1.0](https://github.com/cyh86086/contributor-ai/pull/10)
+- Device-validation documentation pull request state: open draft
 - Release status: no production release
 
 ## Historical target module status
@@ -164,36 +173,35 @@ satisfy these requirements.
 - The first Vivo X Fold5 and AutoJs6 v6.7.0 `arm64-v8a` execution against main
   SHA `0324d640e390da7c2c905fb9d2d8e134ee1e7149` failed during parsing because
   the generated bundle used the reserved keyword `class` at line 59. PR #9
-  corrected the known syntax blocker offline, but only a real-device retest
-  can establish whether AutoJs6 now parses and runs the D01 bundle.
-- Production reader source is present, but real Android `ContentResolver`,
-  Java bridge, permission, threading, and AutoJs6 behavior remain unverified.
-- A user-assisted Vivo X Fold5 and AutoJs6 v6.7.0 `arm64-v8a` retest is
-  required against the current authoritative `main`.
-- Android device behavior, permissions, supported formats, MIME reporting,
-  cleanup, responsiveness, memory behavior, and AutoJs6 compatibility require
-  user-assisted evidence. No post-correction device evidence has been
-  collected yet.
+  corrected the known syntax blocker, and D01 passed on the same device and
+  runtime against main SHA
+  `5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`.
+- Production reader source is present. Real Android `ContentResolver`, Java
+  bridge, picker, JPEG read, MIME detection, and UI responsiveness now have
+  scoped D01 evidence. Other formats and the remaining device matrix are
+  unverified.
+- Permission revocation, missing sources, MIME fallback, empty input, size
+  boundaries, repeated reads, cleanup instrumentation, memory behavior, and
+  the remaining stop conditions require user-assisted evidence.
 - Remote provider and Contributor app integration remain unimplemented and
   outside the active milestone.
 - No provider credential strategy has been approved or implemented. Secrets
   must remain outside Git.
 
-The repository is waiting for user-assisted D01 device verification. No
-additional implementation work is planned before that evidence is recorded.
+The D01 blocker is resolved for the exact tested device, runtime, SHA, and JPEG
+case. This result does not establish complete module migration.
 
 ## Next planned actions
 
-1. Run D01 on Vivo X Fold5 with AutoJs6 v6.7.0 `arm64-v8a` using the exact
-   generated bundle from the current authoritative `main`.
-2. Record only sanitized device evidence against the exact `main` SHA under
-   test; do not infer compatibility from offline checks.
+1. Review and merge the scoped D01 device-validation record.
+2. Continue the remaining device-verification matrix with an exact main SHA
+   and sanitized evidence for each case.
 3. Keep the complete Android Image Input Adapter V1.0 historical module
    `NOT YET MIGRATED`.
 4. Do not add network, provider, queue, Contributor app, submission, or
    device-specific behavior.
-5. Do not begin another implementation milestone until the D01 evidence is
-   reviewed and project state is updated.
+5. Do not infer full device compatibility or module completion from the single
+   D01 JPEG PASS.
 
 ## Verification rules
 
@@ -216,8 +224,8 @@ additional implementation work is planned before that evidence is recorded.
 
 The user must:
 
-- run the pending D01 retest on Vivo X Fold5 with AutoJs6 v6.7.0 `arm64-v8a`
-  and provide only the sanitized result;
+- assist with the remaining Vivo X Fold5 and AutoJs6 device-verification
+  matrix and provide only sanitized results;
 - grant Android permissions and select photos;
 - choose and authorize any remote AI Vision provider;
 - supply provider credentials outside the repository when provider support

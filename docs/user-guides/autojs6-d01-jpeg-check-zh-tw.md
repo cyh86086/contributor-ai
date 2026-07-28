@@ -13,9 +13,14 @@
 
 第一次 Vivo X Fold5／AutoJs6 v6.7.0 測試在解析舊版 generated bundle 時，
 因保留關鍵字 `class` 停止；選圖器沒有開啟，也沒有選取或讀取圖片。這不是
-D01 PASS。相容性修正已由 PR #9 完成審查並合併；請使用目前 authoritative
-main 的 generated bundle 重新測試。合併時的相容性修正 baseline 是
+D01 PASS。相容性修正已由 PR #9 完成審查並合併；合併時的相容性修正
+baseline 是
 `80717606209f3f01c3bfc232a4d16016bf14c368`。
+
+後續使用 main SHA `5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`
+在相同裝置與 runtime 完成的 D01 重測已通過。此指南保留供重現與後續
+regression 驗證；通過紀錄請見
+[`../testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md`](../testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md)。
 
 ## 執行前準備
 

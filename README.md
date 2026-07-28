@@ -27,9 +27,11 @@ this repository.
 
 ## Repository status
 
-This repository is an early project skeleton. The production AutoJs6 runtime
-and its historical/versioned modules have **not** been implemented here yet.
-In particular, this bootstrap does not recreate:
+This repository is still an early product implementation. It contains scoped
+runtime-neutral image-input logic, an AutoJs6 Android image reader, and
+verification support, but it does not contain the complete production
+workflow. Its historical/versioned target modules remain **NOT YET MIGRATED**.
+In particular, the repository has not recreated or completed:
 
 - Launcher V1.3
 - Queue Engine V1.0
@@ -45,6 +47,19 @@ The JavaScript currently executable through npm is a **Node.js offline test
 harness**, not the production runtime. It validates runtime-neutral metadata
 rules without accessing Android, AutoJs6, gallery content, AI services, or the
 Contributor app.
+
+## Device-validation status
+
+`D01_JPEG` passed on Vivo X Fold5 with AutoJs6 v6.7.0 `arm64-v8a` using
+authoritative main SHA
+`5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`. The Android picker, JPEG reader,
+MIME detection, UI responsiveness, and metadata-only output passed. No Base64,
+complete URI, path, filename, image content, stack trace, or credential was
+observed in the script output.
+
+This is a single scoped device result, not full Android Image Input Adapter
+V1.0 migration or complete device compatibility. See the
+[D01 device-validation record](docs/testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md).
 
 ## Project layout
 

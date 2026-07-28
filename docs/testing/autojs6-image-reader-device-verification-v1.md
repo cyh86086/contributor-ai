@@ -11,21 +11,27 @@ This is the executable verification plan for:
   `0324d640e390da7c2c905fb9d2d8e134ee1e7149`
 - **Compatibility-correction baseline:** repository `main` commit
   `80717606209f3f01c3bfc232a4d16016bf14c368`
+- **Passing D01 validation SHA:** repository `main` commit
+  `5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`
 
 The first device execution stopped at bundle parsing and did not reach the
-Android picker. It is not a D01 PASS. The Android Image Input Adapter V1.0
-remains **NOT YET MIGRATED**. This plan does not test or authorize provider,
-network, queue, Contributor app, or submission behavior.
+Android picker. After the compatibility correction, D01 passed on the same
+device and runtime. The scoped result is recorded in
+[`device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md`](device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md).
+The Android Image Input Adapter V1.0 remains **NOT YET MIGRATED**. This plan
+does not test or authorize provider, network, queue, Contributor app, or
+submission behavior.
 
 The D01 one-click launcher was merged in PR #8. Its generated,
 verification-only entry is `scripts/autojs6/d01-jpeg-device-check.js`, with a
 Traditional Chinese guide at
 [`../user-guides/autojs6-d01-jpeg-check-zh-tw.md`](../user-guides/autojs6-d01-jpeg-check-zh-tw.md).
 PR #9 merged the reviewed deterministic legacy-syntax correction. Its feature
-branch is deleted. Real-device retesting against the current authoritative
-`main` is now required, and AutoJs6 compatibility remains unverified.
+branch is deleted. D01 now has passing device evidence for the exact recorded
+scope. The remaining verification matrix and broader AutoJs6 compatibility
+remain unverified.
 
-### Recorded D01 device evidence
+### Initial failed D01 device evidence
 
 - **Device:** Vivo X Fold5
 - **Runtime:** AutoJs6 v6.7.0, `arm64-v8a`
@@ -39,6 +45,20 @@ branch is deleted. Real-device retesting against the current authoritative
 - **Privacy observation:** the script did not output Base64, a complete URI,
   a local path, a filename, image content, a stack trace, or credentials
 - **D01 status:** no PASS
+- **Adapter status:** **NOT YET MIGRATED**
+
+### Passing D01 device evidence
+
+- **Device:** Vivo X Fold5
+- **Runtime:** AutoJs6 v6.7.0, `arm64-v8a`
+- **Tested main SHA:** `5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`
+- **Result:** `D01_JPEG` PASS
+- **Validated:** Android picker, JPEG reader, MIME detection, UI
+  responsiveness, and metadata-only output
+- **Privacy observation:** no Base64, complete URI, local path, filename,
+  image content, stack trace, or credentials were observed
+- **Evidence record:**
+  [`device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md`](device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md)
 - **Adapter status:** **NOT YET MIGRATED**
 
 ## 1. Preconditions

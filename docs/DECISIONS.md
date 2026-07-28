@@ -68,3 +68,12 @@ changing the repository.
 confirmed by the user. Automatic final submission is outside the current
 approved scope unless the user explicitly enables it through a later
 repository decision.
+
+## D-011: Device-validation claims are evidence scoped
+
+**Decision:** Every Android or AutoJs6 device-validation claim must identify
+the exact device, runtime version, authoritative repository SHA, and test case.
+A passing case applies only to that recorded scope. It must not be expanded
+into a claim that other formats, failure paths, integrations, devices, or
+runtimes pass, and it does not mark a historical module migrated unless every
+migration requirement in [`PROJECT_STATE.md`](PROJECT_STATE.md) is satisfied.
