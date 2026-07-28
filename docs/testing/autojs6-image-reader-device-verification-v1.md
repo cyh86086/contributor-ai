@@ -31,6 +31,19 @@ branch is deleted. D01 now has passing device evidence for the exact recorded
 scope. The remaining verification matrix and broader AutoJs6 compatibility
 remain unverified.
 
+Deterministic, verification-only one-click entries are also prepared for:
+
+- D02: `scripts/autojs6/d02-png-device-check.js`;
+- D03: `scripts/autojs6/d03-webp-device-check.js`;
+- D04: `scripts/autojs6/d04-heic-device-check.js`;
+- D05: `scripts/autojs6/d05-heif-device-check.js`.
+
+They share one immutable case manifest, runtime-neutral launcher core, and
+AutoJs6 runtime adapter with D01. Their build freshness, legacy syntax, and
+output contracts have offline checks. None has device evidence yet. Follow
+the Traditional Chinese D02-D05 guide at
+[`../user-guides/autojs6-d02-d05-format-checks-zh-tw.md`](../user-guides/autojs6-d02-d05-format-checks-zh-tw.md).
+
 ### Initial failed D01 device evidence
 
 - **Device:** Vivo X Fold5
@@ -174,6 +187,45 @@ The harness must never print image bytes, Base64, complete URI query strings,
 file paths, credentials, personal filenames, exception messages, stacks, or
 causes. Node.js may lint this template, but Node.js is not a device or
 compatibility test.
+
+### D02-D05 one-click execution
+
+Run D02-D05 independently and in matrix order. Before each case:
+
+1. build or freshness-check every generated entry from the same exact clean
+   repository SHA;
+2. import only the generated entry for the current case into AutoJs6 without
+   editing it on the device;
+3. use only the matching non-sensitive synthetic fixture;
+4. confirm the dialog and Android picker identify the expected format;
+5. select exactly one image and require one metadata-only JSON record;
+6. require `uiResponsive: true` for PASS;
+7. stop if the returned MIME does not exactly match the case MIME, even if the
+   reader otherwise succeeds;
+8. inspect the console for prohibited data before proceeding to the next case.
+
+The exact PASS mappings are:
+
+| Case       | Picker MIME  | Required returned MIME |
+| ---------- | ------------ | ---------------------- |
+| `D02_PNG`  | `image/png`  | `image/png`            |
+| `D03_WEBP` | `image/webp` | `image/webp`           |
+| `D04_HEIC` | `image/heic` | `image/heic`           |
+| `D05_HEIF` | `image/heif` | `image/heif`           |
+
+Picker cancellation, inability to expose a matching source, a wrong returned
+MIME, non-positive or invalid byte count, reader failure, or missing UI
+responsiveness proof is a FAIL or stop result. It must never be rewritten as a
+PASS. In particular, if the Vivo X Fold5 gallery or picker does not expose
+HEIF, record the platform limitation and sanitized D05 FAIL/stop observation.
+Do not substitute HEIC, rename a file, broaden the picker MIME, or claim D05
+unsupported without platform evidence.
+
+For each case, evidence must record the exact clean authoritative main SHA,
+device, Android version, AutoJs6 version and ABI, opaque fixture ID, expected
+byte count, one sanitized output record, UI responsiveness, result, and
+sanitized notes. Never record the URI, path, filename, bytes, Base64, image
+content, exception detail, stack, credentials, or unrelated metadata.
 
 ## 4. Verification matrix
 

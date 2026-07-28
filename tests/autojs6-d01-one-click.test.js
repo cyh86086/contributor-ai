@@ -95,6 +95,20 @@ test("selected URI is passed in memory but never included in output", async () =
   ]);
 });
 
+test("D01 prepareSelectedImage receives exactly one legacy argument", async () => {
+  let observedArguments;
+  const { record } = await runWith({
+    prepareSelectedImage: async (...receivedArguments) => {
+      observedArguments = receivedArguments;
+      return jpegPass();
+    },
+  });
+
+  assert.equal(observedArguments.length, 1);
+  assert.equal(observedArguments[0], PRIVATE_URI);
+  assert.equal(record.status, "PASS");
+});
+
 for (const errorCode of Object.values(IMAGE_INPUT_ERROR_CODES)) {
   test(`stable ${errorCode} is preserved without diagnostic details`, async () => {
     const { record } = await runWith({
@@ -232,6 +246,8 @@ test("D01 runtime source contains no prohibited integration behavior", async () 
   const sourceFiles = await Promise.all(
     [
       "../scripts/autojs6/d01-launcher-core.js",
+      "../scripts/autojs6/format-check-launcher-core.js",
+      "../scripts/autojs6/format-check-runtime.js",
       "../scripts/autojs6/source/d01-jpeg-device-check.entry.js",
     ].map((path) => readFile(new URL(path, import.meta.url), "utf8")),
   );
@@ -251,32 +267,29 @@ test("D01 runtime source contains no prohibited integration behavior", async () 
 });
 
 test("D01 reporter serializes only the already-sanitized record", async () => {
-  const entry = await readFile(
-    new URL(
-      "../scripts/autojs6/source/d01-jpeg-device-check.entry.js",
-      import.meta.url,
-    ),
+  const runtimeAdapter = await readFile(
+    new URL("../scripts/autojs6/format-check-runtime.js", import.meta.url),
     "utf8",
   );
 
-  assert.match(entry, /console\.info\(JSON\.stringify\(record\)\)/u);
-  assert.doesNotMatch(entry, /console\.(?:log|error|warn)\s*\(/u);
-  assert.doesNotMatch(entry, /JSON\.stringify\((?:error|sourceUri)\)/u);
+  assert.match(runtimeAdapter, /console\.info\(JSON\.stringify\(record\)\)/u);
+  assert.doesNotMatch(runtimeAdapter, /console\.(?:log|error|warn)\s*\(/u);
+  assert.doesNotMatch(
+    runtimeAdapter,
+    /JSON\.stringify\((?:error|sourceUri)\)/u,
+  );
 });
 
 test("D01 entry injects the existing production reader harness", async () => {
-  const entry = await readFile(
-    new URL(
-      "../scripts/autojs6/source/d01-jpeg-device-check.entry.js",
-      import.meta.url,
-    ),
+  const runtimeAdapter = await readFile(
+    new URL("../scripts/autojs6/format-check-runtime.js", import.meta.url),
     "utf8",
   );
 
-  assert.match(entry, /runImageReaderDeviceCheck\(\{/u);
-  assert.match(entry, /isFileUriApproved:\s*\(\)\s*=>\s*false/u);
-  assert.match(entry, /context\.getContentResolver\(\)/u);
-  assert.match(entry, /runtime\.util\.java\.array\("byte", size\)/u);
+  assert.match(runtimeAdapter, /runImageReaderDeviceCheck\(\{/u);
+  assert.match(runtimeAdapter, /isFileUriApproved:\s*\(\)\s*=>\s*false/u);
+  assert.match(runtimeAdapter, /context\.getContentResolver\(\)/u);
+  assert.match(runtimeAdapter, /runtime\.util\.java\.array\("byte", size\)/u);
 });
 
 async function runWith(overrides = {}) {

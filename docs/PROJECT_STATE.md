@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-07-27
+Last updated: 2026-07-28
 
 ## Authority
 
@@ -50,7 +50,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: D01 validated; remaining Android device verification pending.**
+**Phase: D01 validated; D02-D05 launchers prepared; device verification
+pending.**
 
 The repository contains product scope and architecture documentation,
 runtime-neutral validation for the current metadata contract, and a Node.js
@@ -63,12 +64,15 @@ stopped at bundle parsing before the Android picker opened. PR #9 merged the
 reviewed deterministic legacy-syntax correction and passed the complete
 offline verification suite. D01 subsequently passed on Vivo X Fold5 with
 AutoJs6 v6.7.0 `arm64-v8a` against authoritative main SHA
-`5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`. The scoped evidence is recorded
-in
+`5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`. PR #10 merged the scoped D01
+evidence as authoritative main SHA
+`1bb59f072aa4b8f941d31bec377dc2fea00681b1`. The scoped evidence is recorded in
 [`testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md).
-The active milestone documents this result and prepares for the remaining
-formats, failures, limits, cleanup, repetition, and memory cases, which remain
-unverified.
+The current milestone prepares deterministic one-click D02 PNG, D03 WebP, D04
+HEIC, and D05 HEIF launchers through one shared format-check implementation.
+Their offline builds, freshness checks, syntax scans, and tests do not
+establish device verification. D02-D05 and the remaining failures, limits,
+cleanup, repetition, and memory cases remain unverified.
 
 ## Current branch and pull request
 
@@ -131,11 +135,16 @@ unverified.
 - Resulting authoritative `main` SHA:
   `80717606209f3f01c3bfc232a4d16016bf14c368`
 - Compatibility-fix branch state: deleted locally and remotely
-- Active device-validation documentation branch:
+- Device-validation documentation branch:
   `docs/d01-device-validation-v1`
-- Active device-validation documentation pull request:
+- Device-validation documentation pull request:
   [#10 — Document D01 Vivo X Fold5 Device Validation V1.0](https://github.com/cyh86086/contributor-ai/pull/10)
-- Device-validation documentation pull request state: open draft
+- Device-validation documentation pull request state: squash-merged
+- Resulting authoritative `main` SHA:
+  `1bb59f072aa4b8f941d31bec377dc2fea00681b1`
+- Active D02-D05 launcher-preparation branch:
+  `feature/prepare-d02-d05-format-checks-v1`
+- D02-D05 launcher-preparation pull request state: not created
 - Release status: no production release
 
 ## Historical target module status
@@ -178,8 +187,8 @@ satisfy these requirements.
   `5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`.
 - Production reader source is present. Real Android `ContentResolver`, Java
   bridge, picker, JPEG read, MIME detection, and UI responsiveness now have
-  scoped D01 evidence. Other formats and the remaining device matrix are
-  unverified.
+  scoped D01 evidence. Deterministic D02-D05 launchers have offline coverage,
+  but PNG, WebP, HEIC, HEIF, and the remaining device matrix are unverified.
 - Permission revocation, missing sources, MIME fallback, empty input, size
   boundaries, repeated reads, cleanup instrumentation, memory behavior, and
   the remaining stop conditions require user-assisted evidence.
@@ -193,15 +202,18 @@ case. This result does not establish complete module migration.
 
 ## Next planned actions
 
-1. Review and merge the scoped D01 device-validation record.
-2. Continue the remaining device-verification matrix with an exact main SHA
+1. Review the D02-D05 launcher-preparation changes and repository checks.
+2. After merge, run D02-D05 on the recorded Vivo X Fold5 and AutoJs6 runtime
+   against the exact clean authoritative main SHA, with sanitized evidence for
+   each independent case.
+3. Continue the remaining device-verification matrix with an exact main SHA
    and sanitized evidence for each case.
-3. Keep the complete Android Image Input Adapter V1.0 historical module
+4. Keep the complete Android Image Input Adapter V1.0 historical module
    `NOT YET MIGRATED`.
-4. Do not add network, provider, queue, Contributor app, submission, or
+5. Do not add network, provider, queue, Contributor app, submission, or
    device-specific behavior.
-5. Do not infer full device compatibility or module completion from the single
-   D01 JPEG PASS.
+6. Do not infer D02-D05 device compatibility, full device compatibility, or
+   module completion from offline checks or the single D01 JPEG PASS.
 
 ## Verification rules
 
