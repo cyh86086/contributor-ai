@@ -290,9 +290,13 @@ Before execution:
 See the
 [Traditional Chinese D07 guide](../user-guides/autojs6-d07-mime-fallback-check-zh-tw.md).
 
+D07 passed for the exact scoped execution recorded in the
+[Vivo X Fold5 / AutoJs6 v6.7.0 evidence](device-validation/d07-vivo-x-fold5-autojs6-v6.7.0.md).
+This result does not establish D08 or broader module completion.
+
 Offline tests prove only the controlled absent-MIME contract, unchanged byte
 count, fallback result, privacy, deterministic build, and syntax compatibility.
-They are not D07 Android device evidence.
+They are not substitutes for the recorded D07 Android device evidence.
 
 ## 4. Verification matrix
 
