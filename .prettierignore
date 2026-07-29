@@ -9,3 +9,4 @@ scripts/autojs6/d04-heic-device-check.js
 scripts/autojs6/d05-heif-device-check.js
 scripts/autojs6/d06-resolver-mime-device-check.js
 scripts/autojs6/d07-mime-fallback-device-check.js
+scripts/autojs6/d08-permission-granted-device-check.js

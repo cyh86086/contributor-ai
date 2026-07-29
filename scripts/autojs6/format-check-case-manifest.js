@@ -93,6 +93,19 @@ export const D07_MIME_FALLBACK_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d07-mime-fallback-device-check.js",
 });
 
+export const D08_PERMISSION_GRANTED_CHECK_CASE = defineCase({
+  testCaseId: "D08_PERMISSION_GRANTED",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  requestCode: 6108,
+  title: "D08 有效權限裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中重新選擇一張不含個資、且小於 10 MiB 的 JPEG。選取後腳本會在該次臨時 grant 仍有效時立即使用既有 production reader 讀取，並只輸出 sanitized success metadata。",
+  sourceEntryPath:
+    "autojs6/source/d08-permission-granted-device-check.entry.js",
+  generatedPath: "autojs6/d08-permission-granted-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -101,6 +114,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D05_FORMAT_CHECK_CASE,
   D06_RESOLVER_MIME_CHECK_CASE,
   D07_MIME_FALLBACK_CHECK_CASE,
+  D08_PERMISSION_GRANTED_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

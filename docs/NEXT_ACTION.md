@@ -5,59 +5,58 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D08-LAUNCHER-PREPARATION`
+**Task ID:** `D08-DEVICE-VERIFICATION`
 
-**Objective:** Prepare one case-specific AutoJs6 launcher for the normal
-permission-granted path, reusing the existing system picker, production Android
-reader, portable core, and metadata-only reporter without adding permission
-logic.
+**Objective:** Execute the generated D08 case on Vivo X Fold5 using a fixture
+freshly selected in that run, and record whether the existing production reader
+returns success metadata while the temporary picker grant remains active.
 
 ## Required work
 
 1. Complete the mandatory repository preflight.
-2. Follow
-   `docs/testing/d08-permission-granted-evidence-gap-review.md` as the reviewed
-   design boundary.
-3. Add manifest case `D08_PERMISSION_GRANTED` with JPEG picker, expected
-   `image/jpeg`, request code `6108`, and the existing normal verification path.
-4. Add a source entry and deterministic generated bundle that delegate
-   immediately to `runAutoJs6FormatCheck()`.
-5. Add manifest, delegation, build-freshness, legacy-syntax, privacy, and
-   normal-path contract coverage without duplicating the D01 implementation.
-6. Add a Traditional Chinese D08 device guide.
-7. Update project state and advance the single active task to D08 device
-   verification only after the preparation pull request is reviewed and merged.
+2. Confirm a clean authoritative `main` and record its exact SHA.
+3. Run `npm run build:autojs6:d08:check` and `npm run scan:autojs6:d08`.
+4. Follow
+   `docs/user-guides/autojs6-d08-permission-granted-check-zh-tw.md`.
+5. Execute `scripts/autojs6/d08-permission-granted-device-check.js` once.
+6. Freshly select the approved non-sensitive JPEG in the system picker and
+   allow the script to read it immediately.
+7. Return only the scoped, sanitized result required by the guide.
+8. Add reviewed evidence, update project state, and advance this file through a
+   documentation pull request.
 
 ## Acceptance criteria
 
-- D08 uses the same normal picker and `runImageReaderDeviceCheck()` path as D01.
-- No new reader, permission API, MIME detector, MIME map, error classification,
-  portable validation, or reporter is introduced.
-- A future device PASS requires case ID `D08_PERMISSION_GRANTED`, final
-  `mimeType: "image/jpeg"`, exact positive `sizeBytes`, and
+- A PASS requires `testCaseId: "D08_PERMISSION_GRANTED"`, `status: "PASS"`,
+  final `mimeType: "image/jpeg"`, exact positive fixture `sizeBytes`, and
   `uiResponsive: true`.
-- Tests prove immediate delegation to the shared runtime and no D08-specific
-  production behavior.
-- Generated AutoJs6 output is deterministic, current, parseable, and compatible
-  with the recorded legacy runtime.
-- Output excludes URI, path, filename, bytes, Base64, image content, exception
-  details, stack, credentials, and unrelated metadata.
+- Evidence identifies exact authoritative SHA, Vivo X Fold5, Android version,
+  AutoJs6 version and ABI, opaque fixture ID, expected byte count, result, and
+  sanitized notes.
+- The fixture is freshly selected during the D08 run and read immediately while
+  its temporary grant is active.
+- The fixture byte count is independently confirmed before execution.
+- Output contains no URI, path, filename, bytes, Base64, image content, error
+  detail, stack, credential, or unrelated metadata.
 - Node.js checks are not represented as Android permission evidence.
-- No D08 device PASS is claimed in the preparation pull request.
+- The evidence task has a GitHub commit and pull request before completion.
 
 ## Prohibited scope
 
-Do not add a permission manager, persistable-grant behavior, second picker,
-second reader, provider, network, queue, Contributor app, automatic submission,
+Do not add a permission manager, persistable grant, second picker, second
+reader, provider, network, queue, Contributor app, automatic submission,
 credentials, broad storage permission, or unrelated validation behavior.
 
 ## Stop conditions
 
-Stop and report without claiming completion when:
+Stop and report without claiming PASS when:
 
 - repository facts relevant to D08 changed and are not reconciled;
-- an open pull request already owns D08 preparation;
-- the implementation cannot remain a pure shared-runtime case alias;
-- bundle freshness, syntax, lint, formatting, privacy, or tests fail;
-- user/device action is required before the launcher is prepared;
-- repository write operations fail.
+- an open pull request already owns D08 evidence;
+- the generated bundle is stale or syntax checks fail;
+- the fixture was not freshly selected in the D08 run;
+- the fixture byte count is unknown;
+- Android or AutoJs6 cannot access or read the selected fixture;
+- final MIME differs from `image/jpeg`;
+- exact byte count or UI responsiveness is not proven;
+- output contains prohibited data.

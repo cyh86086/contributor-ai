@@ -53,8 +53,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: D01-D07 scoped device validation passed; D08-D26 and complete
-module migration remain pending.**
+**Phase: D01-D07 scoped device validation passed; D08 active-permission
+launcher prepared; D08 device evidence and D09-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -94,10 +94,11 @@ scoped evidence is recorded in
 
 The D08 evidence-gap review found that prior successful picker-driven device
 runs imply that usable grants existed, but those records are deliberately
-scoped to D01-D07 and cannot be silently expanded into D08. The reviewed
-minimum is a case-specific launcher alias that delegates unchanged to the
-existing normal picker, production-reader, and portable-core path. No new
-reader or permission logic is required. The review is recorded in
+scoped to D01-D07 and cannot be silently expanded into D08. The repository now
+contains the reviewed case-specific launcher alias, which delegates unchanged
+to the existing fresh system picker, production reader, portable core, and
+sanitized reporter path. No new reader or permission logic was added. Offline
+checks do not establish a D08 device PASS. The review is recorded in
 [`testing/d08-permission-granted-evidence-gap-review.md`](testing/d08-permission-granted-evidence-gap-review.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
@@ -157,11 +158,9 @@ satisfy these requirements.
 - D07 has a scoped PASS for the exact recorded device, runtime, SHA, fixture,
   controlled absent-MIME condition, JPEG signature fallback, byte count, and UI
   responsiveness.
-- The D08 evidence-gap review concluded that prior successful picker runs
-  imply active grants but remain scoped to D01-D07. D08 requires a distinct
-  case-specific launcher execution using the existing normal production-reader
-  path; no new reader or permission logic is required, and no D08 PASS exists
-  yet.
+- D08 now requires one user-assisted Vivo X Fold5 execution of the generated
+  fresh-selection active-permission launcher; no PASS exists until scoped
+  evidence is reviewed and committed.
 - D09-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
@@ -181,7 +180,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D08-LAUNCHER-PREPARATION`.
+At this snapshot it is `D08-DEVICE-VERIFICATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
