@@ -80,6 +80,14 @@ against authoritative main SHA
 scoped evidence is recorded in
 [`testing/device-validation/d06-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d06-vivo-x-fold5-autojs6-v6.7.0.md).
 
+The D07 evidence-gap review then confirmed that the existing portable and
+fake-resolver tests prove the fallback contract but do not constitute distinct
+Android / AutoJs6 device evidence. The reviewed minimum is an evidence-only
+wrapper around the existing production reader: preserve access and exact bytes,
+remove only the returned MIME, and pass the wrapper into the existing
+`prepareImageInput()` fallback path. The review is recorded in
+[`testing/d07-mime-fallback-evidence-gap-review.md`](testing/d07-mime-fallback-evidence-gap-review.md).
+
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
 
@@ -134,7 +142,12 @@ satisfy these requirements.
 
 - D06 has a scoped PASS for the exact recorded device, runtime, SHA, fixture,
   resolver MIME, byte count, and UI-responsiveness result.
-- D07-D26 still require scoped review, preparation, and in several cases
+- The D07 evidence-gap review concluded that existing Node.js fallback tests
+  do not independently establish Android / AutoJs6 evidence. D07 requires one
+  minimal controlled harness that removes only the reader MIME while preserving
+  production-reader bytes and the existing portable fallback path; no D07 PASS
+  exists yet.
+- D08-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -153,7 +166,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D07-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D07-HARNESS-PREPARATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
