@@ -5,51 +5,59 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D08-EVIDENCE-GAP-REVIEW`
+**Task ID:** `D08-LAUNCHER-PREPARATION`
 
-**Objective:** Read the authoritative D08 verification-matrix row and determine
-whether existing repository evidence independently satisfies it or whether a
-minimal additional harness and user-assisted device execution are required.
+**Objective:** Prepare one case-specific AutoJs6 launcher for the normal
+permission-granted path, reusing the existing system picker, production Android
+reader, portable core, and metadata-only reporter without adding permission
+logic.
 
 ## Required work
 
 1. Complete the mandatory repository preflight.
-2. Read the exact D08 row in
-   `docs/testing/autojs6-image-reader-device-verification-v1.md`.
-3. Inspect the production reader, portable core, existing D01-D07 harnesses,
-   tests, device records, build system, and privacy contracts relevant to D08.
-4. Identify the exact source and runtime boundary D08 is intended to prove.
-5. Determine whether existing evidence already proves D08 or document the
-   smallest non-duplicative evidence path required.
-6. Record one reviewed conclusion in repository documentation.
+2. Follow
+   `docs/testing/d08-permission-granted-evidence-gap-review.md` as the reviewed
+   design boundary.
+3. Add manifest case `D08_PERMISSION_GRANTED` with JPEG picker, expected
+   `image/jpeg`, request code `6108`, and the existing normal verification path.
+4. Add a source entry and deterministic generated bundle that delegate
+   immediately to `runAutoJs6FormatCheck()`.
+5. Add manifest, delegation, build-freshness, legacy-syntax, privacy, and
+   normal-path contract coverage without duplicating the D01 implementation.
+6. Add a Traditional Chinese D08 device guide.
+7. Update project state and advance the single active task to D08 device
+   verification only after the preparation pull request is reviewed and merged.
 
 ## Acceptance criteria
 
-- The review quotes or precisely identifies the authoritative D08 requirement.
-- Existing D01-D07 evidence is not reused beyond its actual scope.
-- Node.js checks are not represented as Android proof.
-- Any proposed harness reuses existing production and portable components and
-  avoids duplicate readers, MIME detectors, validation logic, or mappings.
-- Output and evidence remain metadata-only and exclude URI, path, filename,
-  bytes, Base64, image content, exception details, stack, credentials, and
-  unrelated metadata.
-- No D08 PASS is claimed without distinct reviewed evidence.
-- The review has a GitHub commit and pull request before completion.
+- D08 uses the same normal picker and `runImageReaderDeviceCheck()` path as D01.
+- No new reader, permission API, MIME detector, MIME map, error classification,
+  portable validation, or reporter is introduced.
+- A future device PASS requires case ID `D08_PERMISSION_GRANTED`, final
+  `mimeType: "image/jpeg"`, exact positive `sizeBytes`, and
+  `uiResponsive: true`.
+- Tests prove immediate delegation to the shared runtime and no D08-specific
+  production behavior.
+- Generated AutoJs6 output is deterministic, current, parseable, and compatible
+  with the recorded legacy runtime.
+- Output excludes URI, path, filename, bytes, Base64, image content, exception
+  details, stack, credentials, and unrelated metadata.
+- Node.js checks are not represented as Android permission evidence.
+- No D08 device PASS is claimed in the preparation pull request.
 
 ## Prohibited scope
 
-Do not add provider, network, queue, Contributor app, automatic submission,
-credentials, broad storage permission, unrelated format support, or complete
-module-migration claims.
+Do not add a permission manager, persistable-grant behavior, second picker,
+second reader, provider, network, queue, Contributor app, automatic submission,
+credentials, broad storage permission, or unrelated validation behavior.
 
 ## Stop conditions
 
-Stop and report without implementation when:
+Stop and report without claiming completion when:
 
 - repository facts relevant to D08 changed and are not reconciled;
-- an open pull request already owns D08 work;
-- the authoritative D08 row is missing or ambiguous;
-- the source cannot identify one precise evidence boundary;
-- proving D08 requires unreviewed production API expansion;
-- user/device action is required before an evidence path is prepared;
-- repository checks or write operations fail.
+- an open pull request already owns D08 preparation;
+- the implementation cannot remain a pure shared-runtime case alias;
+- bundle freshness, syntax, lint, formatting, privacy, or tests fail;
+- user/device action is required before the launcher is prepared;
+- repository write operations fail.
