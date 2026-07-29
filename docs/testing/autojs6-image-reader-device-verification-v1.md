@@ -31,7 +31,7 @@ branch is deleted. D01 now has passing device evidence for the exact recorded
 scope. The remaining verification matrix and broader AutoJs6 compatibility
 remain unverified.
 
-Deterministic, verification-only one-click entries are also prepared for:
+Deterministic, verification-only one-click entries exist for:
 
 - D02: `scripts/autojs6/d02-png-device-check.js`;
 - D03: `scripts/autojs6/d03-webp-device-check.js`;
@@ -40,8 +40,11 @@ Deterministic, verification-only one-click entries are also prepared for:
 
 They share one immutable case manifest, runtime-neutral launcher core, and
 AutoJs6 runtime adapter with D01. Their build freshness, legacy syntax, and
-output contracts have offline checks. None has device evidence yet. Follow
-the Traditional Chinese D02-D05 guide at
+output contracts have offline checks. D02-D05 also passed scoped device
+validation on Vivo X Fold5 with AutoJs6 v6.7.0 `arm64-v8a` against authoritative
+main SHA `ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`. See the
+[`D02-D05 evidence record`](device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md)
+and the Traditional Chinese guide at
 [`../user-guides/autojs6-d02-d05-format-checks-zh-tw.md`](../user-guides/autojs6-d02-d05-format-checks-zh-tw.md).
 
 ### Initial failed D01 device evidence
@@ -72,6 +75,20 @@ the Traditional Chinese D02-D05 guide at
   image content, stack trace, or credentials were observed
 - **Evidence record:**
   [`device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md`](device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md)
+- **Adapter status:** **NOT YET MIGRATED**
+
+### Passing D02-D05 device evidence
+
+- **Device:** Vivo X Fold5
+- **Runtime:** AutoJs6 v6.7.0, `arm64-v8a`
+- **Tested main SHA:** `ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`
+- **Results:** `D02_PNG`, `D03_WEBP`, `D04_HEIC`, and `D05_HEIF` PASS
+- **Validated:** matching MIME, positive byte count, metadata-only result, and
+  `uiResponsive: true` for each case
+- **Notable observation:** D04 returned `image/heic`; D05 returned the distinct
+  MIME `image/heif`
+- **Evidence record:**
+  [`device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md`](device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md)
 - **Adapter status:** **NOT YET MIGRATED**
 
 ## 1. Preconditions
