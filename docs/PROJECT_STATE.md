@@ -92,6 +92,14 @@ v6.7.0 `arm64-v8a` against authoritative main SHA
 scoped evidence is recorded in
 [`testing/device-validation/d07-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d07-vivo-x-fold5-autojs6-v6.7.0.md).
 
+The D08 evidence-gap review found that prior successful picker-driven device
+runs imply that usable grants existed, but those records are deliberately
+scoped to D01-D07 and cannot be silently expanded into D08. The reviewed
+minimum is a case-specific launcher alias that delegates unchanged to the
+existing normal picker, production-reader, and portable-core path. No new
+reader or permission logic is required. The review is recorded in
+[`testing/d08-permission-granted-evidence-gap-review.md`](testing/d08-permission-granted-evidence-gap-review.md).
+
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
 
@@ -149,7 +157,12 @@ satisfy these requirements.
 - D07 has a scoped PASS for the exact recorded device, runtime, SHA, fixture,
   controlled absent-MIME condition, JPEG signature fallback, byte count, and UI
   responsiveness.
-- D08-D26 still require scoped review, preparation, and in several cases
+- The D08 evidence-gap review concluded that prior successful picker runs
+  imply active grants but remain scoped to D01-D07. D08 requires a distinct
+  case-specific launcher execution using the existing normal production-reader
+  path; no new reader or permission logic is required, and no D08 PASS exists
+  yet.
+- D09-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -168,7 +181,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D08-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D08-LAUNCHER-PREPARATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
