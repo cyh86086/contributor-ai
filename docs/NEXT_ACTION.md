@@ -5,55 +5,51 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D06-DEVICE-VERIFICATION`
+**Task ID:** `D07-EVIDENCE-GAP-REVIEW`
 
-**Objective:** Execute the generated D06 evidence-only launcher on Vivo X Fold5
-and record whether Android `ContentResolver` directly returns the required JPEG
-MIME with the exact fixture byte count.
+**Objective:** Determine whether the existing runtime-neutral fallback tests and
+Android reader boundaries can supply distinct, reviewable D07 evidence for an
+absent `ContentResolver` MIME, or whether D07 needs a minimal controlled
+AutoJs6 evidence harness.
 
 ## Required work
 
 1. Complete the mandatory repository preflight.
-2. Confirm a clean authoritative `main` and record its exact SHA.
-3. Run `npm run build:autojs6:d06:check` and `npm run scan:autojs6:d06`.
-4. Follow
-   `docs/user-guides/autojs6-d06-content-resolver-mime-check-zh-tw.md`.
-5. Execute `scripts/autojs6/d06-resolver-mime-device-check.js` once with the
-   approved non-sensitive JPEG fixture.
-6. Return only the scoped, sanitized result required by the guide.
-7. Add the reviewed device evidence, update project state, and advance this file
-   through a documentation pull request.
+2. Read the D07 row in
+   `docs/testing/autojs6-image-reader-device-verification-v1.md`.
+3. Inspect `src/core/image-input.js`, the production Android reader, existing
+   fallback tests, D06 evidence harness, build system, and privacy contracts.
+4. Identify the exact controlled hook that can return no MIME while preserving
+   a valid fixture read.
+5. Determine whether existing evidence already proves D07 or document the
+   smallest non-duplicative launcher/test change required.
+6. Record one reviewed conclusion in repository documentation.
 
 ## Acceptance criteria
 
-- A PASS requires `testCaseId: "D06_RESOLVER_MIME"`, `status: "PASS"`,
-  `mimeType: "image/jpeg"`, the exact positive fixture `sizeBytes`, and
-  `uiResponsive: true`.
-- Evidence identifies exact authoritative SHA, Vivo X Fold5, Android version,
-  AutoJs6 version and ABI, opaque fixture ID, expected byte count, result, and
-  sanitized notes.
-- No URI, path, filename, bytes, Base64, image content, error detail, stack,
-  credential, or unrelated metadata is recorded.
-- A missing or wrong resolver MIME remains FAIL even when JPEG signature bytes
-  are valid.
-- Node.js checks are not represented as Android proof.
-- The evidence task has a GitHub commit and pull request before it is complete.
+- The review distinguishes D07 signature fallback from D06 resolver-MIME proof.
+- Any proposed harness reuses the existing production reader and portable core;
+  it must not create a second MIME detector or image reader.
+- The controlled absent-MIME condition is deterministic and cannot be confused
+  with a picker failure, permission denial, unsupported bytes, or wrong MIME.
+- Output remains metadata-only and excludes URI, path, filename, bytes, Base64,
+  image content, exception detail, stack, credentials, and unrelated metadata.
+- Node.js evidence is not represented as Android proof.
+- No D07 PASS is claimed without distinct reviewed evidence.
 
 ## Prohibited scope
 
-Do not add signature fallback to D06, a second image reader, queue, AI provider,
-network, Contributor app, automatic submission, credentials, or unrelated
-validation behavior.
+Do not add provider, network, queue, Contributor app, automatic submission,
+credential, broad storage permission, unrelated format support, or complete
+module-migration claims.
 
 ## Stop conditions
 
-Stop and report without claiming PASS when:
+Stop and report without implementation when:
 
-- repository facts relevant to D06 changed and are not reconciled;
-- an open pull request already owns D06 evidence;
-- the generated bundle is stale or syntax checks fail;
-- the fixture byte count is unknown;
-- Android or AutoJs6 cannot expose or read the fixture;
-- the resolver MIME is absent or differs from `image/jpeg`;
-- UI responsiveness is not proven;
-- the output contains prohibited data.
+- repository facts relevant to D07 changed and are not reconciled;
+- an open pull request already owns D07 work;
+- the source cannot identify one deterministic absent-MIME control point;
+- proving the condition requires unreviewed production API expansion;
+- user/device action is required before the evidence path is prepared;
+- GitHub write capability is unavailable and repository changes are required.

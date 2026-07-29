@@ -66,11 +66,10 @@ same Vivo X Fold5 and AutoJs6 runtime using authoritative main SHA
 `ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`. The scoped results are recorded in
 the [D02-D05 device-validation record](docs/testing/device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md).
 
-D01-D05 are scoped format cases only. A deterministic evidence-only D06
-launcher is prepared to prove MIME provenance directly from Android
-`ContentResolver`; D06 still requires a separate device execution and has no
-PASS claim yet. D07-D26 and complete Android Image Input Adapter V1.0 migration
-remain pending.
+D01-D06 now have scoped Vivo X Fold5 / AutoJs6 device evidence. D06 passed
+with MIME provenance directly from Android `ContentResolver`, exact fixture
+byte count, and responsive UI against its recorded authoritative SHA. D07-D26
+and complete Android Image Input Adapter V1.0 migration remain pending.
 
 ## Project layout
 

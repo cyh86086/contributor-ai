@@ -53,8 +53,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: D01-D05 scoped format device validation passed; D06 resolver-MIME
-device launcher prepared; D06 device evidence and D07-D26 remain pending.**
+**Phase: D01-D06 scoped device validation passed; D07-D26 and complete
+module migration remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -69,11 +69,16 @@ MIME fallback, permission failure, missing source, size boundaries, cleanup,
 repetition, memory behavior, complete device compatibility, provider behavior,
 queue behavior, Contributor app automation, or module migration.
 
-The D06 evidence-gap review found that D01-D05 final MIME records cannot prove
-MIME provenance because `prepareImageInput()` may use byte-signature fallback.
-The repository therefore prepares one evidence-only D06 launcher that calls the
-existing production reader directly and requires the normalized resolver MIME.
-This is not a D06 PASS; a separate Vivo X Fold5 execution remains required.
+The D06 evidence-gap review found that D01-D05 final MIME records could not
+prove MIME provenance because `prepareImageInput()` may use byte-signature
+fallback. PR #14 added an evidence-only D06 launcher that calls the existing
+production reader directly, and PR #15 reconciled every generated bundle.
+D06 then passed on Vivo X Fold5 with Android 16 and AutoJs6 v6.7.0 `arm64-v8a`
+against authoritative main SHA
+`6704ed97553f1bba60b7bf9120d6ba84d44715ca`. The independently confirmed
+6,406-byte JPEG fixture returned `image/jpeg` with `uiResponsive: true`. The
+scoped evidence is recorded in
+[`testing/device-validation/d06-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d06-vivo-x-fold5-autojs6-v6.7.0.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
@@ -127,8 +132,8 @@ satisfy these requirements.
 
 ## Current blockers
 
-- D06 now requires one user-assisted Vivo X Fold5 execution of the generated
-  resolver-MIME launcher; no PASS exists until scoped evidence is reviewed.
+- D06 has a scoped PASS for the exact recorded device, runtime, SHA, fixture,
+  resolver MIME, byte count, and UI-responsiveness result.
 - D07-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
@@ -148,7 +153,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D06-DEVICE-VERIFICATION`.
+At this snapshot it is `D07-EVIDENCE-GAP-REVIEW`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
