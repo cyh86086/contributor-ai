@@ -113,7 +113,7 @@ function createHarness(options = {}) {
     accessDenied = false,
     readError,
   } = options;
-  const mimeType = Object.prototype.hasOwnProperty.call(options, "mimeType")
+  const mimeType = Object.hasOwn(options, "mimeType")
     ? options.mimeType
     : "image/jpeg";
   const reports = [];
