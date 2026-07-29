@@ -28,6 +28,10 @@ Before planning or changing anything, the executor must complete every item:
 If any item cannot be completed, or the documents conflict with GitHub state,
 feature development must stop. State reconciliation is the only permitted work.
 
+A historical or evidence-scoped SHA does not conflict merely because `main`
+advanced later. Only fields explicitly labeled as current live state must match
+the preflight result.
+
 ## One active task
 
 Only the single active task in `docs/NEXT_ACTION.md` may be executed. The task
@@ -110,8 +114,13 @@ AutoJs6, provider, network, Contributor app, or submission behavior.
 ## State maintenance
 
 Update `PROJECT_STATE.md`, `NEXT_ACTION.md`, and affected evidence documents in
-the same change whenever the phase, authoritative SHA, blocker, open PR, active
-task, device result, module status, or release status changes.
+the same change whenever the phase, blocker, open PR, active task, device result,
+module status, or release status changes.
+
+Do not encode the live `main` SHA as a self-referential invariant inside a pull
+request that will create a new merge SHA. Fetch the live SHA during preflight.
+Store exact SHAs only when they identify historical commits or scope device
+evidence.
 
 `PROJECT_STATE.md` is a current snapshot, not a chronological substitute for Git
 history. Historical detail belongs in commits, pull requests, decisions, and

@@ -113,3 +113,11 @@ stops until write access or an approved local repository workflow is available.
 or the actual `main` SHA disagree, reconciliation is the highest-priority task.
 No new feature implementation may proceed until the authoritative snapshot and
 single next action are corrected.
+
+## D-017: Live main SHA is resolved during preflight
+
+**Decision:** The executor fetches the live `main` SHA at the start of every
+preflight. Governance and active-task files must not require a pull request to
+predict the merge SHA that will introduce those files. Exact SHAs stored in the
+repository identify historical commits or scope evidence; they are not assumed
+to equal the current branch head unless explicitly labeled as live state.
