@@ -120,7 +120,17 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     sourceEntryPath: "autojs6/source/d07-mime-fallback-device-check.entry.js",
     generatedPath: "autojs6/d07-mime-fallback-device-check.js"
   });
-  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE]);
+  var D08_PERMISSION_GRANTED_CHECK_CASE = defineCase({
+    testCaseId: "D08_PERMISSION_GRANTED",
+    pickerMimeType: "image/jpeg",
+    expectedMimeType: "image/jpeg",
+    requestCode: 6108,
+    title: "D08 \u6709\u6548\u6B0A\u9650\u88DD\u7F6E\u9A57\u8B49",
+    instructionText: "\u8ACB\u5728 Android \u7CFB\u7D71\u9078\u5716\u5668\u4E2D\u91CD\u65B0\u9078\u64C7\u4E00\u5F35\u4E0D\u542B\u500B\u8CC7\u3001\u4E14\u5C0F\u65BC 10 MiB \u7684 JPEG\u3002\u9078\u53D6\u5F8C\u8173\u672C\u6703\u5728\u8A72\u6B21\u81E8\u6642 grant \u4ECD\u6709\u6548\u6642\u7ACB\u5373\u4F7F\u7528\u65E2\u6709 production reader \u8B80\u53D6\uFF0C\u4E26\u53EA\u8F38\u51FA sanitized success metadata\u3002",
+    sourceEntryPath: "autojs6/source/d08-permission-granted-device-check.entry.js",
+    generatedPath: "autojs6/d08-permission-granted-device-check.js"
+  });
+  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE]);
   var D02_D05_FORMAT_CHECK_CASES = Object.freeze([D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE]);
   var IMAGE_INPUT_ERROR_CODES = Object.freeze({
     UNSUPPORTED_MIME_TYPE: "UNSUPPORTED_MIME_TYPE",

@@ -298,6 +298,32 @@ Offline tests prove only the controlled absent-MIME contract, unchanged byte
 count, fallback result, privacy, deterministic build, and syntax compatibility.
 They are not substitutes for the recorded D07 Android device evidence.
 
+### D08 active-permission one-click execution
+
+D08 uses `scripts/autojs6/d08-permission-granted-device-check.js`. It is a
+case-specific alias of the existing normal system-picker and production-reader
+path. It adds no permission implementation and must be executed with a fixture
+freshly selected in that run while the temporary grant remains active.
+
+Before execution:
+
+1. verify the generated D08 bundle is current and legacy-syntax compatible;
+2. use a clean authoritative `main` SHA;
+3. independently record opaque fixture ID `JPEG_PERMISSION_GRANTED_VALID` and
+   exact JPEG byte count;
+4. import the generated script without editing it;
+5. select the fixture freshly in the system picker and allow immediate read;
+6. require final `mimeType: "image/jpeg"`, exact positive `sizeBytes`, and
+   `uiResponsive: true`;
+7. retain only sanitized metadata and scoped device information.
+
+See the
+[Traditional Chinese D08 guide](../user-guides/autojs6-d08-permission-granted-check-zh-tw.md).
+
+Offline tests prove only shared-runtime delegation, normal-path contracts,
+privacy, deterministic build, and syntax compatibility. They are not D08
+Android permission evidence.
+
 ## 4. Verification matrix
 
 Record the exact main SHA, limits, Android version, AutoJs6 version, start/end

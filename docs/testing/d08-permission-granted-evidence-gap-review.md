@@ -73,6 +73,9 @@ Offline tests may prove that the D08 case delegates unchanged to the shared
 runtime, has deterministic generated output, remains privacy-safe, and passes
 legacy syntax checks. They are not Android permission evidence.
 
-D08 remains pending until the case-specific launcher is reviewed, merged, and
-executed on the recorded Vivo X Fold5 / AutoJs6 runtime with evidence bound to
-an exact authoritative SHA.
+The reviewed case-specific launcher is now implemented as a pure alias of the
+existing normal picker, production-reader, portable-core, and sanitized reporter
+path. Offline checks establish only delegation, determinism, privacy, and syntax
+compatibility. D08 remains pending until the generated launcher is executed on
+the recorded Vivo X Fold5 / AutoJs6 runtime with evidence bound to an exact
+authoritative SHA.
