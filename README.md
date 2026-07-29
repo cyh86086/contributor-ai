@@ -66,11 +66,11 @@ same Vivo X Fold5 and AutoJs6 runtime using authoritative main SHA
 `ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`. The scoped results are recorded in
 the [D02-D05 device-validation record](docs/testing/device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md).
 
-D01-D06 have scoped Vivo X Fold5 / AutoJs6 device evidence. D07 now has a
-deterministic evidence-only launcher that removes only the production-reader
-MIME and exercises the existing portable JPEG signature fallback; D07 still
-requires a separate scoped device execution and has no PASS claim yet. D08-D26
-and complete Android Image Input Adapter V1.0 migration remain pending.
+D01-D07 now have scoped Vivo X Fold5 / AutoJs6 device evidence. D07 passed
+with the production-reader bytes preserved, reader MIME deterministically
+absent, the existing portable JPEG signature fallback returning `image/jpeg`,
+an exact fixture byte count, and responsive UI. D08-D26 and complete Android
+Image Input Adapter V1.0 migration remain pending.
 
 ## Project layout
 
