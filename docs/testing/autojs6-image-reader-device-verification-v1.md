@@ -244,6 +244,27 @@ byte count, one sanitized output record, UI responsiveness, result, and
 sanitized notes. Never record the URI, path, filename, bytes, Base64, image
 content, exception detail, stack, credentials, or unrelated metadata.
 
+### D06 ContentResolver MIME one-click execution
+
+D06 uses
+`scripts/autojs6/d06-resolver-mime-device-check.js`. It selects one JPEG and
+calls the existing production reader directly. It does not call
+`prepareImageInput()`, so an absent or wrong resolver MIME cannot be replaced by
+byte-signature fallback.
+
+Before execution:
+
+1. verify the generated D06 bundle is current and legacy-syntax compatible;
+2. use a clean authoritative `main` SHA;
+3. record only opaque fixture ID `JPEG_RESOLVER_MIME_VALID` and exact byte count;
+4. import the generated script without editing it on the device;
+5. require `mimeType: "image/jpeg"`, exact positive `sizeBytes`, and
+   `uiResponsive: true`;
+6. retain only the sanitized output and scoped device metadata.
+
+See the
+[Traditional Chinese D06 guide](../user-guides/autojs6-d06-content-resolver-mime-check-zh-tw.md).
+
 ## 4. Verification matrix
 
 Record the exact main SHA, limits, Android version, AutoJs6 version, start/end

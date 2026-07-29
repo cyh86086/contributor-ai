@@ -53,8 +53,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: D01-D05 scoped format device validation passed; D06-D26 and
-complete module migration remain pending.**
+**Phase: D01-D05 scoped format device validation passed; D06 resolver-MIME
+device launcher prepared; D06 device evidence and D07-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -69,7 +69,13 @@ MIME fallback, permission failure, missing source, size boundaries, cleanup,
 repetition, memory behavior, complete device compatibility, provider behavior,
 queue behavior, Contributor app automation, or module migration.
 
-The repository now uses `NEXT_ACTION.md` as the single active-task register and
+The D06 evidence-gap review found that D01-D05 final MIME records cannot prove
+MIME provenance because `prepareImageInput()` may use byte-signature fallback.
+The repository therefore prepares one evidence-only D06 launcher that calls the
+existing production reader directly and requires the normalized resolver MIME.
+This is not a D06 PASS; a separate Vivo X Fold5 execution remains required.
+
+The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
 
 ## Current branch and pull request
@@ -121,8 +127,10 @@ satisfy these requirements.
 
 ## Current blockers
 
-- The remaining D06-D26 verification matrix still requires scoped review,
-  preparation, and in several cases user-assisted Vivo X Fold5 evidence.
+- D06 now requires one user-assisted Vivo X Fold5 execution of the generated
+  resolver-MIME launcher; no PASS exists until scoped evidence is reviewed.
+- D07-D26 still require scoped review, preparation, and in several cases
+  user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
 - Remote provider, network transport, queue, Contributor app integration, and
@@ -140,7 +148,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D06-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D06-DEVICE-VERIFICATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
