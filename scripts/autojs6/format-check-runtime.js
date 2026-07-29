@@ -12,6 +12,7 @@ import {
   runFormatCheck,
 } from "./format-check-launcher-core.js";
 import { runImageReaderDeviceCheck } from "./image-reader-device-check.js";
+import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 const READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
@@ -34,7 +35,7 @@ export function runAutoJs6FormatCheck(formatCase, injectedRuntime) {
       return executeOffUiThread(runtime, task);
     },
     prepareSelectedImage(sourceUri, testCaseId) {
-      return prepareSelectedImage(runtime, sourceUri, testCaseId);
+      return prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase);
     },
     reportMetadata(record) {
       runtime.console.clear();
@@ -155,9 +156,32 @@ function executeOffUiThread(runtime, task) {
   });
 }
 
-function prepareSelectedImage(runtime, sourceUri, testCaseId) {
+function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
   const context = runtime.context;
   const contentResolver = context.getContentResolver();
+  const parseUri = (value) => runtime.android.net.Uri.parse(value);
+  const javaBridge = {
+    createByteArray: (size) => runtime.util.java.array("byte", size),
+    classifyError(error) {
+      return classifyError(runtime, error);
+    },
+  };
+
+  if (formatCase.verificationMode === "resolver-mime") {
+    return runResolverMimeDeviceCheck({
+      testCaseId,
+      sourceUri,
+      expectedMimeType: formatCase.expectedMimeType,
+      maxSizeBytes: MAX_SIZE_BYTES,
+      readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
+      context,
+      contentResolver,
+      parseUri,
+      javaBridge,
+      isFileUriApproved: () => false,
+      reportMetadata: () => {},
+    });
+  }
 
   return runImageReaderDeviceCheck({
     testCaseId,
@@ -166,13 +190,8 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId) {
     readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
     context,
     contentResolver,
-    parseUri: (value) => runtime.android.net.Uri.parse(value),
-    javaBridge: {
-      createByteArray: (size) => runtime.util.java.array("byte", size),
-      classifyError(error) {
-        return classifyError(runtime, error);
-      },
-    },
+    parseUri,
+    javaBridge,
     isFileUriApproved: () => false,
     reportMetadata: () => {},
   });

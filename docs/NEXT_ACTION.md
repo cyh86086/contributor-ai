@@ -1,60 +1,59 @@
 # Next action
 
 Last reviewed: 2026-07-29
-Defined by merged governance PR: `#12`
-Execution baseline: resolve the live `main` SHA during mandatory preflight. This
-document does not attempt to predict the merge commit that introduces it.
+Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D06-EVIDENCE-GAP-REVIEW`
+**Task ID:** `D06-DEVICE-VERIFICATION`
 
-**Objective:** Determine whether the existing D01-D05 launcher and reader path
-already exposes every distinct fact required by D06 (MIME returned through the
-Android `ContentResolver`) or whether D06 needs a separate deterministic device
-launcher or evidence procedure.
-
-This is an evidence-gap review before implementation. It must not automatically
-create a duplicate launcher.
+**Objective:** Execute the generated D06 evidence-only launcher on Vivo X Fold5
+and record whether Android `ContentResolver` directly returns the required JPEG
+MIME with the exact fixture byte count.
 
 ## Required work
 
-1. Complete the mandatory preflight in `PROJECT_GOVERNANCE.md`.
-2. Inspect the current D01-D05 manifest, launcher core, AutoJs6 runtime adapter,
-   production image reader, tests, and device-verification plan.
-3. Identify the exact source of the MIME value reported by D01-D05.
-4. Compare that source and evidence contract with the D06 row in the verification
-   matrix.
-5. Produce one reviewed conclusion:
-   - existing evidence can satisfy D06 after a distinct scoped evidence record;
-   - existing code needs a minimal evidence-only change; or
-   - D06 requires user-assisted device action before any conclusion.
-6. Add only the minimum documentation, tests, or launcher change required by the
-   conclusion.
-7. Run all applicable repository checks and update project state in the same PR.
+1. Complete the mandatory repository preflight.
+2. Confirm a clean authoritative `main` and record its exact SHA.
+3. Run `npm run build:autojs6:d06:check` and `npm run scan:autojs6:d06`.
+4. Follow
+   `docs/user-guides/autojs6-d06-content-resolver-mime-check-zh-tw.md`.
+5. Execute `scripts/autojs6/d06-resolver-mime-device-check.js` once with the
+   approved non-sensitive JPEG fixture.
+6. Return only the scoped, sanitized result required by the guide.
+7. Add the reviewed device evidence, update project state, and advance this file
+   through a documentation pull request.
 
 ## Acceptance criteria
 
-- No duplicate MIME mapping or second image-reader implementation is introduced.
-- The conclusion cites exact repository files and runtime boundaries.
-- No D06 PASS is claimed without distinct reviewed evidence matching D-011.
+- A PASS requires `testCaseId: "D06_RESOLVER_MIME"`, `status: "PASS"`,
+  `mimeType: "image/jpeg"`, the exact positive fixture `sizeBytes`, and
+  `uiResponsive: true`.
+- Evidence identifies exact authoritative SHA, Vivo X Fold5, Android version,
+  AutoJs6 version and ABI, opaque fixture ID, expected byte count, result, and
+  sanitized notes.
+- No URI, path, filename, bytes, Base64, image content, error detail, stack,
+  credential, or unrelated metadata is recorded.
+- A missing or wrong resolver MIME remains FAIL even when JPEG signature bytes
+  are valid.
 - Node.js checks are not represented as Android proof.
-- `npm run check` and `git diff --check` pass for repository changes.
-- The task has a GitHub commit and pull request before it is called complete.
-- `NEXT_ACTION.md` is updated to the next single task in the same completed PR.
+- The evidence task has a GitHub commit and pull request before it is complete.
 
 ## Prohibited scope
 
-Do not add queue, AI provider, network, Contributor app, automatic submission,
-credential handling, or unrelated image-validation modules during this task.
+Do not add signature fallback to D06, a second image reader, queue, AI provider,
+network, Contributor app, automatic submission, credentials, or unrelated
+validation behavior.
 
 ## Stop conditions
 
-Stop and report without implementing when:
+Stop and report without claiming PASS when:
 
-- repository facts relevant to this task changed after review and have not
-  been reconciled;
-- an open PR already owns D06 work;
-- GitHub write access is unavailable;
-- the repository cannot prove where the reported MIME originates;
-- device action is required to distinguish the possible conclusions.
+- repository facts relevant to D06 changed and are not reconciled;
+- an open pull request already owns D06 evidence;
+- the generated bundle is stale or syntax checks fail;
+- the fixture byte count is unknown;
+- Android or AutoJs6 cannot expose or read the fixture;
+- the resolver MIME is absent or differs from `image/jpeg`;
+- UI responsiveness is not proven;
+- the output contains prohibited data.

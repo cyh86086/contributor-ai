@@ -67,17 +67,34 @@ export const D05_FORMAT_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d05-heif-device-check.js",
 });
 
+export const D06_RESOLVER_MIME_CHECK_CASE = defineCase({
+  testCaseId: "D06_RESOLVER_MIME",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  requestCode: 6106,
+  verificationMode: "resolver-mime",
+  title: "D06 ContentResolver MIME 裝置驗證",
+  instructionText:
+    "請在系統選圖器中選擇一張不含個資、且小於 10 MiB 的 JPEG 圖片。此案例只接受 Android ContentResolver 直接回傳的 MIME，不使用位元組簽章 fallback。",
+  sourceEntryPath: "autojs6/source/d06-resolver-mime-device-check.entry.js",
+  generatedPath: "autojs6/d06-resolver-mime-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
   D03_FORMAT_CHECK_CASE,
   D04_FORMAT_CHECK_CASE,
   D05_FORMAT_CHECK_CASE,
+  D06_RESOLVER_MIME_CHECK_CASE,
 ]);
 
-export const D02_D05_FORMAT_CHECK_CASES = Object.freeze(
-  FORMAT_CHECK_CASES.slice(1),
-);
+export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([
+  D02_FORMAT_CHECK_CASE,
+  D03_FORMAT_CHECK_CASE,
+  D04_FORMAT_CHECK_CASE,
+  D05_FORMAT_CHECK_CASE,
+]);
 
 export function findFormatCheckCase(testCaseId) {
   return FORMAT_CHECK_CASES.find(
