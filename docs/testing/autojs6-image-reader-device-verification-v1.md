@@ -269,6 +269,31 @@ D06 passed for the exact scoped execution recorded in the
 [Vivo X Fold5 / AutoJs6 v6.7.0 evidence](device-validation/d06-vivo-x-fold5-autojs6-v6.7.0.md).
 This result does not establish D07 or broader module completion.
 
+### D07 absent-MIME signature-fallback one-click execution
+
+D07 uses `scripts/autojs6/d07-mime-fallback-device-check.js`. The evidence-only
+wrapper delegates access and exact byte reading to the existing production
+reader, removes only the returned MIME, and passes the unchanged bytes into the
+existing `prepareImageInput()` portable fallback path.
+
+Before execution:
+
+1. verify the generated D07 bundle is current and legacy-syntax compatible;
+2. use a clean authoritative `main` SHA;
+3. independently record opaque fixture ID `JPEG_MIME_FALLBACK_VALID` and exact
+   JPEG byte count;
+4. import the generated script without editing it;
+5. require final `mimeType: "image/jpeg"`, exact positive `sizeBytes`, and
+   `uiResponsive: true`;
+6. retain only sanitized metadata and scoped device information.
+
+See the
+[Traditional Chinese D07 guide](../user-guides/autojs6-d07-mime-fallback-check-zh-tw.md).
+
+Offline tests prove only the controlled absent-MIME contract, unchanged byte
+count, fallback result, privacy, deterministic build, and syntax compatibility.
+They are not D07 Android device evidence.
+
 ## 4. Verification matrix
 
 Record the exact main SHA, limits, Android version, AutoJs6 version, start/end

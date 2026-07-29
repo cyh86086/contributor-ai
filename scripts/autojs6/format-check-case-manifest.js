@@ -80,6 +80,19 @@ export const D06_RESOLVER_MIME_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d06-resolver-mime-device-check.js",
 });
 
+export const D07_MIME_FALLBACK_CHECK_CASE = defineCase({
+  testCaseId: "D07_MIME_FALLBACK",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  requestCode: 6107,
+  verificationMode: "mime-fallback",
+  title: "D07 MIME 簽章 fallback 裝置驗證",
+  instructionText:
+    "請選擇一張不含個資、且小於 10 MiB 的 JPEG。此 evidence-only 案例保留 production reader 的原始 bytes，但刻意移除 reader MIME，確認既有 portable core 能依 JPEG 位元組簽章 fallback。",
+  sourceEntryPath: "autojs6/source/d07-mime-fallback-device-check.entry.js",
+  generatedPath: "autojs6/d07-mime-fallback-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -87,6 +100,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D04_FORMAT_CHECK_CASE,
   D05_FORMAT_CHECK_CASE,
   D06_RESOLVER_MIME_CHECK_CASE,
+  D07_MIME_FALLBACK_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

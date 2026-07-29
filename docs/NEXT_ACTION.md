@@ -5,61 +5,57 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D07-HARNESS-PREPARATION`
+**Task ID:** `D07-DEVICE-VERIFICATION`
 
-**Objective:** Prepare one minimal evidence-only AutoJs6 launcher that proves
-the existing portable JPEG signature fallback under a deterministic absent-MIME
-condition, without adding a second reader or MIME detector.
+**Objective:** Execute the generated D07 evidence-only launcher on Vivo X Fold5
+and record whether the existing portable core derives `image/jpeg` from the
+fixture byte signature when the reader MIME is deterministically absent.
 
 ## Required work
 
 1. Complete the mandatory repository preflight.
-2. Follow
-   `docs/testing/d07-mime-fallback-evidence-gap-review.md` as the reviewed design
-   boundary.
-3. Reuse `createAutoJs6AndroidImageReader()` for access and exact byte reading.
-4. Add an evidence-only reader wrapper that preserves `canAccess()` and bytes
-   but returns an explicitly absent `mimeType` to `prepareImageInput()`.
-5. Reuse the existing portable `prepareImageInput()` and
-   `detectImageMimeType()` implementation; do not copy either algorithm.
-6. Add a deterministic D07 manifest case, source entry, generated bundle,
-   offline contract tests, build/freshness checks, legacy-syntax coverage, and
-   a Traditional Chinese device guide.
-7. Update project state and advance the active task to D07 device verification
-   only after the harness PR is reviewed and merged.
+2. Confirm a clean authoritative `main` and record its exact SHA.
+3. Run `npm run build:autojs6:d07:check` and `npm run scan:autojs6:d07`.
+4. Follow
+   `docs/user-guides/autojs6-d07-mime-fallback-check-zh-tw.md`.
+5. Execute `scripts/autojs6/d07-mime-fallback-device-check.js` once with the
+   approved non-sensitive JPEG fixture.
+6. Return only the scoped, sanitized result required by the guide.
+7. Add reviewed evidence, update project state, and advance this file through a
+   documentation pull request.
 
 ## Acceptance criteria
 
-- The controlled absent-MIME hook changes only the reader MIME result and
-  preserves the exact production-reader bytes.
-- A PASS requires final `mimeType: "image/jpeg"`, exact positive `sizeBytes`, and
+- A PASS requires `testCaseId: "D07_MIME_FALLBACK"`, `status: "PASS"`, final
+  `mimeType: "image/jpeg"`, exact positive fixture `sizeBytes`, and
   `uiResponsive: true`.
-- Tests prove that a present or manipulated resolver MIME cannot bypass the
-  controlled absent-MIME condition used by the D07 case.
-- The implementation contains no duplicate reader, signature detector, MIME
-  map, Base64 encoder, or production configuration switch.
-- Generated AutoJs6 output is deterministic, current, parseable, and compatible
-  with the recorded legacy runtime.
-- Output excludes URI, path, filename, bytes, Base64, image content, exception
-  details, stack, credentials, and unrelated metadata.
+- Evidence identifies exact authoritative SHA, Vivo X Fold5, Android version,
+  AutoJs6 version and ABI, opaque fixture ID, expected byte count, result, and
+  sanitized notes.
+- The selected fixture is a valid JPEG and its byte count is independently
+  confirmed before execution.
+- The evidence-only wrapper preserves production-reader bytes and removes only
+  MIME before the existing portable fallback path.
+- Output contains no URI, path, filename, bytes, Base64, image content, error
+  detail, stack, credential, or unrelated metadata.
 - Node.js checks are not represented as Android proof.
-- No D07 device PASS is claimed in the preparation PR.
+- The evidence task has a GitHub commit and pull request before completion.
 
 ## Prohibited scope
 
-Do not add provider, network, queue, Contributor app, automatic submission,
-credentials, broad storage permission, unrelated format support, or complete
-module-migration claims.
+Do not add a second reader, signature detector, MIME map, production switch,
+provider, network, queue, Contributor app, automatic submission, credentials,
+or unrelated validation behavior.
 
 ## Stop conditions
 
-Stop and report without claiming completion when:
+Stop and report without claiming PASS when:
 
 - repository facts relevant to D07 changed and are not reconciled;
-- an open pull request already owns D07 preparation;
-- the wrapper cannot preserve exact reader bytes;
-- the implementation would require a production API switch or duplicate MIME
-  logic;
-- bundle freshness, syntax, lint, formatting, privacy, or tests fail;
-- user/device action is required before the launcher is prepared;
-- repository write capability is unavailable.
+- an open pull request already owns D07 evidence;
+- the generated bundle is stale or syntax checks fail;
+- the fixture byte count is unknown;
+- Android or AutoJs6 cannot expose or read the fixture;
+- final MIME differs from `image/jpeg`;
+- exact byte count or UI responsiveness is not proven;
+- output contains prohibited data.

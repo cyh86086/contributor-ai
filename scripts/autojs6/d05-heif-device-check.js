@@ -109,7 +109,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     sourceEntryPath: "autojs6/source/d06-resolver-mime-device-check.entry.js",
     generatedPath: "autojs6/d06-resolver-mime-device-check.js"
   });
-  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE]);
+  var D07_MIME_FALLBACK_CHECK_CASE = defineCase({
+    testCaseId: "D07_MIME_FALLBACK",
+    pickerMimeType: "image/jpeg",
+    expectedMimeType: "image/jpeg",
+    requestCode: 6107,
+    verificationMode: "mime-fallback",
+    title: "D07 MIME \u7C3D\u7AE0 fallback \u88DD\u7F6E\u9A57\u8B49",
+    instructionText: "\u8ACB\u9078\u64C7\u4E00\u5F35\u4E0D\u542B\u500B\u8CC7\u3001\u4E14\u5C0F\u65BC 10 MiB \u7684 JPEG\u3002\u6B64 evidence-only \u6848\u4F8B\u4FDD\u7559 production reader \u7684\u539F\u59CB bytes\uFF0C\u4F46\u523B\u610F\u79FB\u9664 reader MIME\uFF0C\u78BA\u8A8D\u65E2\u6709 portable core \u80FD\u4F9D JPEG \u4F4D\u5143\u7D44\u7C3D\u7AE0 fallback\u3002",
+    sourceEntryPath: "autojs6/source/d07-mime-fallback-device-check.entry.js",
+    generatedPath: "autojs6/d07-mime-fallback-device-check.js"
+  });
+  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE]);
   var D02_D05_FORMAT_CHECK_CASES = Object.freeze([D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE]);
   var IMAGE_INPUT_ERROR_CODES = Object.freeze({
     UNSUPPORTED_MIME_TYPE: "UNSUPPORTED_MIME_TYPE",
@@ -1032,12 +1043,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   }
   var PUBLIC_ERROR_CODES3 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
   var SAFE_CASE_ID3 = /^[\x2D0-9A-Z_]{1,40}$/;
-  var SAFE_MIME_TYPE2 = /^image\/[\+\x2D\.0-9a-z]+$/;
-  function runResolverMimeDeviceCheck(_0) {
+  function runMimeFallbackDeviceCheck(_0) {
     return __async(this, arguments, function (_ref9) {
       var testCaseId = _ref9.testCaseId,
         sourceUri = _ref9.sourceUri,
-        expectedMimeType = _ref9.expectedMimeType,
         maxSizeBytes = _ref9.maxSizeBytes,
         readerSafetyLimitBytes = _ref9.readerSafetyLimitBytes,
         context = _ref9.context,
@@ -1051,18 +1060,16 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         openFileReadOnly = _ref9.openFileReadOnly,
         _ref9$reportMetadata = _ref9.reportMetadata,
         reportMetadata = _ref9$reportMetadata === void 0 ? function () {} : _ref9$reportMetadata;
-      return _regenerator().m(function _callee1() {
-        var record, reader, result, _t14, _t15;
-        return _regenerator().w(function (_context1) {
-          while (1) switch (_context1.p = _context1.n) {
+      return _regenerator().m(function _callee10() {
+        var record, _a, reader, evidenceReader, result, _t14;
+        return _regenerator().w(function (_context10) {
+          while (1) switch (_context10.p = _context10.n) {
             case 0:
-              validateInputs({
+              validateHarnessInputs2({
                 testCaseId: testCaseId,
-                expectedMimeType: expectedMimeType,
-                maxSizeBytes: maxSizeBytes,
                 reportMetadata: reportMetadata
               });
-              _context1.p = 1;
+              _context10.p = 1;
               reader = createAutoJs6AndroidImageReader({
                 context: context,
                 contentResolver: contentResolver,
@@ -1072,22 +1079,130 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 openFileReadOnly: openFileReadOnly,
                 readerSafetyLimitBytes: readerSafetyLimitBytes
               });
-              _context1.n = 2;
+              evidenceReader = Object.freeze({
+                canAccess: function canAccess(value) {
+                  return reader.canAccess(value);
+                },
+                read: function read(value) {
+                  return __async(this, null, _regenerator().m(function _callee1() {
+                    var result2;
+                    return _regenerator().w(function (_context1) {
+                      while (1) switch (_context1.n) {
+                        case 0:
+                          _context1.n = 1;
+                          return reader.read(value);
+                        case 1:
+                          result2 = _context1.v;
+                          return _context1.a(2, Object.freeze({
+                            bytes: result2.bytes,
+                            mimeType: void 0
+                          }));
+                      }
+                    }, _callee1);
+                  }));
+                }
+              });
+              _context10.n = 2;
+              return prepareImageInput({
+                sourceUri: sourceUri,
+                maxSizeBytes: maxSizeBytes,
+                reader: evidenceReader,
+                isFileUriApproved: isFileUriApproved
+              });
+            case 2:
+              result = _context10.v;
+              record = Object.freeze({
+                testCaseId: testCaseId,
+                status: "PASS",
+                mimeType: result.mimeType,
+                sizeBytes: result.sizeBytes
+              });
+              _context10.n = 4;
+              break;
+            case 3:
+              _context10.p = 3;
+              _t14 = _context10.v;
+              record = Object.freeze({
+                testCaseId: testCaseId,
+                status: "FAIL",
+                errorCode: PUBLIC_ERROR_CODES3.has(_t14 == null ? void 0 : _t14.code) ? _t14.code : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
+              });
+            case 4:
+              reportMetadata(record);
+              return _context10.a(2, record);
+          }
+        }, _callee10, null, [[1, 3]]);
+      })();
+    });
+  }
+  function validateHarnessInputs2(_ref0) {
+    var testCaseId = _ref0.testCaseId,
+      reportMetadata = _ref0.reportMetadata;
+    if (typeof testCaseId !== "string" || !SAFE_CASE_ID3.test(testCaseId)) {
+      throw new TypeError("testCaseId must be an opaque uppercase case ID");
+    }
+    if (typeof reportMetadata !== "function") {
+      throw new TypeError("reportMetadata must be a function");
+    }
+  }
+  var PUBLIC_ERROR_CODES4 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
+  var SAFE_CASE_ID4 = /^[\x2D0-9A-Z_]{1,40}$/;
+  var SAFE_MIME_TYPE2 = /^image\/[\+\x2D\.0-9a-z]+$/;
+  function runResolverMimeDeviceCheck(_0) {
+    return __async(this, arguments, function (_ref1) {
+      var testCaseId = _ref1.testCaseId,
+        sourceUri = _ref1.sourceUri,
+        expectedMimeType = _ref1.expectedMimeType,
+        maxSizeBytes = _ref1.maxSizeBytes,
+        readerSafetyLimitBytes = _ref1.readerSafetyLimitBytes,
+        context = _ref1.context,
+        contentResolver = _ref1.contentResolver,
+        parseUri = _ref1.parseUri,
+        javaBridge = _ref1.javaBridge,
+        _ref1$isFileUriApprov = _ref1.isFileUriApproved,
+        isFileUriApproved = _ref1$isFileUriApprov === void 0 ? function () {
+          return false;
+        } : _ref1$isFileUriApprov,
+        openFileReadOnly = _ref1.openFileReadOnly,
+        _ref1$reportMetadata = _ref1.reportMetadata,
+        reportMetadata = _ref1$reportMetadata === void 0 ? function () {} : _ref1$reportMetadata;
+      return _regenerator().m(function _callee11() {
+        var record, reader, result, _t15, _t16;
+        return _regenerator().w(function (_context11) {
+          while (1) switch (_context11.p = _context11.n) {
+            case 0:
+              validateInputs({
+                testCaseId: testCaseId,
+                expectedMimeType: expectedMimeType,
+                maxSizeBytes: maxSizeBytes,
+                reportMetadata: reportMetadata
+              });
+              _context11.p = 1;
+              reader = createAutoJs6AndroidImageReader({
+                context: context,
+                contentResolver: contentResolver,
+                parseUri: parseUri,
+                javaBridge: javaBridge,
+                isFileUriApproved: isFileUriApproved,
+                openFileReadOnly: openFileReadOnly,
+                readerSafetyLimitBytes: readerSafetyLimitBytes
+              });
+              _context11.n = 2;
               return reader.canAccess(sourceUri);
             case 2:
-              _t14 = _context1.v;
-              if (!(_t14 !== true)) {
-                _context1.n = 3;
+              _t15 = _context11.v;
+              if (!(_t15 !== true)) {
+                _context11.n = 3;
                 break;
               }
               record = failure2(testCaseId, IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED);
-              _context1.n = 5;
+              _context11.n = 5;
               break;
             case 3:
-              _context1.n = 4;
+              _context11.n = 4;
               return reader.read(sourceUri);
             case 4:
-              result = _context1.v;
+              result = _context11.v;
               record = normalizeReaderResult({
                 testCaseId: testCaseId,
                 expectedMimeType: expectedMimeType,
@@ -1095,25 +1210,25 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 result: result
               });
             case 5:
-              _context1.n = 7;
+              _context11.n = 7;
               break;
             case 6:
-              _context1.p = 6;
-              _t15 = _context1.v;
-              record = failure2(testCaseId, normalizeErrorCode(_t15));
+              _context11.p = 6;
+              _t16 = _context11.v;
+              record = failure2(testCaseId, normalizeErrorCode(_t16));
             case 7:
               reportMetadata(record);
-              return _context1.a(2, record);
+              return _context11.a(2, record);
           }
-        }, _callee1, null, [[1, 6]]);
+        }, _callee11, null, [[1, 6]]);
       })();
     });
   }
-  function normalizeReaderResult(_ref0) {
-    var testCaseId = _ref0.testCaseId,
-      expectedMimeType = _ref0.expectedMimeType,
-      maxSizeBytes = _ref0.maxSizeBytes,
-      result = _ref0.result;
+  function normalizeReaderResult(_ref10) {
+    var testCaseId = _ref10.testCaseId,
+      expectedMimeType = _ref10.expectedMimeType,
+      maxSizeBytes = _ref10.maxSizeBytes,
+      result = _ref10.result;
     var bytes = safelyReadProperty2(result, "bytes");
     var reportedMimeType = safelyReadProperty2(result, "mimeType");
     if (!(bytes instanceof Uint8Array)) {
@@ -1138,7 +1253,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   }
   function normalizeErrorCode(error) {
     var code = safelyReadProperty2(error, "code");
-    if (PUBLIC_ERROR_CODES3.has(code)) {
+    if (PUBLIC_ERROR_CODES4.has(code)) {
       return code;
     }
     var classification = safelyReadProperty2(error, "classification");
@@ -1151,7 +1266,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     return Object.freeze({
       testCaseId: testCaseId,
       status: "FAIL",
-      errorCode: PUBLIC_ERROR_CODES3.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
+      errorCode: PUBLIC_ERROR_CODES4.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
     });
   }
   function safelyReadProperty2(value, propertyName) {
@@ -1164,12 +1279,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       return void 0;
     }
   }
-  function validateInputs(_ref1) {
-    var testCaseId = _ref1.testCaseId,
-      expectedMimeType = _ref1.expectedMimeType,
-      maxSizeBytes = _ref1.maxSizeBytes,
-      reportMetadata = _ref1.reportMetadata;
-    if (typeof testCaseId !== "string" || !SAFE_CASE_ID3.test(testCaseId)) {
+  function validateInputs(_ref11) {
+    var testCaseId = _ref11.testCaseId,
+      expectedMimeType = _ref11.expectedMimeType,
+      maxSizeBytes = _ref11.maxSizeBytes,
+      reportMetadata = _ref11.reportMetadata;
+    if (typeof testCaseId !== "string" || !SAFE_CASE_ID4.test(testCaseId)) {
       throw new TypeError("testCaseId must be an opaque uppercase case ID");
     }
     if (typeof expectedMimeType !== "string" || !SAFE_MIME_TYPE2.test(expectedMimeType) || normalizeMimeType(expectedMimeType) !== expectedMimeType) {
@@ -1189,14 +1304,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   function runAutoJs6FormatCheck(formatCase, injectedRuntime) {
     var runtime = injectedRuntime != null ? injectedRuntime : (typeof globalThis === "undefined" ? "undefined" : _typeof(globalThis)) === "object" ? globalThis : Function("return this")();
     return runFormatCheck(formatCase, {
-      showInstructions: function showInstructions(_ref10) {
-        var title = _ref10.title,
-          instructionText = _ref10.instructionText;
+      showInstructions: function showInstructions(_ref12) {
+        var title = _ref12.title,
+          instructionText = _ref12.instructionText;
         return runtime.dialogs.alert(title, instructionText);
       },
-      pickSingleImage: function pickSingleImage(_ref11) {
-        var pickerMimeType = _ref11.pickerMimeType,
-          requestCode = _ref11.requestCode;
+      pickSingleImage: function pickSingleImage(_ref13) {
+        var pickerMimeType = _ref13.pickerMimeType,
+          requestCode = _ref13.requestCode;
         return _pickSingleImage(runtime, pickerMimeType, requestCode);
       },
       executeOffUiThread: function executeOffUiThread(task) {
@@ -1332,6 +1447,22 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return _classifyError(runtime, error);
       }
     };
+    if (formatCase.verificationMode === "mime-fallback") {
+      return runMimeFallbackDeviceCheck({
+        testCaseId: testCaseId,
+        sourceUri: sourceUri,
+        maxSizeBytes: MAX_SIZE_BYTES,
+        readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
+        context: context,
+        contentResolver: contentResolver,
+        parseUri: parseUri,
+        javaBridge: javaBridge,
+        isFileUriApproved: function isFileUriApproved() {
+          return false;
+        },
+        reportMetadata: function reportMetadata() {}
+      });
+    }
     if (formatCase.verificationMode === "resolver-mime") {
       return runResolverMimeDeviceCheck({
         testCaseId: testCaseId,

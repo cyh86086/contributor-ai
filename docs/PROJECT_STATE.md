@@ -53,8 +53,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: D01-D06 scoped device validation passed; D07-D26 and complete
-module migration remain pending.**
+**Phase: D01-D06 scoped device validation passed; D07 absent-MIME fallback
+launcher prepared; D07 device evidence and D08-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -82,10 +82,11 @@ scoped evidence is recorded in
 
 The D07 evidence-gap review then confirmed that the existing portable and
 fake-resolver tests prove the fallback contract but do not constitute distinct
-Android / AutoJs6 device evidence. The reviewed minimum is an evidence-only
-wrapper around the existing production reader: preserve access and exact bytes,
-remove only the returned MIME, and pass the wrapper into the existing
-`prepareImageInput()` fallback path. The review is recorded in
+Android / AutoJs6 device evidence. The repository now contains the reviewed
+minimal evidence-only wrapper: it preserves production-reader access and exact
+bytes, removes only the returned MIME, and passes the wrapper into the existing
+`prepareImageInput()` fallback path. Deterministic build, privacy, and offline
+contract checks do not establish a D07 device PASS. The review is recorded in
 [`testing/d07-mime-fallback-evidence-gap-review.md`](testing/d07-mime-fallback-evidence-gap-review.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
@@ -142,11 +143,9 @@ satisfy these requirements.
 
 - D06 has a scoped PASS for the exact recorded device, runtime, SHA, fixture,
   resolver MIME, byte count, and UI-responsiveness result.
-- The D07 evidence-gap review concluded that existing Node.js fallback tests
-  do not independently establish Android / AutoJs6 evidence. D07 requires one
-  minimal controlled harness that removes only the reader MIME while preserving
-  production-reader bytes and the existing portable fallback path; no D07 PASS
-  exists yet.
+- D07 now requires one user-assisted Vivo X Fold5 execution of the generated
+  absent-MIME fallback launcher; no PASS exists until scoped evidence is
+  reviewed and committed.
 - D08-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
@@ -166,7 +165,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D07-HARNESS-PREPARATION`.
+At this snapshot it is `D07-DEVICE-VERIFICATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state

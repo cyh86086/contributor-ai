@@ -38,6 +38,7 @@ test("format-check manifest is static, immutable, and complete", () => {
       ["D04_HEIC", "image/heic", "image/heic", 6104],
       ["D05_HEIF", "image/heif", "image/heif", 6105],
       ["D06_RESOLVER_MIME", "image/jpeg", "image/jpeg", 6106],
+      ["D07_MIME_FALLBACK", "image/jpeg", "image/jpeg", 6107],
     ],
   );
   assert.equal(Object.isFrozen(FORMAT_CHECK_CASES), true);

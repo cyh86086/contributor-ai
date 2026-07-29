@@ -12,6 +12,7 @@ import {
   runFormatCheck,
 } from "./format-check-launcher-core.js";
 import { runImageReaderDeviceCheck } from "./image-reader-device-check.js";
+import { runMimeFallbackDeviceCheck } from "./mime-fallback-device-check.js";
 import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
@@ -166,6 +167,21 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
       return classifyError(runtime, error);
     },
   };
+
+  if (formatCase.verificationMode === "mime-fallback") {
+    return runMimeFallbackDeviceCheck({
+      testCaseId,
+      sourceUri,
+      maxSizeBytes: MAX_SIZE_BYTES,
+      readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
+      context,
+      contentResolver,
+      parseUri,
+      javaBridge,
+      isFileUriApproved: () => false,
+      reportMetadata: () => {},
+    });
+  }
 
   if (formatCase.verificationMode === "resolver-mime") {
     return runResolverMimeDeviceCheck({
