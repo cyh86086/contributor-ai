@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-07-28
+Last updated: 2026-07-29
 
 ## Authority
 
@@ -14,8 +14,11 @@ repository implementation, tests, commits, branch management, and pull request
 work. Repository changes become authoritative only through Git history; Codex
 conversation output by itself is not project state.
 
-Every new development task must begin by reading this document and
-[`DECISIONS.md`](DECISIONS.md).
+Every new development task must begin by reading this document,
+[`DECISIONS.md`](DECISIONS.md), [`NEXT_ACTION.md`](NEXT_ACTION.md), and
+[`PROJECT_GOVERNANCE.md`](PROJECT_GOVERNANCE.md). The mandatory preflight must
+also verify the latest `main` SHA, open pull requests, existing implementation,
+current blockers, and repository write access before any development begins.
 
 ## Product definition
 
@@ -50,102 +53,41 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: D01 validated; D02-D05 launchers prepared; device verification
-pending.**
+**Phase: D01-D05 scoped format device validation passed; D06-D26 and
+complete module migration remain pending.**
 
-The repository contains product scope and architecture documentation,
-runtime-neutral validation for the current metadata contract, and a Node.js
-offline harness. The Android Image Input Core V1.0 portable implementation is
-merged. The AutoJs6 Android Image Reader V1.0 specification is merged. The
-classified reader-error boundary, AutoJs6 Android Image Reader V1.0 production
-source, general device-verification package, and one-click D01 JPEG launcher
-are merged. The first Vivo X Fold5 and AutoJs6 v6.7.0 `arm64-v8a` execution
-stopped at bundle parsing before the Android picker opened. PR #9 merged the
-reviewed deterministic legacy-syntax correction and passed the complete
-offline verification suite. D01 subsequently passed on Vivo X Fold5 with
-AutoJs6 v6.7.0 `arm64-v8a` against authoritative main SHA
-`5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`. PR #10 merged the scoped D01
-evidence as authoritative main SHA
-`1bb59f072aa4b8f941d31bec377dc2fea00681b1`. The scoped evidence is recorded in
-[`testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d01-vivo-x-fold5-autojs6-v6.7.0.md).
-The current milestone prepares deterministic one-click D02 PNG, D03 WebP, D04
-HEIC, and D05 HEIF launchers through one shared format-check implementation.
-Their offline builds, freshness checks, syntax scans, and tests do not
-establish device verification. D02-D05 and the remaining failures, limits,
-cleanup, repetition, and memory cases remain unverified.
+PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
+verification launchers as authoritative main SHA
+`ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`. All four launchers subsequently
+passed on Vivo X Fold5 with AutoJs6 v6.7.0 `arm64-v8a` against that exact SHA.
+The scoped evidence is recorded in
+[`testing/device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md).
+
+D01 remains scoped to its recorded SHA and evidence file. D02-D05 are scoped to
+`ad52d12...` and their evidence file. These five PASS results do not establish
+MIME fallback, permission failure, missing source, size boundaries, cleanup,
+repetition, memory behavior, complete device compatibility, provider behavior,
+queue behavior, Contributor app automation, or module migration.
+
+The repository now uses `NEXT_ACTION.md` as the single active-task register and
+`PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
 
 ## Current branch and pull request
 
 - Authoritative branch: `main`
-- Pull request: [#1 — Bootstrap Contributor AI AutoJs6 project](https://github.com/cyh86086/contributor-ai/pull/1)
-- Target branch: `main`
-- Pull request state for this baseline: squash-merged
-- Source branch: `feature/bootstrap-project` deleted after merge
-- Active specification branch:
-  `feature/spec-android-image-input-adapter-v1`
-- Active specification pull request:
-  [#2 — Specify Android Image Input Adapter V1.0](https://github.com/cyh86086/contributor-ai/pull/2)
-- Specification pull request state: squash-merged
-- Active implementation branch: `feature/implement-image-input-core-v1`
-- Active implementation pull request:
-  [#3 — Implement Android Image Input Core V1.0](https://github.com/cyh86086/contributor-ai/pull/3)
-- Implementation pull request state: squash-merged
-- Resulting authoritative `main` SHA:
-  `234a7ff02d0451ba014a2219147a41366357a3a6`
-- Active reader-specification branch:
-  `feature/spec-autojs6-image-reader-v1`
-- Active reader-specification pull request:
-  [#4 — Specify AutoJs6 Android Image Reader V1.0](https://github.com/cyh86086/contributor-ai/pull/4)
-- Reader-specification pull request state: squash-merged
-- Resulting authoritative `main` SHA:
-  `939f87c2f522fe9e0f7faae180c76feb1e3d6827`
-- Active classified-error branch:
-  `feature/classified-image-reader-errors-v1`
-- Active classified-error pull request:
-  [#5 — Support Classified Image Reader Errors V1.0](https://github.com/cyh86086/contributor-ai/pull/5)
-- Classified-error pull request state: squash-merged
-- Resulting authoritative `main` SHA:
-  `a462f8fe6533f10c23d8445d31d57b4f38d3f90b`
-- Active production-reader branch:
-  `feature/implement-autojs6-image-reader-v1`
-- Active production-reader pull request:
-  [#6 — Implement AutoJs6 Android Image Reader V1.0](https://github.com/cyh86086/contributor-ai/pull/6)
-- Production-reader pull request state: squash-merged
-- Resulting authoritative `main` SHA:
-  `be978cb2da2426bde9c08c2ecf5df91fe5203f2c`
-- Active device-verification preparation branch:
-  `feature/prepare-image-reader-device-verification-v1`
-- Active device-verification preparation pull request:
-  [#7 — Prepare AutoJs6 Image Reader Device Verification V1.0](https://github.com/cyh86086/contributor-ai/pull/7)
-- Device-verification preparation pull request state: squash-merged
-- Resulting authoritative `main` SHA:
-  `fbf12737be6f661f52969325489a1c19bce86163`
-- Active D01 launcher branch:
-  `feature/autojs6-d01-one-click-launcher-v1`
-- Active D01 launcher pull request:
-  [#8 — Prepare AutoJs6 D01 One-Click JPEG Device Check V1.0](https://github.com/cyh86086/contributor-ai/pull/8)
-- D01 launcher pull request state: squash-merged
-- Resulting authoritative `main` SHA:
-  `0324d640e390da7c2c905fb9d2d8e134ee1e7149`
-- D01 compatibility-fix branch:
-  `fix/autojs6-d01-reserved-class-keyword-v1`
-- D01 compatibility-fix pull request:
-  [#9 — Fix AutoJs6 D01 Reserved Class Keyword Compatibility V1.0](https://github.com/cyh86086/contributor-ai/pull/9)
-- D01 compatibility-fix pull request state: squash-merged
-- Resulting authoritative `main` SHA:
-  `80717606209f3f01c3bfc232a4d16016bf14c368`
-- Compatibility-fix branch state: deleted locally and remotely
-- Device-validation documentation branch:
-  `docs/d01-device-validation-v1`
-- Device-validation documentation pull request:
-  [#10 — Document D01 Vivo X Fold5 Device Validation V1.0](https://github.com/cyh86086/contributor-ai/pull/10)
-- Device-validation documentation pull request state: squash-merged
-- Resulting authoritative `main` SHA:
-  `1bb59f072aa4b8f941d31bec377dc2fea00681b1`
-- Active D02-D05 launcher-preparation branch:
-  `feature/prepare-d02-d05-format-checks-v1`
-- D02-D05 launcher-preparation pull request state: not created
+- Authoritative SHA before this governance repair:
+  `ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`
+- Latest merged pull request:
+  [#11 — Prepare D02-D05 AutoJs6 format verification](https://github.com/cyh86086/contributor-ai/pull/11)
+- PR #11 state: squash-merged
+- Open pull requests observed during the 2026-07-29 governance preflight: none
+- PR #11 source branch `feature/prepare-d02-d05-format-checks-v1`: absent from
+  remote branch search after merge
+- Governance task branch: `docs/project-governance-repair-v1`
 - Release status: no production release
+
+Historical PR detail remains available in Git history and PRs #1-#11. This
+snapshot records current state rather than repeating every completed branch.
 
 ## Historical target module status
 
@@ -179,41 +121,31 @@ satisfy these requirements.
 
 ## Current blockers
 
-- The first Vivo X Fold5 and AutoJs6 v6.7.0 `arm64-v8a` execution against main
-  SHA `0324d640e390da7c2c905fb9d2d8e134ee1e7149` failed during parsing because
-  the generated bundle used the reserved keyword `class` at line 59. PR #9
-  corrected the known syntax blocker, and D01 passed on the same device and
-  runtime against main SHA
-  `5720caa5015eaee9277c9ec6b8d38dc85e5ed2c9`.
-- Production reader source is present. Real Android `ContentResolver`, Java
-  bridge, picker, JPEG read, MIME detection, and UI responsiveness now have
-  scoped D01 evidence. Deterministic D02-D05 launchers have offline coverage,
-  but PNG, WebP, HEIC, HEIF, and the remaining device matrix are unverified.
-- Permission revocation, missing sources, MIME fallback, empty input, size
-  boundaries, repeated reads, cleanup instrumentation, memory behavior, and
-  the remaining stop conditions require user-assisted evidence.
-- Remote provider and Contributor app integration remain unimplemented and
-  outside the active milestone.
-- No provider credential strategy has been approved or implemented. Secrets
-  must remain outside Git.
-
-The D01 blocker is resolved for the exact tested device, runtime, SHA, and JPEG
-case. This result does not establish complete module migration.
+- The remaining D06-D26 verification matrix still requires scoped review,
+  preparation, and in several cases user-assisted Vivo X Fold5 evidence.
+- Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
+  repository migration and device-verification criterion is satisfied.
+- Remote provider, network transport, queue, Contributor app integration, and
+  submission behavior remain unimplemented and outside the current milestone.
+- No provider credential strategy has been approved. Secrets must remain
+  outside Git.
+- Automation workflow blocker: the current ChatGPT GitHub Connector can read
+  repository metadata, files, commits, and PRs, but branch and Contents writes
+  returned HTTP 403 and the connector reported no installed accounts or
+  installations. This is read-only authorization, not a GitHub disconnection.
+  Automated branch, commit, and PR work through that connector must remain
+  stopped until write authorization is restored or an approved local-repository
+  workflow is used.
 
 ## Next planned actions
 
-1. Review the D02-D05 launcher-preparation changes and repository checks.
-2. After merge, run D02-D05 on the recorded Vivo X Fold5 and AutoJs6 runtime
-   against the exact clean authoritative main SHA, with sanitized evidence for
-   each independent case.
-3. Continue the remaining device-verification matrix with an exact main SHA
-   and sanitized evidence for each case.
-4. Keep the complete Android Image Input Adapter V1.0 historical module
-   `NOT YET MIGRATED`.
-5. Do not add network, provider, queue, Contributor app, submission, or
-   device-specific behavior.
-6. Do not infer D02-D05 device compatibility, full device compatibility, or
-   module completion from offline checks or the single D01 JPEG PASS.
+The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
+At this snapshot it is `D06-EVIDENCE-GAP-REVIEW`.
+
+No queue, provider, network, Contributor app, credential, submission, or other
+unrelated feature work may begin while that task is active. If repository state
+changes, an open PR already owns the work, or GitHub write access is unavailable,
+stop and reconcile state rather than generating detached implementation.
 
 ## Verification rules
 

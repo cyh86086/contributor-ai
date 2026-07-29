@@ -16,9 +16,14 @@
 測試案例、PASS/FAIL、MIME、檔案大小與介面回應狀態。它們不會連線、不會
 上傳圖片、不會呼叫 AI、不會操作 Contributor App，也不會送出任何內容。
 
-這些腳本目前只有離線 build、freshness、legacy syntax 與輸出合約測試。
-**D02–D05 尚未完成實機驗證**，Android Image Input Adapter V1.0 仍是
-**NOT YET MIGRATED**。
+這些腳本已完成離線 build、freshness、legacy syntax、輸出合約測試，
+並已在 Vivo X Fold5／AutoJs6 v6.7.0 `arm64-v8a`、authoritative main SHA
+`ad52d122e239e0431c9fd2d3c2cdedf383f8b0da` 完成 D02–D05 範圍內的實機
+PASS。證據記錄見
+[`../testing/device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md`](../testing/device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md)。
+
+這些結果不代表完整裝置矩陣或模組遷移完成；Android Image Input Adapter
+V1.0 仍是 **NOT YET MIGRATED**。
 
 ## 執行前準備
 

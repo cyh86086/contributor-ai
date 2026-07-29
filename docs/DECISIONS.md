@@ -77,3 +77,39 @@ A passing case applies only to that recorded scope. It must not be expanded
 into a claim that other formats, failure paths, integrations, devices, or
 runtimes pass, and it does not mark a historical module migrated unless every
 migration requirement in [`PROJECT_STATE.md`](PROJECT_STATE.md) is satisfied.
+
+## D-012: Mandatory repository preflight
+
+**Decision:** Before planning or changing the project, the executor must read
+`PROJECT_STATE.md`, `DECISIONS.md`, `NEXT_ACTION.md`, and
+`PROJECT_GOVERNANCE.md`; verify the latest authoritative `main` SHA; inspect open
+pull requests; search for existing implementation; and confirm blockers, user
+intervention, and write access. Missing or conflicting state blocks feature work.
+
+## D-013: One active task
+
+**Decision:** `NEXT_ACTION.md` contains exactly one active task. No other task
+may begin until it is completed, explicitly replaced, cancelled, or reported as
+blocked through a repository change.
+
+## D-014: Repository definition of done
+
+**Decision:** A task is complete only after its applicable checks pass and its
+repository change, state update, commit, and pull request exist in GitHub.
+Temporary directories, generated archives, local examples, uncommitted patches,
+and chat output are drafts and must never be reported as completed features.
+
+## D-015: Read access and write access are separate
+
+**Decision:** GitHub connectivity must be classified from actual operations. If
+repository reads succeed but write actions return HTTP 403, the condition is a
+read-only GitHub Connector authorization failure. It must not be called a GitHub
+disconnection, and identical writes must not be repeatedly retried. Feature work
+stops until write access or an approved local repository workflow is available.
+
+## D-016: State drift blocks feature development
+
+**Decision:** When `PROJECT_STATE.md`, evidence records, branches, pull requests,
+or the actual `main` SHA disagree, reconciliation is the highest-priority task.
+No new feature implementation may proceed until the authoritative snapshot and
+single next action are corrected.
