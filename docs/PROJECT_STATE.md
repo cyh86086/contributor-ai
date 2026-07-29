@@ -75,15 +75,15 @@ The repository now uses `NEXT_ACTION.md` as the single active-task register and
 ## Current branch and pull request
 
 - Authoritative branch: `main`
-- Authoritative SHA before this governance repair:
-  `ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`
-- Latest merged pull request:
-  [#11 — Prepare D02-D05 AutoJs6 format verification](https://github.com/cyh86086/contributor-ai/pull/11)
-- PR #11 state: squash-merged
-- Open pull requests observed during the 2026-07-29 governance preflight: none
-- PR #11 source branch `feature/prepare-d02-d05-format-checks-v1`: absent from
-  remote branch search after merge
-- Governance task branch: `docs/project-governance-repair-v1`
+- Governance baseline established by
+  [#12 — Repair project governance and record D02-D05 evidence](https://github.com/cyh86086/contributor-ai/pull/12)
+- PR #12 state: squash-merged
+- Governance baseline merge SHA:
+  `8eeef1642e33853e75938dd16d7bbbbc1627a9ee`
+- PR #12 source branch `docs/project-governance-repair-v1`: deleted after merge
+- Open pull-request snapshot immediately after PR #12 merge: none
+- The live `main` SHA is fetched during every mandatory preflight; it is not
+  duplicated here as a self-referential current-state invariant.
 - Release status: no production release
 
 Historical PR detail remains available in Git history and PRs #1-#11. This

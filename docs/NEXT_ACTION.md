@@ -1,8 +1,9 @@
 # Next action
 
 Last reviewed: 2026-07-29
-Authoritative planning baseline: `main` at
-`ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`
+Defined by merged governance PR: `#12`
+Execution baseline: resolve the live `main` SHA during mandatory preflight. This
+document does not attempt to predict the merge commit that introduces it.
 
 ## Active task
 
@@ -51,7 +52,8 @@ credential handling, or unrelated image-validation modules during this task.
 
 Stop and report without implementing when:
 
-- the authoritative `main` SHA has changed and state has not been reconciled;
+- repository facts relevant to this task changed after review and have not
+  been reconciled;
 - an open PR already owns D06 work;
 - GitHub write access is unavailable;
 - the repository cannot prove where the reported MIME originates;
