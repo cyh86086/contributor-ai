@@ -70,6 +70,8 @@ Offline tests for the future harness may prove controlled MIME removal,
 unchanged bytes, deterministic bundle generation, privacy, and legacy syntax.
 They must not be represented as Android proof.
 
-D07 remains pending until the minimal harness is reviewed, merged, and executed
-on the recorded Vivo X Fold5 / AutoJs6 runtime with scoped evidence bound to an
-exact authoritative SHA.
+The reviewed minimal harness is now implemented as an evidence-only wrapper
+around the existing production reader and portable core. Offline verification
+can establish its deterministic contract, but D07 remains pending until the
+generated launcher is executed on the recorded Vivo X Fold5 / AutoJs6 runtime
+with scoped evidence bound to an exact authoritative SHA.
