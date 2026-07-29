@@ -265,6 +265,10 @@ Before execution:
 See the
 [Traditional Chinese D06 guide](../user-guides/autojs6-d06-content-resolver-mime-check-zh-tw.md).
 
+D06 passed for the exact scoped execution recorded in the
+[Vivo X Fold5 / AutoJs6 v6.7.0 evidence](device-validation/d06-vivo-x-fold5-autojs6-v6.7.0.md).
+This result does not establish D07 or broader module completion.
+
 ## 4. Verification matrix
 
 Record the exact main SHA, limits, Android version, AutoJs6 version, start/end

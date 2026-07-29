@@ -4,9 +4,10 @@
 
 Reviewed against live `main` during the 2026-07-29 repository preflight.
 
-Conclusion: the existing D01-D05 device records cannot independently satisfy
-D06. A minimal evidence-only D06 launcher is required, followed by one
-user-assisted Vivo X Fold5 execution.
+Conclusion: the existing D01-D05 device records could not independently
+satisfy D06. The minimal evidence-only D06 launcher was implemented and the
+required Vivo X Fold5 execution subsequently passed. See the
+[D06 device-validation record](device-validation/d06-vivo-x-fold5-autojs6-v6.7.0.md).
 
 ## Repository trace
 
