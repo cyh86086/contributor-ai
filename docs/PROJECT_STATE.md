@@ -163,7 +163,13 @@ satisfy these requirements.
   that were not supplied remain explicitly recorded as not supplied. The scoped
   evidence is recorded in
   [`testing/device-validation/d08-vivo-x-fold5-autojs6-device-validation.md`](testing/device-validation/d08-vivo-x-fold5-autojs6-device-validation.md).
-- D09-D26 still require scoped review, preparation, and in several cases
+- D09 is defined as temporary permission revoked before `canAccess()`, with
+  required result `URI_ACCESS_DENIED`. Existing injected offline tests prove
+  denial and sanitization contracts but do not prove real Android revocation
+  timing. No D09 launcher or device evidence exists yet. The evidence-gap review
+  is recorded in
+  [`testing/d09-permission-revoked-evidence-gap-review.md`](testing/d09-permission-revoked-evidence-gap-review.md).
+- D10-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -182,7 +188,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D09-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D09-LAUNCHER-PREPARATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
