@@ -166,9 +166,14 @@ satisfy these requirements.
 - D09 is defined as temporary permission revoked before `canAccess()`, with
   required result `URI_ACCESS_DENIED`. Existing injected offline tests prove
   denial and sanitization contracts but do not prove real Android revocation
-  timing. No D09 launcher or device evidence exists yet. The evidence-gap review
-  is recorded in
-  [`testing/d09-permission-revoked-evidence-gap-review.md`](testing/d09-permission-revoked-evidence-gap-review.md).
+  timing. Launcher preparation is blocked because the repository contains no
+  reviewed Android or AutoJs6 mechanism that can revoke the selected temporary
+  grant and prove completion before `canAccess()` without adding production
+  permission architecture. The evidence-gap review and feasibility blocker are
+  recorded in
+  [`testing/d09-permission-revoked-evidence-gap-review.md`](testing/d09-permission-revoked-evidence-gap-review.md)
+  and
+  [`testing/d09-revocation-feasibility-blocker.md`](testing/d09-revocation-feasibility-blocker.md).
 - D10-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
@@ -188,7 +193,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D09-LAUNCHER-PREPARATION`.
+At this snapshot it is `D09-DEVICE-REVOCATION-FEASIBILITY`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
