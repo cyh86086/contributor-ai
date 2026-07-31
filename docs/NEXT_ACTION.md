@@ -5,58 +5,55 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D09-LAUNCHER-PREPARATION`
+**Task ID:** `D09-DEVICE-REVOCATION-FEASIBILITY`
 
-**Objective:** Prepare the smallest evidence-only AutoJs6 D09 launcher and
-Traditional Chinese guide needed to verify that a temporary Android picker grant
-revoked before `canAccess()` produces the stable public code
-`URI_ACCESS_DENIED`, without adding production permission architecture.
+**Objective:** Determine on Vivo X Fold5 with AutoJs6 whether a real temporary
+Android picker grant can be invalidated reproducibly and privacy-safely before
+the existing production reader invokes `canAccess()`.
 
 ## Required work
 
 1. Complete the mandatory repository preflight.
-2. Confirm a clean authoritative `main` and record its exact SHA.
-3. Reuse the existing production reader, portable error mapping, shared
-   launcher core, and sanitized reporter.
-4. Add only the minimum controlled evidence hook needed to establish that
-   revocation occurs before `canAccess()`.
-5. Add deterministic offline tests for delegation, ordering, stable error
-   mapping, privacy, and fail-closed behavior.
-6. Add a deterministic generated AutoJs6 bundle, build-freshness check, legacy
-   syntax scan, and Traditional Chinese execution guide.
-7. Update project state and this file through a pull request.
+2. Confirm the exact authoritative repository SHA used for the feasibility
+   procedure.
+3. Use the existing Android system picker to obtain a temporary content grant.
+4. Test only platform-supported or AutoJs6-supported ways to invalidate that
+   exact temporary grant before the reader begins.
+5. Record whether invalidation completion can be proven before `canAccess()`.
+6. Return one sanitized classification:
+   - `FEASIBLE`;
+   - `BLOCKED_PLATFORM`;
+   - `BLOCKED_UNPROVEN_ORDERING`.
+7. Record exact device, Android version, AutoJs6 version and ABI, authoritative
+   SHA, sanitized steps, and known limitations through a documentation PR.
 
 ## Acceptance criteria
 
-- The case ID is `D09_PERMISSION_REVOKED_BEFORE_ACCESS`.
-- A PASS is possible only when the observed stable result is
-  `URI_ACCESS_DENIED` and `uiResponsive: true`.
-- Revocation is demonstrably ordered before the existing production reader's
-  `canAccess()` call.
-- The launcher is evidence-only and does not become a general permission
-  manager.
-- Output contains no URI, path, filename, bytes, Base64, image content,
-  exception detail, stack, credential, or unrelated metadata.
-- Offline tests are not represented as Android device evidence.
-- Build freshness, legacy syntax, repository checks, diff review, and secret
-  review pass.
-- A GitHub commit and pull request exist before the task is complete.
+- The selected source is obtained through the Android system picker.
+- No broad storage permission or persistable grant is introduced.
+- No full URI, path, filename, bytes, Base64, image content, exception detail,
+  stack, credential, or unrelated metadata is recorded.
+- `FEASIBLE` is allowed only when invalidation of the exact selected grant is
+  reproducible and completion before `canAccess()` is proven.
+- A platform limitation is recorded honestly rather than replaced by fake-only
+  evidence.
+- The result is committed and reviewed through a pull request.
 
 ## Prohibited scope
 
-Do not add broad storage permission, persistable grants, a second production
-reader, provider, network, queue, Contributor app automation, credentials, or
-automatic submission.
+Do not implement the D09 launcher during this task. Do not inject a fake
+resolver, synthesize `SecurityException`, add a permission manager, add
+persistable grants, clear all application data, broaden storage permissions, or
+change production reader behavior.
 
 ## Stop conditions
 
 Stop and report when:
 
-- Android/AutoJs6 cannot provide a controlled evidence-only revocation hook
-  without adding production permission architecture;
-- revocation ordering before `canAccess()` cannot be established;
+- the Vivo X Fold5 or AutoJs6 runtime is unavailable;
+- Android or AutoJs6 offers no deterministic grant-invalidation mechanism;
+- ordering before `canAccess()` cannot be proven;
+- the procedure risks exposing prohibited source information;
 - an open pull request already owns D09;
-- repository state or authoritative source conflicts;
-- tests or generated-bundle checks fail;
-- sensitive information may have appeared;
+- repository state conflicts;
 - write access is unavailable.
