@@ -158,9 +158,12 @@ satisfy these requirements.
 - D07 has a scoped PASS for the exact recorded device, runtime, SHA, fixture,
   controlled absent-MIME condition, JPEG signature fallback, byte count, and UI
   responsiveness.
-- D08 now requires one user-assisted Vivo X Fold5 execution of the generated
-  fresh-selection active-permission launcher; no PASS exists until scoped
-  evidence is reviewed and committed.
+- A sanitized Vivo X Fold5 D08 runtime result has been supplied with
+  `D08_PERMISSION_GRANTED`, `PASS`, `image/jpeg`, `sizeBytes: 656352`, and
+  `uiResponsive: true`. The Android UI exposed only a rounded size (`1.33 MB`),
+  so the exact-byte acceptance criterion is being reconciled to use the existing
+  production reader's exact positive `sizeBytes`. No scoped PASS is authoritative
+  until reviewed evidence is committed.
 - D09-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
@@ -180,7 +183,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D08-DEVICE-VERIFICATION`.
+At this snapshot it is `D08-EVIDENCE-REVIEW`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
