@@ -12,10 +12,27 @@ production-reader-to-core exact-boundary test and the existing complete
 success-reporting test cover that composition sufficiently for device-procedure
 preparation. A separately governed D13 test task is not required.
 
-The repository does not yet contain an independently verified numeric byte
-count for `AT_PORTABLE_LIMIT`. That count is required before device execution,
-but it can be established safely during procedure preparation. This review
-does not create a launcher, fixture, test, device result, or PASS claim.
+At the review baseline, the repository did not contain an independently
+verified numeric byte count for `AT_PORTABLE_LIMIT`. That count was required
+before device execution and could be established safely during procedure
+preparation. This review itself did not create a launcher, fixture, test,
+device result, or PASS claim.
+
+## Procedure-preparation update
+
+The governed preparation task independently measured the user-approved,
+privately mapped JPEG fixture with a read-only local byte-count tool outside the
+launcher and production reader. The retained repository values are only:
+
+- fixture ID: `AT_PORTABLE_LIMIT`;
+- verified size: `6406` bytes;
+- `maxSizeBytes`: `6406`;
+- `readerSafetyLimitBytes`: `12582912`.
+
+The count was measured anew rather than inferred from D01-D08 evidence. The
+private fixture mapping, filename, path, and content remain outside Git. The
+prepared launcher and procedure are unexecuted and make no Android, AutoJs6,
+device, or PASS claim.
 
 ## Authoritative scope
 
@@ -74,9 +91,11 @@ the real D13 evidence procedure.
 
 ## Fixture and count review
 
-`AT_PORTABLE_LIMIT` appears only in the verification plan's fixture table, the
-D13 matrix row, and the current governance task. No committed fixture manifest
-or device-evidence record assigns it a verified numeric byte count.
+At the review baseline, `AT_PORTABLE_LIMIT` appeared only in the verification
+plan's fixture table, the D13 matrix row, and the governance task. No committed
+fixture manifest or device-evidence record then assigned it a verified numeric
+byte count. The later preparation update above records the independently
+measured count without storing the private fixture mapping.
 
 Other evidence cannot fill that gap:
 

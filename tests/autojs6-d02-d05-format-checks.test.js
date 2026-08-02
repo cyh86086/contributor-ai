@@ -7,6 +7,7 @@ import {
   D01_FORMAT_CHECK_CASE,
   D02_D05_FORMAT_CHECK_CASES,
   D05_FORMAT_CHECK_CASE,
+  D13_EXACT_PORTABLE_LIMIT_CHECK_CASE,
   FORMAT_CHECK_CASES,
 } from "../scripts/autojs6/format-check-case-manifest.js";
 import { runFormatCheck } from "../scripts/autojs6/format-check-launcher-core.js";
@@ -40,12 +41,33 @@ test("format-check manifest is static, immutable, and complete", () => {
       ["D06_RESOLVER_MIME", "image/jpeg", "image/jpeg", 6106],
       ["D07_MIME_FALLBACK", "image/jpeg", "image/jpeg", 6107],
       ["D08_PERMISSION_GRANTED", "image/jpeg", "image/jpeg", 6108],
+      ["D13_EXACT_PORTABLE_LIMIT", "image/jpeg", "image/jpeg", 6113],
     ],
   );
   assert.equal(Object.isFrozen(FORMAT_CHECK_CASES), true);
   for (const formatCase of FORMAT_CHECK_CASES) {
     assert.equal(Object.isFrozen(formatCase), true);
   }
+});
+
+test("D13 manifest pins the independently verified exact boundary", () => {
+  assert.deepEqual(
+    {
+      fixtureId: D13_EXACT_PORTABLE_LIMIT_CHECK_CASE.fixtureId,
+      expectedSizeBytes: D13_EXACT_PORTABLE_LIMIT_CHECK_CASE.expectedSizeBytes,
+      maxSizeBytes: D13_EXACT_PORTABLE_LIMIT_CHECK_CASE.maxSizeBytes,
+      readerSafetyLimitBytes:
+        D13_EXACT_PORTABLE_LIMIT_CHECK_CASE.readerSafetyLimitBytes,
+      verificationMode: D13_EXACT_PORTABLE_LIMIT_CHECK_CASE.verificationMode,
+    },
+    {
+      fixtureId: "AT_PORTABLE_LIMIT",
+      expectedSizeBytes: 6_406,
+      maxSizeBytes: 6_406,
+      readerSafetyLimitBytes: 12 * 1024 * 1024,
+      verificationMode: "exact-portable-limit",
+    },
+  );
 });
 
 for (const formatCase of FORMAT_CHECK_CASES) {

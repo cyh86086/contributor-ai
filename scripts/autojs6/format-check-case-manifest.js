@@ -106,6 +106,24 @@ export const D08_PERMISSION_GRANTED_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d08-permission-granted-device-check.js",
 });
 
+export const D13_EXACT_PORTABLE_LIMIT_CHECK_CASE = defineCase({
+  testCaseId: "D13_EXACT_PORTABLE_LIMIT",
+  fixtureId: "AT_PORTABLE_LIMIT",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6113,
+  verificationMode: "exact-portable-limit",
+  title: "D13 portable size 上限等值裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選擇私下對應 AT_PORTABLE_LIMIT、且已獨立確認為 6,406 bytes 的非敏感 JPEG。此 evidence-only 案例只接受 production reader 回報大小精確等於 maxSizeBytes，並只輸出 sanitized metadata。",
+  sourceEntryPath:
+    "autojs6/source/d13-exact-portable-limit-device-check.entry.js",
+  generatedPath: "autojs6/d13-exact-portable-limit-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -115,6 +133,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D06_RESOLVER_MIME_CHECK_CASE,
   D07_MIME_FALLBACK_CHECK_CASE,
   D08_PERMISSION_GRANTED_CHECK_CASE,
+  D13_EXACT_PORTABLE_LIMIT_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

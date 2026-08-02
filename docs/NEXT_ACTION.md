@@ -5,84 +5,81 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D13-DEVICE-PROCEDURE-PREPARATION`
+**Task ID:** `D13-DEVICE-VALIDATION`
 
-**Objective:** Prepare the smallest reviewed, evidence-only D13 execution
-package for the formal exact portable size-limit case without executing it.
+**Objective:** Execute the separately reviewed D13 exact portable-limit
+procedure on Vivo X Fold5 and record only scoped, sanitized Android and AutoJs6
+evidence.
 
-The package must use the existing shared production-reader, portable-core, and
-sanitized-reporter path. It must configure `maxSizeBytes` to the independently
-verified numeric count for `AT_PORTABLE_LIMIT`, keep
-`readerSafetyLimitBytes` at or above that count, and define a Vivo X Fold5
-procedure whose only acceptable success has `sizeBytes === maxSizeBytes` and
-demonstrated UI responsiveness.
+The reviewed launcher uses fixture ID `AT_PORTABLE_LIMIT`, independently
+verified size `6406`, `maxSizeBytes: 6406`, and
+`readerSafetyLimitBytes: 12582912`. It must use the existing Android system
+picker, fresh temporary grant, production reader, portable core, shared
+reporter, and off-UI-thread responsiveness path without modification.
 
 ## Required work
 
-1. Complete the mandatory repository preflight and confirm no pull request,
-   branch, launcher, or procedure already owns D13.
-2. Re-read the D13 evidence-gap review, verification matrix, production
-   reader, portable core, shared harness, and existing generated-entry
-   conventions.
-3. Require a non-sensitive controlled supported image whose exact positive
-   byte count is measured independently before execution. Keep the private
-   fixture manifest outside Git and retain only `AT_PORTABLE_LIMIT` plus the
-   numeric count in reviewed evidence.
-4. Prepare the minimal D13-specific evidence entry and user procedure by
-   delegating to the existing system-picker and shared runtime path; do not add
-   reader, permission, or application behavior.
-5. Set `maxSizeBytes` to the independently verified count and
-   `readerSafetyLimitBytes` to the same count or a higher reviewed value.
-6. Require a fresh temporary picker grant, off-UI-thread execution, metadata-only
-   output, `uiResponsive: true`, and exact equality between reported
-   `sizeBytes` and `maxSizeBytes`.
-7. Add deterministic build-freshness, legacy-syntax, delegation, sanitization,
-   and configuration checks only as required by the established launcher
-   pattern.
-8. Publish the unexecuted procedure for review. Do not claim device evidence or
-   PASS.
+1. Complete mandatory preflight from live `main` and confirm the reviewed D13
+   launcher, generated bundle, procedure, and configuration are unchanged.
+2. Confirm all repository checks pass against the exact execution SHA.
+3. Have the user place the privately mapped, unchanged `AT_PORTABLE_LIMIT`
+   fixture where the Vivo X Fold5 system picker can select it.
+4. Have the user import the committed generated D13 bundle into AutoJs6 v6.7.0
+   `arm64-v8a` without editing it.
+5. Use the Android system picker opened by that run to select the fixture and
+   execute with a fresh temporary grant.
+6. Retain only the exact repository SHA, device/runtime scope, opaque fixture
+   ID, numeric limits, one sanitized metadata record, responsiveness, result,
+   and non-sensitive notes.
+7. If and only if the record is the exact approved PASS shape, add a scoped
+   device-validation evidence document and advance to the next governed matrix
+   review. Otherwise record the sanitized failure honestly without inventing a
+   classification.
 
 ## Acceptance criteria
 
-- The execution package is scoped only to formal D13 and the opaque
-  `AT_PORTABLE_LIMIT` fixture.
-- The independently verified numeric count is available before any launcher
-  value or procedure is finalized; no rounded display size or reader output is
-  used as the independent source.
-- The package delegates unchanged to the existing production reader, portable
-  core, shared reporter, system picker, and UI-responsiveness mechanism.
-- `maxSizeBytes` equals the verified count and `readerSafetyLimitBytes` is not
-  lower.
-- The procedure retains only sanitized metadata and clearly separates D13 from
-  D14 portable overflow and D15 reader-ceiling overflow.
-- No device execution occurs in this task.
-- All repository checks pass and the preparation is committed and published
-  for review.
+- Execution uses the reviewed generated bundle from a clean authoritative SHA.
+- The selected private fixture mapping remains outside Git and the source is
+  unchanged after its independent count was established.
+- The only accepted PASS record is:
+
+  ```json
+  {
+    "testCaseId": "D13_EXACT_PORTABLE_LIMIT",
+    "status": "PASS",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 6406,
+    "uiResponsive": true
+  }
+  ```
+
+- No URI, path, filename, bytes, Base64, image content, exception detail,
+  stack, credential, or uncontrolled runtime value is retained.
+- D13 evidence is not reused for D14 or D15.
 
 ## Prohibited scope
 
-Do not execute D13 on a device or claim PASS. Do not derive the fixture count
-from URI metadata, a filename, rounded display size, encoded length, compressed
-payload length, provider payload length, or the D13 production-reader result.
-Do not reuse D01-D08 or fake-fixture counts as D13 evidence.
+Do not edit the launcher on the device, change either numeric limit, reuse a
+saved URI, request persistable access, add broad storage permission, copy the
+source into repository or application storage, or infer PASS from offline
+tests.
 
-Do not add broad storage permission, a persistable grant, permission manager,
-source-copy architecture, production reader behavior, portable-core behavior,
+Do not add production reader or portable-core behavior, permission manager,
 provider, network, queue, Contributor app, credential, submission, or unrelated
-module work. Do not begin D14-D26.
+module work. Do not begin D14-D26 before D13 is dispositioned through reviewed
+evidence.
 
 ## Stop conditions
 
 Stop and report when:
 
-- no independently verified positive numeric count for `AT_PORTABLE_LIMIT` is
-  available;
-- the controlled fixture cannot be kept non-sensitive and privately mapped to
-  its opaque ID;
-- the reader ceiling would be lower than the portable limit;
-- the package cannot delegate to the existing shared runtime without production
-  changes;
-- an open pull request or branch already owns D13;
+- the user is not available to operate the Vivo X Fold5, AutoJs6, or Android
+  system picker;
+- the private fixture cannot be selected unchanged;
+- the execution SHA or generated bundle is not clean and authoritative;
+- the returned record is incomplete, unsanitized, or not one of the reviewed
+  stable shapes;
+- an open pull request or branch already owns D13 device evidence;
 - repository state conflicts;
 - sensitive data may have appeared;
 - write access is unavailable.
