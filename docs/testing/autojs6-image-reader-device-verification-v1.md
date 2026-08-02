@@ -138,6 +138,7 @@ and expected byte sizes.
 | `AT_PORTABLE_LIMIT`   | Valid supported image exactly `maxSizeBytes`                                       |
 | `OVER_PORTABLE`       | Valid supported image above `maxSizeBytes` but not above the reader ceiling        |
 | `OVER_READER_CEILING` | Valid supported source above `readerSafetyLimitBytes`                              |
+| `JPEG_REPEAT_VALID`   | Non-sensitive synthetic JPEG dedicated to D16 repeated reads                       |
 | `MISSING_SOURCE`      | A selected non-sensitive source deleted after its URI is recorded                  |
 | `REVOKED_SOURCE`      | A source whose temporary URI grant can be intentionally revoked                    |
 
@@ -329,34 +330,34 @@ Android permission evidence.
 Record the exact main SHA, limits, Android version, AutoJs6 version, start/end
 memory observations, result, and sanitized notes for every row.
 
-| ID  | Test                                                  | Procedure                                                                                   | Expected result                                                        |
-| --- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| D01 | `content://` JPEG                                     | Select `JPEG_VALID`, retain only its runtime URI, and run once                              | Success: `image/jpeg`, exact non-zero `sizeBytes`                      |
-| D02 | PNG                                                   | Select and run `PNG_VALID`                                                                  | Success: `image/png`, exact non-zero `sizeBytes`                       |
-| D03 | WebP                                                  | Select and run `WEBP_VALID`                                                                 | Success: `image/webp`, exact non-zero `sizeBytes`                      |
-| D04 | HEIC                                                  | Select and run `HEIC_VALID`                                                                 | Success: `image/heic`, exact non-zero `sizeBytes`                      |
-| D05 | HEIF where supported                                  | Select and run `HEIF_VALID`; mark not supported only with platform evidence                 | Success: `image/heif`, exact non-zero `sizeBytes`                      |
-| D06 | MIME from `ContentResolver`                           | Record that a supported MIME is returned, without recording the URI                         | Success with normalized returned MIME and exact `sizeBytes`            |
-| D07 | Absent MIME signature fallback                        | Through a controlled adapter hook, return no MIME while reading a valid fixture             | Success with signature-detected MIME and exact `sizeBytes`             |
-| D08 | Permission granted                                    | Run a freshly selected URI while its grant is active                                        | Success metadata                                                       |
-| D09 | Permission revoked before `canAccess()`               | Revoke the temporary grant before invoking the harness                                      | `URI_ACCESS_DENIED`                                                    |
-| D10 | Permission revoked between `canAccess()` and `read()` | Use a controlled hook to revoke after the probe closes and before the production read opens | `URI_ACCESS_DENIED`                                                    |
-| D11 | Missing source                                        | Delete `MISSING_SOURCE` after selection, then run while authorization history remains       | `IMAGE_READ_FAILED`                                                    |
-| D12 | Null stream, controlled fake only                     | Inject a resolver fake returning `null`; do not claim this as a real Android behavior       | `IMAGE_READ_FAILED`                                                    |
-| D13 | Exact portable size limit                             | Run `AT_PORTABLE_LIMIT` with `maxSizeBytes` equal to its verified byte count                | Success with `sizeBytes === maxSizeBytes`                              |
-| D14 | Portable size overflow                                | Run `OVER_PORTABLE` with a higher reader ceiling                                            | `IMAGE_TOO_LARGE`                                                      |
-| D15 | Reader safety ceiling overflow                        | Run `OVER_READER_CEILING` with a deliberately lower recorded reader ceiling                 | `IMAGE_READ_FAILED`; no truncated success                              |
-| D16 | Repeated reads                                        | Read the same non-sensitive granted URI repeatedly in a recorded loop                       | Every iteration returns the same success metadata                      |
-| D17 | Multi-image sequential reads                          | Read JPEG, PNG, WebP, and supported HEIC/HEIF URIs sequentially                             | One independent success metadata record per image                      |
-| D18 | Stream cleanup after success                          | Instrument the stream wrapper close event for a valid read                                  | Success metadata and exactly one demonstrated close                    |
-| D19 | Cleanup after failure                                 | Inject a controlled mid-read failure and instrument close                                   | `IMAGE_READ_FAILED` and exactly one demonstrated close                 |
-| D20 | Memory behavior                                       | Record coarse memory before, during, and after D16/D17; allow a stabilization interval      | Success metadata; no unsafe sustained growth                           |
-| D21 | UI responsiveness and blocking                        | Interact with the device UI while repeated reads execute off the UI thread                  | Success metadata; no UI blocking                                       |
-| D22 | No image or Base64 persistence                        | Inspect the approved output/log locations after successful and failed cases                 | Success metadata or the case's stable error; no persisted bytes/Base64 |
-| D23 | No sensitive logging                                  | Review all logs after the full matrix                                                       | Success metadata or stable error codes only; no prohibited data        |
-| D24 | Empty source where Android permits                    | Run `EMPTY_CONTROLLED`; otherwise retain this as a controlled-fake result only              | `EMPTY_IMAGE`                                                          |
-| D25 | Unsupported non-image source                          | Select a non-sensitive unsupported controlled source if the picker permits it               | `UNSUPPORTED_MIME_TYPE`                                                |
-| D26 | Controlled encoding failure                           | Inject a failing provider-neutral encoder after a valid read                                | `ENCODING_FAILED`                                                      |
+| ID  | Test                                                  | Procedure                                                                                                                    | Expected result                                                                                                                    |
+| --- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| D01 | `content://` JPEG                                     | Select `JPEG_VALID`, retain only its runtime URI, and run once                                                               | Success: `image/jpeg`, exact non-zero `sizeBytes`                                                                                  |
+| D02 | PNG                                                   | Select and run `PNG_VALID`                                                                                                   | Success: `image/png`, exact non-zero `sizeBytes`                                                                                   |
+| D03 | WebP                                                  | Select and run `WEBP_VALID`                                                                                                  | Success: `image/webp`, exact non-zero `sizeBytes`                                                                                  |
+| D04 | HEIC                                                  | Select and run `HEIC_VALID`                                                                                                  | Success: `image/heic`, exact non-zero `sizeBytes`                                                                                  |
+| D05 | HEIF where supported                                  | Select and run `HEIF_VALID`; mark not supported only with platform evidence                                                  | Success: `image/heif`, exact non-zero `sizeBytes`                                                                                  |
+| D06 | MIME from `ContentResolver`                           | Record that a supported MIME is returned, without recording the URI                                                          | Success with normalized returned MIME and exact `sizeBytes`                                                                        |
+| D07 | Absent MIME signature fallback                        | Through a controlled adapter hook, return no MIME while reading a valid fixture                                              | Success with signature-detected MIME and exact `sizeBytes`                                                                         |
+| D08 | Permission granted                                    | Run a freshly selected URI while its grant is active                                                                         | Success metadata                                                                                                                   |
+| D09 | Permission revoked before `canAccess()`               | Revoke the temporary grant before invoking the harness                                                                       | `URI_ACCESS_DENIED`                                                                                                                |
+| D10 | Permission revoked between `canAccess()` and `read()` | Use a controlled hook to revoke after the probe closes and before the production read opens                                  | `URI_ACCESS_DENIED`                                                                                                                |
+| D11 | Missing source                                        | Delete `MISSING_SOURCE` after selection, then run while authorization history remains                                        | `IMAGE_READ_FAILED`                                                                                                                |
+| D12 | Null stream, controlled fake only                     | Inject a resolver fake returning `null`; do not claim this as a real Android behavior                                        | `IMAGE_READ_FAILED`                                                                                                                |
+| D13 | Exact portable size limit                             | Run `AT_PORTABLE_LIMIT` with `maxSizeBytes` equal to its verified byte count                                                 | Success with `sizeBytes === maxSizeBytes`                                                                                          |
+| D14 | Portable size overflow                                | Run `OVER_PORTABLE` with a higher reader ceiling                                                                             | `IMAGE_TOO_LARGE`                                                                                                                  |
+| D15 | Reader safety ceiling overflow                        | Run `OVER_READER_CEILING` with a deliberately lower recorded reader ceiling                                                  | `IMAGE_READ_FAILED`; no truncated success                                                                                          |
+| D16 | Repeated reads                                        | Select `JPEG_REPEAT_VALID` once with one fresh temporary grant, then run exactly 10 fail-fast complete production-path reads | One frozen sanitized aggregate; success only when all 10 reads return equal approved metadata and loop-level UI remains responsive |
+| D17 | Multi-image sequential reads                          | Read JPEG, PNG, WebP, and supported HEIC/HEIF URIs sequentially                                                              | One independent success metadata record per image                                                                                  |
+| D18 | Stream cleanup after success                          | Instrument the stream wrapper close event for a valid read                                                                   | Success metadata and exactly one demonstrated close                                                                                |
+| D19 | Cleanup after failure                                 | Inject a controlled mid-read failure and instrument close                                                                    | `IMAGE_READ_FAILED` and exactly one demonstrated close                                                                             |
+| D20 | Memory behavior                                       | Record coarse memory before, during, and after D16/D17; allow a stabilization interval                                       | Success metadata; no unsafe sustained growth                                                                                       |
+| D21 | UI responsiveness and blocking                        | Interact with the device UI while repeated reads execute off the UI thread                                                   | Success metadata; no UI blocking                                                                                                   |
+| D22 | No image or Base64 persistence                        | Inspect the approved output/log locations after successful and failed cases                                                  | Success metadata or the case's stable error; no persisted bytes/Base64                                                             |
+| D23 | No sensitive logging                                  | Review all logs after the full matrix                                                                                        | Success metadata or stable error codes only; no prohibited data                                                                    |
+| D24 | Empty source where Android permits                    | Run `EMPTY_CONTROLLED`; otherwise retain this as a controlled-fake result only                                               | `EMPTY_IMAGE`                                                                                                                      |
+| D25 | Unsupported non-image source                          | Select a non-sensitive unsupported controlled source if the picker permits it                                                | `UNSUPPORTED_MIME_TYPE`                                                                                                            |
+| D26 | Controlled encoding failure                           | Inject a failing provider-neutral encoder after a valid read                                                                 | `ENCODING_FAILED`                                                                                                                  |
 
 ## 5. Expected results
 
@@ -395,6 +396,110 @@ public codes, plus the boolean `uiResponsive` field:
 
 Any other result is a harness or integration defect. Stop and report it
 without printing the underlying exception.
+
+### D16 approved repeated-read contract
+
+The user explicitly approved this complete D16 contract on 2026-08-02. It is
+binding for later readiness review and preparation, but this clarification is
+not a launcher, test result, Android result, or PASS claim.
+
+#### Iterations and production path
+
+- Use the same one system-picker selection for exactly 10 complete reads of the
+  same selected source.
+- Every iteration must execute the existing full path:
+  `canAccess() → read() → portable core → verification reporter path`.
+- Do not reselect between iterations. Stop the remaining reads immediately
+  when a fail-fast condition occurs; a failed iteration must not be skipped.
+
+#### Controlled fixture and grant
+
+- Use opaque fixture ID `JPEG_REPEAT_VALID`, a non-personal, non-sensitive
+  synthetic JPEG.
+- Keep its binary and private fixture mapping outside Git. Before a later
+  procedure is prepared, independently re-measure its exact byte count with a
+  read-only tool outside the launcher and production reader.
+- Repository evidence may record only the opaque fixture ID, JPEG media type,
+  and independently verified positive integer byte count. It must not record a
+  source location, source name, selected identifier, source bytes, Base64, or
+  image content.
+- Use one fresh Android system-picker temporary grant for the complete
+  10-iteration loop. Do not request persistable access, broad storage
+  permission, or a permission manager, and do not reselect.
+
+#### Per-iteration requirements and equality
+
+Every successful iteration must satisfy all of these requirements:
+
+- `status === "PASS"`;
+- `mimeType === "image/jpeg"`;
+- `sizeBytes === independentlyVerifiedByteCount`.
+
+Iterations 2 through 10 must equal iteration 1 for `mimeType` and `sizeBytes`.
+The fixed test case ID is `D16_REPEATED_READS`; it is not an equality field.
+
+#### Responsiveness and fail-fast rules
+
+- Assess responsiveness once for the complete loop and report one loop-level
+  `uiResponsive` value. Do not report per-iteration responsiveness.
+- After a read or metadata fail-fast condition, finish the existing safe
+  loop-level responsiveness assessment before emitting the one aggregate
+  record. D16 success requires `uiResponsive === true`.
+- Stop remaining reads when the source is inaccessible, a read fails, the
+  underlying status is not `PASS`, MIME is not `image/jpeg`, size differs from
+  the independently verified count, or MIME/size differs from iteration 1.
+- If the completed loop-level assessment is false, report
+  `failureReason: "UI_NOT_RESPONSIVE"`. Otherwise preserve an existing stable
+  public error unchanged with `failureReason: "PUBLIC_ERROR"`, or report a
+  metadata failure with `failureReason: "METADATA_MISMATCH"`.
+- `METADATA_MISMATCH` and `UI_NOT_RESPONSIVE` are evidence-only D16 failure
+  reasons. They are neither production error codes nor project
+  classifications. `PUBLIC_ERROR` identifies preservation of an existing
+  stable public error and likewise does not create a new production error.
+
+#### One sanitized aggregate record
+
+Emit exactly one frozen aggregate record. Do not emit 10 per-iteration
+records. The success shape is:
+
+```json
+{
+  "testCaseId": "D16_REPEATED_READS",
+  "status": "PASS",
+  "requestedIterations": 10,
+  "attemptedIterations": 10,
+  "successfulIterations": 10,
+  "mimeType": "image/jpeg",
+  "sizeBytes": "<independently verified positive integer>",
+  "allMetadataEqual": true,
+  "uiResponsive": true
+}
+```
+
+The failure shape is:
+
+```json
+{
+  "testCaseId": "D16_REPEATED_READS",
+  "status": "FAIL",
+  "requestedIterations": 10,
+  "attemptedIterations": "<1-10>",
+  "successfulIterations": "<0-10>",
+  "allMetadataEqual": "<true-or-false>",
+  "uiResponsive": "<true-or-false>",
+  "failureReason": "<PUBLIC_ERROR | METADATA_MISMATCH | UI_NOT_RESPONSIVE>",
+  "errorCode": "<existing stable public code; only when failureReason is PUBLIC_ERROR>"
+}
+```
+
+The aggregate must contain no selected identifier, source location, source
+name, source bytes, Base64, image content, exception, message, stack, cause,
+credential, or uncontrolled runtime value.
+
+D16 proves only repeated full reads on the same fresh temporary grant. It does
+not prove D17 multi-image behavior, D18/D19 exact cleanup instrumentation, D20
+memory behavior, D21 UI-blocking behavior, provider or queue behavior, or
+Contributor app integration.
 
 ## 6. Evidence capture
 
