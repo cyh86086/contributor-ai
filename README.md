@@ -75,11 +75,13 @@ revocation between `canAccess()` and `read()`; D10 is also
 real missing source can fail at the initial access probe or the later read, which
 the current pipeline maps to different public results; D11 is
 `BLOCKED_UNPROVEN_CLASSIFICATION`, with no launcher or device-result claim. The
-D12 review then found that existing tests cover each adjacent contract but not
-one exact second-open null path through the production reader, portable core,
-and stable reporter. The next active task is the separately governed D12
-test-only coverage preparation; D13-D26 and complete Android Image Input Adapter
-V1.0 migration remain pending.
+D12 fake-only offline contract is now proved by one exact test in which the
+access probe succeeds and the read-stage second resolver open returns `null`.
+The test carries the result through the production reader, portable core, and
+stable reporter as sanitized `IMAGE_READ_FAILED`; it is not Android, provider,
+device, or D11 evidence. The next active task is
+`D13-EVIDENCE-GAP-REVIEW`; D13-D26 and complete Android Image Input Adapter V1.0
+migration remain pending.
 
 ## Project layout
 

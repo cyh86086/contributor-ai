@@ -5,61 +5,67 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D12-TEST-COVERAGE-PREPARATION`
+**Task ID:** `D13-EVIDENCE-GAP-REVIEW`
 
-**Objective:** Implement the smallest test-only coverage change that proves the
-formal D12 fake resolver sequence through the existing production Android image
-reader, portable error boundary, and stable public reporter.
+**Objective:** Perform a repository-first evidence-gap review of formal D13,
+the exact portable size-limit case.
 
-The test must keep D12 explicitly offline and fake-only. It must make the access
-probe succeed, return `null` from the read-stage second resolver open, and prove
-the final stable result is `IMAGE_READ_FAILED` without changing production
-behavior.
+The formal matrix requires `AT_PORTABLE_LIMIT` to use `maxSizeBytes` equal to
+the fixture's independently verified byte count and expects success with
+`sizeBytes === maxSizeBytes`. The review must determine what existing
+repository evidence proves, what scoped device evidence is still needed, and
+the smallest governed next step. It must not implement a launcher or test while
+the review is active.
 
 ## Required work
 
-1. Complete the mandatory repository preflight.
-2. Re-read the D12 evidence-gap review and confirm no open pull request or branch
-   already owns the test-only change.
-3. Add one minimal D12-specific offline test using the existing shared
-   `runImageReaderDeviceCheck()` path.
-4. Configure the fake resolver so the first open returns a closable probe stream
-   and the second open returns `null`.
-5. Assert exactly two opens, stable `IMAGE_READ_FAILED`, one identical frozen
-   reporter record, and no uncontrolled output fields.
-6. Run the full repository verification suite and publish the test-only change
-   for review.
+1. Complete the mandatory repository preflight and confirm no pull request or
+   branch already owns D13.
+2. Read the formal verification-matrix D13 row and its controlled-fixture and
+   evidence requirements.
+3. Inspect the production reader's safety ceiling, portable `maxSizeBytes`
+   validation and exact-boundary behavior, shared reporter, and all relevant
+   offline tests.
+4. Determine whether the verified byte count for `AT_PORTABLE_LIMIT` and a
+   reproducible production-runtime procedure already exist without recording a
+   source identifier, path, filename, bytes, image content, or diagnostics.
+5. Distinguish offline exact-boundary contract evidence from Android and
+   AutoJs6 device evidence.
+6. Record the evidence gap, feasibility or blocker, and the single next task in
+   project-state and D13 review documentation.
 
 ## Acceptance criteria
 
-- The test executes the existing production reader, portable core, and shared
-  reporter without altering them.
-- `canAccess()` succeeds on the first fake stream and the second resolver open
-  returns `null` during `read()`.
-- The exact public result is `IMAGE_READ_FAILED`, reported once with no source or
-  uncontrolled diagnostic fields.
-- The change is test-only apart from required state and evidence updates.
-- No Android, provider, device, or D11 claim is made.
-- All repository checks pass and the change is committed and reviewed through a
-  pull request.
+- The review traces the formal sequence from the production reader through the
+  portable size check and stable reporter.
+- The meaning and provenance of the `AT_PORTABLE_LIMIT` verified byte count are
+  explicit and sanitized.
+- Existing offline tests and missing device evidence are listed without
+  expanding their claims.
+- The review determines whether a later controlled device procedure is safe,
+  deterministic, and necessary.
+- No D13 result, launcher, fixture, production behavior, or device evidence is
+  fabricated.
+- All documentation checks and repository scans pass, and the review is
+  committed and published for review.
 
 ## Prohibited scope
 
-Do not implement a D12 launcher or run a device test. Do not change production
-reader, portable core, reporter, generated bundles, Android permissions, or
-application architecture. Do not use D12 to replace D11, permission evidence,
-real provider behavior, or the private-cache exploration.
+Do not create a D13 launcher, run a D13 device test, alter fixture data, or
+change production reader, portable core, reporter, generated bundles, Android
+permissions, or application architecture during this review. Do not infer
+Android or AutoJs6 behavior from offline tests.
 
-Do not begin queue, provider, network, Contributor app, credential, submission,
-or unrelated module work.
+Do not begin D14-D26, queue, provider, network, Contributor app, credential,
+submission, or unrelated module work.
 
 ## Stop conditions
 
 Stop and report when:
 
-- the test would require production or generated-runtime changes;
-- the first-open and second-open order cannot be asserted deterministically;
-- stable sanitized reporting cannot be proved without sensitive values;
-- an open pull request already owns the D12 test-only change;
+- the formal D13 contract or verified fixture byte count is ambiguous;
+- an open pull request or branch already owns D13;
 - repository state conflicts;
+- sensitive source or fixture data would need to be recorded;
+- production or generated-runtime changes would be required for the review;
 - write access is unavailable.
