@@ -5,55 +5,73 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D16-POST-CLARIFICATION-READINESS-REVIEW`
+**Task ID:** `D16-AGGREGATE-SEMANTICS-CLARIFICATION`
 
-**Objective:** Perform a documentation/repository-only readiness review of the
-approved D16 repeated-read contract and decide the next governed preparation
-stage.
+**Objective:** Write the user-approved `attemptedIterations`,
+`successfulIterations`, `allMetadataEqual`, and failure-precedence semantics
+into the formal D16 contract through a separate documentation-only change.
 
-## Required review
+The readiness review still concludes that test-only coverage is required, but
+tests must not begin until this clarification is independently reviewed and
+merged.
 
-1. Re-read the approved D16 contract in
-   `docs/testing/autojs6-image-reader-device-verification-v1.md` and the closed
-   evidence-gap review.
-2. Inspect the existing production reader, portable core, verification reporter
-   path, and relevant offline tests without modifying them.
-3. Determine whether repository coverage already proves the required
-   10-iteration orchestration, fail-fast rules, equality checks, loop-level
-   responsiveness handling, public-error preservation, and one frozen
-   aggregate record.
-4. If coverage is incomplete, set the next sole task to
-   `D16-TEST-COVERAGE-PREPARATION` and identify the exact test-only gap.
-5. If coverage is complete, set the next sole task to
-   `D16-DEVICE-PROCEDURE-PREPARATION` and document why no test-only preparation
-   is needed.
+## Required work
+
+1. Complete mandatory preflight and re-read the D16 formal contract, original
+   evidence-gap review, and post-clarification readiness review.
+2. Update only the formal D16 documentation and required repository state to
+   record the approved aggregate-semantics addendum exactly.
+3. Define `attemptedIterations` as incrementing when an iteration starts the
+   complete path, including the iteration that fails, while excluding later
+   iterations skipped by fail-fast.
+4. Define `successfulIterations` as incrementing only when the iteration is a
+   JPEG `PASS`, matches the independently verified count, and matches iteration
+   1 metadata.
+5. Define `allMetadataEqual` for complete success, early public/metadata
+   failure, successful reads followed by UI failure, and UI precedence after an
+   earlier failure.
+6. Record the exact UI, stable-public-error, and metadata-mismatch precedence,
+   including when `errorCode` must be present or absent.
+7. Record the approved iteration-4 public-error, iteration-4 metadata-mismatch,
+   and 10-success-plus-UI-failure examples.
+8. Preserve the existing fixture, grant, iteration, privacy, claim, and
+   evidence boundaries, then publish the documentation-only clarification for
+   independent review.
 
 ## Acceptance criteria
 
-- The review uses the approved exact count of 10 and opaque fixture ID
-  `JPEG_REPEAT_VALID` without changing the contract.
-- It distinguishes offline repository evidence from Android/device evidence
-  and does not claim D16 PASS.
-- It reaches exactly one of the two governed next-task outcomes above using
-  repository evidence.
-- It updates project state, this single-task register, and a scoped review
-  document in one documentation-only change.
-- It records no selected identifier, source location, source name, source
-  bytes, Base64, image content, exception detail, stack, credential, or
-  uncontrolled runtime value.
+- The formal D16 contract contains the exact user-approved counter timing,
+  successful-iteration conditions, equality rules, and failure precedence.
+- UI non-responsiveness has highest priority and never exposes `errorCode`.
+- A responsive stable public error preserves its original stable public code.
+- A responsive metadata mismatch has no `errorCode`.
+- The three approved examples have exact attempted/successful counters,
+  equality values, failure reasons, and error-code presence rules.
+- The clarification remains documentation-only and makes no implementation,
+  offline PASS, Android, AutoJs6, temporary-grant lifetime, or device claim.
+- The repository state and sole next-action register are updated consistently,
+  all checks and privacy/scope scans pass, and the change is reviewed through a
+  pull request.
 
 ## Prohibited scope
 
-Do not add tests, create a D16 launcher or procedure, run a device, measure or
-commit a binary fixture, claim PASS, or assign a new classification name during
-this review.
+Do not add or modify tests, a D16 launcher, generated bundles, production code,
+a device procedure, binary fixture, permission behavior, or application
+architecture. Do not execute a phone or claim D16 PASS.
 
-Do not add production behavior, persistable access, broad storage permission,
-permission manager, source-copy architecture, provider, network, queue,
-Contributor app, credential, submission, or unrelated module work.
+Do not add persistable access, broad storage permission, a permission manager,
+provider, network, queue, Contributor app, credential, submission, or unrelated
+module work.
 
 ## Stop conditions
 
-Stop for repository drift, an existing owning pull request or branch,
-conflicting governance, ambiguous approved-contract text, sensitive data,
-failed verification outside scope, or unavailable GitHub write access.
+Stop and report when:
+
+- the approved addendum conflicts with the formal D16 fixture, grant,
+  iteration, privacy, or evidence boundaries;
+- another pull request or branch already owns the clarification task;
+- repository state or the approved semantics are ambiguous;
+- the clarification would require tests, production behavior, generated code,
+  device execution, or sensitive values;
+- required checks fail outside the authorized documentation-only scope;
+- GitHub write access is unavailable.
