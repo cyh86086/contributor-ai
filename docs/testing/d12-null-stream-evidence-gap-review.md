@@ -2,21 +2,22 @@
 
 ## Review result
 
-**Coverage is incomplete; a separately governed test-only change is required.**
+**Coverage gap resolved by a separately governed fake-only offline test.**
 
-The repository proves the component contracts around null streams, ordinary
-read failures, permission denial, public error mapping, and sanitized reporting.
-It does not contain one test that establishes the exact formal D12 sequence
-through the production Android image reader, portable error boundary, and
-stable public reporter.
+`tests/autojs6-d12-null-stream.test.js` establishes the exact formal D12
+sequence through the production Android image reader, portable error boundary,
+and stable public reporter. It does so with injected offline dependencies only.
 
-This review does not create a new status classification. It makes no Android,
-provider, device, or D12 PASS claim and introduces no test or launcher.
+This record does not create a new status classification. The result proves the
+D12 repository offline contract only; it makes no Android, provider, device, or
+D12 device-PASS claim and introduces no launcher.
 
 ## Authoritative scope
 
 - **Preflight live `main` SHA:**
   `3866ade46397d769ccf27db837f43964d8d1e12d`
+- **Test implementation preflight `main` SHA:**
+  `8d83f273139833ee7b80ea432da9a0127b7bb09f`
 - **Formal case:** a controlled fake resolver returns `null`
 - **Expected stable public result:** `IMAGE_READ_FAILED`
 - **Evidence class:** fake-only offline contract
@@ -58,13 +59,14 @@ result; it does not rewrite the matrix or claim real platform behavior.
 | `tests/autojs6-d01-one-click.test.js` and reporter assertions in existing harness tests | Public records are allowlisted, metadata-only, emitted once, and do not retain uncontrolled fields.                                                                     | They do not couple those guarantees to a D12 second-open null.                       |
 | Injected `FileNotFoundException` and permission-failure tests                           | Missing-source-like non-permission failures and access failures have distinct reader classifications.                                                                   | They are not real D11 deletion evidence and do not substitute for D12's null return. |
 
-The components are individually covered, but evidence assembled from separate
-tests is not an exact execution proof for the formal D12 sequence.
+The historical rows above explain the original gap. The separately governed
+`tests/autojs6-d12-null-stream.test.js` now supplies the missing exact execution
+without replacing or reinterpreting those component tests.
 
-## Required test-only coverage
+## Resolved test-only coverage
 
-A separately governed test-only change must invoke the existing shared
-`runImageReaderDeviceCheck()` path and demonstrate all of the following in one
+The D12-specific test invokes the existing shared
+`runImageReaderDeviceCheck()` path and demonstrates all of the following in one
 case:
 
 1. the fake resolver's first open returns a closable probe stream;
@@ -73,13 +75,19 @@ case:
 4. exactly two stream opens occur;
 5. the production reader classifies the null as a non-permission read failure;
 6. the portable core returns stable public `IMAGE_READ_FAILED`;
-7. the reporter receives exactly the same frozen, metadata-only failure record;
-8. the record contains no source identifier, runtime diagnostic, cause, or
-   uncontrolled field.
+7. neither buffer creation nor runtime error classification is called;
+8. the reporter receives the exact same frozen, metadata-only failure record
+   once;
+9. the record has exactly `testCaseId`, `status`, and `errorCode`, with no source
+   identifier, MIME, size, runtime diagnostic, cause, or uncontrolled field;
+10. neither the record nor its serialization contains the synthetic source
+    identifier.
 
-The change may add or modify tests only. It must not change the matrix,
-production reader, portable core, reporter, generated launcher bundles, Android
-permissions, or application architecture.
+The test is reviewed with this record on branch `agent/d12-test-coverage`.
+GitHub commit and pull-request metadata are the authoritative implementation
+identifiers; this document does not predict its own merge SHA. The change does
+not modify the matrix, production reader, portable core, reporter, generated
+launcher bundles, Android permissions, or application architecture.
 
 ## Scope boundaries
 
@@ -95,9 +103,10 @@ permissions, or application architecture.
 
 ## Governed outcome
 
-- Close `D12-EVIDENCE-GAP-REVIEW` with the exact coverage gap recorded above.
-- Do not claim that existing tests fully prove D12.
+- Close `D12-TEST-COVERAGE-PREPARATION` with the exact fake-only offline
+  contract proved by the D12-specific test.
+- Record D12 as proved by repository tests only; do not call it Android,
+  provider, or device evidence.
 - Do not create a D12 launcher or perform a device test.
-- Set the single active task to `D12-TEST-COVERAGE-PREPARATION`.
-- Do not advance to D13 until the separately governed D12 test-only change is
-  implemented, verified, committed, and reviewed.
+- Set the single active task to `D13-EVIDENCE-GAP-REVIEW`.
+- Do not implement D13 before its governed evidence-gap review.

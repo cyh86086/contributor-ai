@@ -54,8 +54,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 ## Current phase
 
 **Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
-platform; D11 is blocked by unproven classification; D12 requires one exact
-test-only coverage change; D13-D26 remain pending.**
+platform; D11 is blocked by unproven classification; the D12 fake-only offline
+contract is proved; D13-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -133,16 +133,16 @@ provider-independent missing-source result. D11 is therefore
 authorized. The review is recorded in
 [`testing/d11-missing-source-evidence-gap-review.md`](testing/d11-missing-source-evidence-gap-review.md).
 
-The D12 evidence-gap review preserved D12 as a fake-only offline contract. A
-null probe stream at `canAccess()` becomes `URI_ACCESS_DENIED`, so the formal
-`IMAGE_READ_FAILED` result requires a successful first probe followed by a
-controlled null from the read-stage second open. Existing tests separately
-prove reader null handling, portable error mapping, ordinary read failure,
-first-open denial, and sanitized reporting, but no single test carries the
-second-open null through the production reader, portable core, and shared
-reporter. D12 therefore requires one separately governed test-only coverage
-change; no launcher or device execution is authorized. The review is recorded
-in
+The D12 evidence-gap review preserved D12 as a fake-only offline contract. The
+separately governed `tests/autojs6-d12-null-stream.test.js` now proves the exact
+sequence in one execution: a closable first probe makes `canAccess()` succeed,
+the read-stage second resolver open returns `null`, and the existing production
+reader, portable core, and shared reporter produce one frozen, sanitized
+`IMAGE_READ_FAILED` record. No buffer allocation or runtime-error
+classification occurs on that null path. This is repository offline-contract
+evidence only; it is not an Android, provider, device, D11, or private-cache
+result, and no D12 launcher or device execution is authorized. The review and
+resolved coverage are recorded in
 [`testing/d12-null-stream-evidence-gap-review.md`](testing/d12-null-stream-evidence-gap-review.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
@@ -232,12 +232,13 @@ satisfy these requirements.
   do not prove which path occurs on the scoped device and provider. No D11
   launcher or device-result claim is authorized. The review is recorded in
   [`testing/d11-missing-source-evidence-gap-review.md`](testing/d11-missing-source-evidence-gap-review.md).
-- D12 evidence-gap review is complete. Existing tests do not yet provide one
-  exact production-reader, portable-core, and reporter execution in which the
-  access probe succeeds and the read-stage resolver open returns `null`. A
-  separately governed test-only change is required before the repository may
-  record the D12 offline contract as proven. D12 remains fake-only and requires
-  no device execution. The review is recorded in
+- D12's fake-only offline contract is proved by one exact
+  production-reader, portable-core, and reporter test in which the access probe
+  succeeds and the read-stage resolver open returns `null`. The stable result
+  is `IMAGE_READ_FAILED`, with one frozen allowlisted record and no source or
+  diagnostic fields. This is not Android, provider, device, D11, or
+  private-cache evidence; D12 requires no device execution. The review is
+  recorded in
   [`testing/d12-null-stream-evidence-gap-review.md`](testing/d12-null-stream-evidence-gap-review.md).
 - D13-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
@@ -256,7 +257,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D12-TEST-COVERAGE-PREPARATION`.
+At this snapshot it is `D13-EVIDENCE-GAP-REVIEW`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
