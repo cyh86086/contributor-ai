@@ -79,13 +79,13 @@ D12 fake-only offline contract is now proved by one exact test in which the
 access probe succeeds and the read-stage second resolver open returns `null`.
 The test carries the result through the production reader, portable core, and
 stable reporter as sanitized `IMAGE_READ_FAILED`; it is not Android, provider,
-device, or D11 evidence. D13 now has an unexecuted evidence-only launcher and
-reviewable Vivo X Fold5 procedure. Its `AT_PORTABLE_LIMIT` count was
-independently measured as 6,406 bytes outside the launcher and production
-reader; only the opaque ID and count are retained. The next active task is
-`D13-DEVICE-VALIDATION`, which requires user-operated system-picker execution.
-No D13 device result or PASS exists yet; D14-D26 and complete Android Image
-Input Adapter V1.0 migration remain pending.
+device, or D11 evidence. D13 has a scoped PASS on Vivo X Fold5 with Android 16
+and AutoJs6 v6.7.0 `arm64-v8a`: the production reader returned the independently
+verified 6,406-byte `AT_PORTABLE_LIMIT` JPEG exactly at `maxSizeBytes`, with a
+separately higher reader ceiling and responsive UI. This result is only D13
+equality evidence and is not D14 or D15 evidence. The next active task is the
+documentation-only `D14-EVIDENCE-GAP-REVIEW`; D14-D26 and complete Android
+Image Input Adapter V1.0 migration remain pending.
 
 ## Project layout
 
