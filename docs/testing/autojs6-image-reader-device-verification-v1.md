@@ -438,6 +438,27 @@ Every successful iteration must satisfy all of these requirements:
 Iterations 2 through 10 must equal iteration 1 for `mimeType` and `sizeBytes`.
 The fixed test case ID is `D16_REPEATED_READS`; it is not an equality field.
 
+#### Aggregate counter and equality semantics
+
+The user approved these additional aggregate semantics on 2026-08-02:
+
+- Increment `attemptedIterations` immediately when an iteration begins the
+  complete production path. An iteration that produces a public error or
+  metadata mismatch is attempted. Later iterations that do not begin because
+  of fail-fast are not attempted.
+- Increment `successfulIterations` only when that iteration has underlying
+  `status === "PASS"`, `mimeType === "image/jpeg"`,
+  `sizeBytes === independentlyVerifiedByteCount`, and `mimeType` and
+  `sizeBytes` equal iteration 1. An iteration that produces a public error or
+  metadata mismatch is not successful.
+- Set `allMetadataEqual` to `true` only when all 10 reads succeed and all 10
+  report equal MIME and byte-count metadata. Set it to `false` after any early
+  public error or metadata mismatch.
+- When all 10 reads succeed and the final loop-level
+  `uiResponsive === false`, keep `allMetadataEqual: true`. When UI failure
+  overrides an earlier public error or metadata mismatch, keep
+  `allMetadataEqual: false`.
+
 #### Responsiveness and fail-fast rules
 
 - Assess responsiveness once for the complete loop and report one loop-level
@@ -448,14 +469,22 @@ The fixed test case ID is `D16_REPEATED_READS`; it is not an equality field.
 - Stop remaining reads when the source is inaccessible, a read fails, the
   underlying status is not `PASS`, MIME is not `image/jpeg`, size differs from
   the independently verified count, or MIME/size differs from iteration 1.
-- If the completed loop-level assessment is false, report
-  `failureReason: "UI_NOT_RESPONSIVE"`. Otherwise preserve an existing stable
-  public error unchanged with `failureReason: "PUBLIC_ERROR"`, or report a
-  metadata failure with `failureReason: "METADATA_MISMATCH"`.
 - `METADATA_MISMATCH` and `UI_NOT_RESPONSIVE` are evidence-only D16 failure
   reasons. They are neither production error codes nor project
   classifications. `PUBLIC_ERROR` identifies preservation of an existing
   stable public error and likewise does not create a new production error.
+
+Failure precedence is exact and ordered:
+
+1. If `uiResponsive === false`, report
+   `failureReason: "UI_NOT_RESPONSIVE"` and omit `errorCode`. This result has
+   highest priority, including after an earlier public error or metadata
+   mismatch.
+2. Otherwise, when UI is responsive and a stable public error exists, report
+   `failureReason: "PUBLIC_ERROR"` and preserve its original stable public
+   `errorCode` unchanged.
+3. Otherwise, when UI is responsive and metadata differs, report
+   `failureReason: "METADATA_MISMATCH"` and omit `errorCode`.
 
 #### One sanitized aggregate record
 
@@ -495,6 +524,21 @@ The failure shape is:
 The aggregate must contain no selected identifier, source location, source
 name, source bytes, Base64, image content, exception, message, stack, cause,
 credential, or uncontrolled runtime value.
+
+#### Formal failure-aggregate examples
+
+- A stable public error on iteration 4 with responsive UI produces
+  `attemptedIterations: 4`, `successfulIterations: 3`,
+  `allMetadataEqual: false`, `failureReason: "PUBLIC_ERROR"`, and the original
+  stable public `errorCode`.
+- A metadata mismatch on iteration 4 with responsive UI produces
+  `attemptedIterations: 4`, `successfulIterations: 3`,
+  `allMetadataEqual: false`, `failureReason: "METADATA_MISMATCH"`, and no
+  `errorCode`.
+- All 10 successful equal-metadata iterations followed by a non-responsive UI
+  assessment produce `attemptedIterations: 10`, `successfulIterations: 10`,
+  `allMetadataEqual: true`, `failureReason: "UI_NOT_RESPONSIVE"`, and no
+  `errorCode`.
 
 D16 proves only repeated full reads on the same fresh temporary grant. It does
 not prove D17 multi-image behavior, D18/D19 exact cleanup instrumentation, D20
