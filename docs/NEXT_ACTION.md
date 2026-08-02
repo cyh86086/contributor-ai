@@ -5,46 +5,50 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D12-EVIDENCE-GAP-REVIEW`
+**Task ID:** `D12-TEST-COVERAGE-PREPARATION`
 
-**Objective:** Review the repository evidence for verification-matrix D12: a
-controlled fake resolver returns `null`, with expected stable result
-`IMAGE_READ_FAILED`.
+**Objective:** Implement the smallest test-only coverage change that proves the
+formal D12 fake resolver sequence through the existing production Android image
+reader, portable error boundary, and stable public reporter.
 
-The review must keep D12 explicitly fake-only, determine whether existing
-offline coverage already proves the required contract, and prevent the result
-from being presented as real Android, provider, missing-source, or D11 evidence.
+The test must keep D12 explicitly offline and fake-only. It must make the access
+probe succeed, return `null` from the read-stage second resolver open, and prove
+the final stable result is `IMAGE_READ_FAILED` without changing production
+behavior.
 
 ## Required work
 
 1. Complete the mandatory repository preflight.
-2. Re-read the formal D12 row and production `canAccess()` / `read()` null-stream
-   behavior.
-3. Inventory every existing fake-resolver null-stream test and its portable
-   error-mapping coverage.
-4. Determine whether the existing tests already satisfy the controlled
-   fake-only D12 contract or whether a separately governed test-only gap remains.
-5. Record the evidence conclusion and smallest governed next step in a
-   documentation-only pull request.
+2. Re-read the D12 evidence-gap review and confirm no open pull request or branch
+   already owns the test-only change.
+3. Add one minimal D12-specific offline test using the existing shared
+   `runImageReaderDeviceCheck()` path.
+4. Configure the fake resolver so the first open returns a closable probe stream
+   and the second open returns `null`.
+5. Assert exactly two opens, stable `IMAGE_READ_FAILED`, one identical frozen
+   reporter record, and no uncontrolled output fields.
+6. Run the full repository verification suite and publish the test-only change
+   for review.
 
 ## Acceptance criteria
 
-- The review preserves D12 as a controlled fake-only null-stream case with
-  expected `IMAGE_READ_FAILED`.
-- Existing coverage is traced through the production reader and portable error
-  boundary without claiming Android or provider behavior.
-- The review explicitly distinguishes D12 from D11 real-source deletion and all
-  device evidence.
-- No launcher, production behavior, broad storage permission, persistable grant,
-  permission manager, or source-copy architecture is introduced.
-- The result is committed and reviewed through a pull request.
+- The test executes the existing production reader, portable core, and shared
+  reporter without altering them.
+- `canAccess()` succeeds on the first fake stream and the second resolver open
+  returns `null` during `read()`.
+- The exact public result is `IMAGE_READ_FAILED`, reported once with no source or
+  uncontrolled diagnostic fields.
+- The change is test-only apart from required state and evidence updates.
+- No Android, provider, device, or D11 claim is made.
+- All repository checks pass and the change is committed and reviewed through a
+  pull request.
 
 ## Prohibited scope
 
-Do not implement a D12 launcher or claim a device PASS. Do not use D12 to replace
-D11, missing-source evidence, permission evidence, or the private-cache
-exploration. Do not add a permission manager, persistable grants, broad storage
-permissions, source-copy architecture, or production reader changes.
+Do not implement a D12 launcher or run a device test. Do not change production
+reader, portable core, reporter, generated bundles, Android permissions, or
+application architecture. Do not use D12 to replace D11, permission evidence,
+real provider behavior, or the private-cache exploration.
 
 Do not begin queue, provider, network, Contributor app, credential, submission,
 or unrelated module work.
@@ -53,11 +57,9 @@ or unrelated module work.
 
 Stop and report when:
 
-- the formal D12 fake-only case or expected error classification is ambiguous;
-- existing tests cannot be attributed to the production reader and portable
-  boundary without changing code;
-- the review would require device evidence, sensitive values, or production
-  architecture;
-- an open pull request already owns D12;
+- the test would require production or generated-runtime changes;
+- the first-open and second-open order cannot be asserted deterministically;
+- stable sanitized reporting cannot be proved without sensitive values;
+- an open pull request already owns the D12 test-only change;
 - repository state conflicts;
 - write access is unavailable.

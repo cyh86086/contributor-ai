@@ -75,8 +75,11 @@ revocation between `canAccess()` and `read()`; D10 is also
 real missing source can fail at the initial access probe or the later read, which
 the current pipeline maps to different public results; D11 is
 `BLOCKED_UNPROVEN_CLASSIFICATION`, with no launcher or device-result claim. The
-next active task is the formal D12 fake-only null-stream evidence review; D12-D26
-and complete Android Image Input Adapter V1.0 migration remain pending.
+D12 review then found that existing tests cover each adjacent contract but not
+one exact second-open null path through the production reader, portable core,
+and stable reporter. The next active task is the separately governed D12
+test-only coverage preparation; D13-D26 and complete Android Image Input Adapter
+V1.0 migration remain pending.
 
 ## Project layout
 
