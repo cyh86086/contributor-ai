@@ -55,8 +55,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 **Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
 platform; D11 is blocked by unproven classification; the D12 fake-only offline
-contract is proved; D13 is ready for device-procedure preparation; D14-D26
-remain pending.**
+contract is proved; the D13 device procedure is prepared but unexecuted;
+D14-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -153,11 +153,17 @@ metadata. Existing offline coverage includes a production-reader-to-core exact
 boundary execution and a separate complete reader/core/reporter success
 execution. No single test combines all three with exact equality, but that
 additional test is not a prerequisite for device-procedure preparation. The
-opaque `AT_PORTABLE_LIMIT` fixture has no independently verified numeric count
-in the repository; procedure preparation must establish it before execution
-and retain only the fixture ID and number. D13 has no launcher, device result,
-or PASS claim. The review is recorded in
-[`testing/d13-exact-portable-limit-evidence-gap-review.md`](testing/d13-exact-portable-limit-evidence-gap-review.md).
+preparation task independently measured the privately mapped
+`AT_PORTABLE_LIMIT` JPEG as 6,406 bytes with a read-only local tool outside the
+launcher and production reader. The evidence-only D13 launcher pins
+`maxSizeBytes` to 6,406 and the separately higher reader safety ceiling to
+12,582,912, delegates to the existing system picker, production reader,
+portable core, and sanitized reporter, and rejects any non-equal success size.
+The fixture mapping remains outside Git. D13 still has no device result or PASS
+claim. The review and unexecuted procedure are recorded in
+[`testing/d13-exact-portable-limit-evidence-gap-review.md`](testing/d13-exact-portable-limit-evidence-gap-review.md)
+and
+[`user-guides/autojs6-d13-exact-portable-limit-check-zh-tw.md`](user-guides/autojs6-d13-exact-portable-limit-check-zh-tw.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
@@ -254,13 +260,17 @@ satisfy these requirements.
   private-cache evidence; D12 requires no device execution. The review is
   recorded in
   [`testing/d12-null-stream-evidence-gap-review.md`](testing/d12-null-stream-evidence-gap-review.md).
-- D13 evidence-gap review is complete. Existing component and integrated
-  offline tests are sufficient to prepare a scoped device procedure without a
-  new test-only prerequisite. `AT_PORTABLE_LIMIT` still requires an
-  independently verified positive numeric count before execution; other fake
-  or D01-D08 fixture counts do not establish it. No D13 launcher, device
-  result, or PASS is claimed. The review is recorded in
-  [`testing/d13-exact-portable-limit-evidence-gap-review.md`](testing/d13-exact-portable-limit-evidence-gap-review.md).
+- D13 evidence-gap review and device-procedure preparation are complete. The
+  user-approved `AT_PORTABLE_LIMIT` JPEG was independently measured anew as
+  6,406 bytes outside the launcher and production reader; only the opaque ID
+  and count are retained. The unexecuted evidence-only launcher uses that exact
+  portable limit, a 12,582,912-byte reader ceiling, the existing fresh picker,
+  production reader, portable core, and sanitized reporter path. No D13 device
+  result or PASS is claimed. Device validation requires the user to operate the
+  Vivo X Fold5 system picker. The review and procedure are recorded in
+  [`testing/d13-exact-portable-limit-evidence-gap-review.md`](testing/d13-exact-portable-limit-evidence-gap-review.md)
+  and
+  [`user-guides/autojs6-d13-exact-portable-limit-check-zh-tw.md`](user-guides/autojs6-d13-exact-portable-limit-check-zh-tw.md).
 - D14-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
@@ -278,7 +288,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D13-DEVICE-PROCEDURE-PREPARATION`.
+At this snapshot it is `D13-DEVICE-VALIDATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state

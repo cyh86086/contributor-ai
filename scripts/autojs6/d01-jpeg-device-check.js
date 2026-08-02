@@ -1,8 +1,5 @@
 "ui";
 /* GENERATED: non-production AutoJs6 D01_JPEG device-verification support only. */
-function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regenerator() { var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
@@ -22,7 +19,64 @@ function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? O
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 (function () {
+  var __defProp = Object.defineProperty;
+  var __defProps = Object.defineProperties;
+  var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __defNormalProp = function __defNormalProp(obj, key, value) {
+    return key in obj ? __defProp(obj, key, {
+      enumerable: true,
+      configurable: true,
+      writable: true,
+      value: value
+    }) : obj[key] = value;
+  };
+  var __spreadValues = function __spreadValues(a, b) {
+    for (var prop in b || (b = {})) if (__hasOwnProp.call(b, prop)) __defNormalProp(a, prop, b[prop]);
+    if (__getOwnPropSymbols) {
+      var _iterator = _createForOfIteratorHelper(__getOwnPropSymbols(b)),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var prop = _step.value;
+          if (__propIsEnum.call(b, prop)) __defNormalProp(a, prop, b[prop]);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    }
+    return a;
+  };
+  var __spreadProps = function __spreadProps(a, b) {
+    return __defProps(a, __getOwnPropDescs(b));
+  };
+  var __objRest = function __objRest(source, exclude) {
+    var target = {};
+    for (var prop in source) if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0) target[prop] = source[prop];
+    if (source != null && __getOwnPropSymbols) {
+      var _iterator2 = _createForOfIteratorHelper(__getOwnPropSymbols(source)),
+        _step2;
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var prop = _step2.value;
+          if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop)) target[prop] = source[prop];
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    }
+    return target;
+  };
   var __async = function __async(__this, __arguments, generator) {
     return new Promise(function (resolve, reject) {
       var fulfilled = function fulfilled(value) {
@@ -130,7 +184,22 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     sourceEntryPath: "autojs6/source/d08-permission-granted-device-check.entry.js",
     generatedPath: "autojs6/d08-permission-granted-device-check.js"
   });
-  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE]);
+  var D13_EXACT_PORTABLE_LIMIT_CHECK_CASE = defineCase({
+    testCaseId: "D13_EXACT_PORTABLE_LIMIT",
+    fixtureId: "AT_PORTABLE_LIMIT",
+    pickerMimeType: "image/jpeg",
+    expectedMimeType: "image/jpeg",
+    expectedSizeBytes: 6406,
+    maxSizeBytes: 6406,
+    readerSafetyLimitBytes: 12 * 1024 * 1024,
+    requestCode: 6113,
+    verificationMode: "exact-portable-limit",
+    title: "D13 portable size \u4E0A\u9650\u7B49\u503C\u88DD\u7F6E\u9A57\u8B49",
+    instructionText: "\u8ACB\u5728 Android \u7CFB\u7D71\u9078\u5716\u5668\u4E2D\u9078\u64C7\u79C1\u4E0B\u5C0D\u61C9 AT_PORTABLE_LIMIT\u3001\u4E14\u5DF2\u7368\u7ACB\u78BA\u8A8D\u70BA 6,406 bytes \u7684\u975E\u654F\u611F JPEG\u3002\u6B64 evidence-only \u6848\u4F8B\u53EA\u63A5\u53D7 production reader \u56DE\u5831\u5927\u5C0F\u7CBE\u78BA\u7B49\u65BC maxSizeBytes\uFF0C\u4E26\u53EA\u8F38\u51FA sanitized metadata\u3002",
+    sourceEntryPath: "autojs6/source/d13-exact-portable-limit-device-check.entry.js",
+    generatedPath: "autojs6/d13-exact-portable-limit-device-check.js"
+  });
+  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE, D13_EXACT_PORTABLE_LIMIT_CHECK_CASE]);
   var D02_D05_FORMAT_CHECK_CASES = Object.freeze([D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE]);
   var IMAGE_INPUT_ERROR_CODES = Object.freeze({
     UNSUPPORTED_MIME_TYPE: "UNSUPPORTED_MIME_TYPE",
@@ -921,18 +990,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   function combineChunks(chunks, sizeBytes) {
     var result = new Uint8Array(sizeBytes);
     var offset = 0;
-    var _iterator = _createForOfIteratorHelper(chunks),
-      _step;
+    var _iterator3 = _createForOfIteratorHelper(chunks),
+      _step3;
     try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var chunk = _step.value;
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var chunk = _step3.value;
         result.set(chunk, offset);
         offset += chunk.byteLength;
       }
     } catch (err) {
-      _iterator.e(err);
+      _iterator3.e(err);
     } finally {
-      _iterator.f();
+      _iterator3.f();
     }
     return result;
   }
@@ -1052,117 +1121,91 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }
   }
   var PUBLIC_ERROR_CODES3 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
-  var SAFE_CASE_ID3 = /^[\x2D0-9A-Z_]{1,40}$/;
-  function runMimeFallbackDeviceCheck(_0) {
-    return __async(this, arguments, function (_ref9) {
-      var testCaseId = _ref9.testCaseId,
-        sourceUri = _ref9.sourceUri,
-        maxSizeBytes = _ref9.maxSizeBytes,
-        readerSafetyLimitBytes = _ref9.readerSafetyLimitBytes,
-        context = _ref9.context,
-        contentResolver = _ref9.contentResolver,
-        parseUri = _ref9.parseUri,
-        javaBridge = _ref9.javaBridge,
-        _ref9$isFileUriApprov = _ref9.isFileUriApproved,
-        isFileUriApproved = _ref9$isFileUriApprov === void 0 ? function () {
-          return false;
-        } : _ref9$isFileUriApprov,
-        openFileReadOnly = _ref9.openFileReadOnly,
-        _ref9$reportMetadata = _ref9.reportMetadata,
-        reportMetadata = _ref9$reportMetadata === void 0 ? function () {} : _ref9$reportMetadata;
-      return _regenerator().m(function _callee10() {
-        var record, _a, reader, evidenceReader, result, _t14;
-        return _regenerator().w(function (_context10) {
-          while (1) switch (_context10.p = _context10.n) {
-            case 0:
-              validateHarnessInputs2({
-                testCaseId: testCaseId,
-                reportMetadata: reportMetadata
-              });
-              _context10.p = 1;
-              reader = createAutoJs6AndroidImageReader({
-                context: context,
-                contentResolver: contentResolver,
-                parseUri: parseUri,
-                javaBridge: javaBridge,
-                isFileUriApproved: isFileUriApproved,
-                openFileReadOnly: openFileReadOnly,
-                readerSafetyLimitBytes: readerSafetyLimitBytes
-              });
-              evidenceReader = Object.freeze({
-                canAccess: function canAccess(value) {
-                  return reader.canAccess(value);
-                },
-                read: function read(value) {
-                  return __async(this, null, _regenerator().m(function _callee1() {
-                    var result2;
-                    return _regenerator().w(function (_context1) {
-                      while (1) switch (_context1.n) {
-                        case 0:
-                          _context1.n = 1;
-                          return reader.read(value);
-                        case 1:
-                          result2 = _context1.v;
-                          return _context1.a(2, Object.freeze({
-                            bytes: result2.bytes,
-                            mimeType: void 0
-                          }));
-                      }
-                    }, _callee1);
-                  }));
-                }
-              });
-              _context10.n = 2;
-              return prepareImageInput({
-                sourceUri: sourceUri,
-                maxSizeBytes: maxSizeBytes,
-                reader: evidenceReader,
-                isFileUriApproved: isFileUriApproved
-              });
-            case 2:
-              result = _context10.v;
-              record = Object.freeze({
-                testCaseId: testCaseId,
-                status: "PASS",
-                mimeType: result.mimeType,
-                sizeBytes: result.sizeBytes
-              });
-              _context10.n = 4;
-              break;
-            case 3:
-              _context10.p = 3;
-              _t14 = _context10.v;
-              record = Object.freeze({
-                testCaseId: testCaseId,
-                status: "FAIL",
-                errorCode: PUBLIC_ERROR_CODES3.has(_t14 == null ? void 0 : _t14.code) ? _t14.code : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
-              });
-            case 4:
-              reportMetadata(record);
-              return _context10.a(2, record);
-          }
-        }, _callee10, null, [[1, 3]]);
-      })();
+  function runExactPortableLimitDeviceCheck(_a) {
+    return __async(this, null, _regenerator().m(function _callee1() {
+      var _b, expectedSizeBytes, maxSizeBytes, readerSafetyLimitBytes, _b$reportMetadata, reportMetadata, readerOptions, candidate, record;
+      return _regenerator().w(function (_context1) {
+        while (1) switch (_context1.n) {
+          case 0:
+            _b = _a, expectedSizeBytes = _b.expectedSizeBytes, maxSizeBytes = _b.maxSizeBytes, readerSafetyLimitBytes = _b.readerSafetyLimitBytes, _b$reportMetadata = _b.reportMetadata, reportMetadata = _b$reportMetadata === void 0 ? function () {} : _b$reportMetadata, readerOptions = __objRest(_b, ["expectedSizeBytes", "maxSizeBytes", "readerSafetyLimitBytes", "reportMetadata"]);
+            validateLimits({
+              expectedSizeBytes: expectedSizeBytes,
+              maxSizeBytes: maxSizeBytes,
+              readerSafetyLimitBytes: readerSafetyLimitBytes,
+              reportMetadata: reportMetadata
+            });
+            _context1.n = 1;
+            return runImageReaderDeviceCheck(__spreadProps(__spreadValues({}, readerOptions), {
+              maxSizeBytes: maxSizeBytes,
+              readerSafetyLimitBytes: readerSafetyLimitBytes,
+              reportMetadata: function reportMetadata() {}
+            }));
+          case 1:
+            candidate = _context1.v;
+            record = normalizeRecord({
+              candidate: candidate,
+              expectedSizeBytes: expectedSizeBytes,
+              testCaseId: readerOptions.testCaseId
+            });
+            reportMetadata(record);
+            return _context1.a(2, record);
+        }
+      }, _callee1);
+    }));
+  }
+  function normalizeRecord(_ref9) {
+    var candidate = _ref9.candidate,
+      expectedSizeBytes = _ref9.expectedSizeBytes,
+      testCaseId = _ref9.testCaseId;
+    var status = safelyReadProperty2(candidate, "status");
+    var mimeType = safelyReadProperty2(candidate, "mimeType");
+    var sizeBytes = safelyReadProperty2(candidate, "sizeBytes");
+    if (status === "PASS" && typeof mimeType === "string" && sizeBytes === expectedSizeBytes) {
+      return Object.freeze({
+        testCaseId: testCaseId,
+        status: "PASS",
+        mimeType: mimeType,
+        sizeBytes: sizeBytes
+      });
+    }
+    var errorCode = safelyReadProperty2(candidate, "errorCode");
+    return Object.freeze({
+      testCaseId: testCaseId,
+      status: "FAIL",
+      errorCode: status === "FAIL" && PUBLIC_ERROR_CODES3.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
     });
   }
-  function validateHarnessInputs2(_ref0) {
-    var testCaseId = _ref0.testCaseId,
+  function safelyReadProperty2(value, propertyName) {
+    if (value === null || _typeof(value) !== "object" && typeof value !== "function") {
+      return void 0;
+    }
+    try {
+      return value[propertyName];
+    } catch (e) {
+      return void 0;
+    }
+  }
+  function validateLimits(_ref0) {
+    var expectedSizeBytes = _ref0.expectedSizeBytes,
+      maxSizeBytes = _ref0.maxSizeBytes,
+      readerSafetyLimitBytes = _ref0.readerSafetyLimitBytes,
       reportMetadata = _ref0.reportMetadata;
-    if (typeof testCaseId !== "string" || !SAFE_CASE_ID3.test(testCaseId)) {
-      throw new TypeError("testCaseId must be an opaque uppercase case ID");
+    if (!Number.isSafeInteger(expectedSizeBytes) || expectedSizeBytes <= 0 || maxSizeBytes !== expectedSizeBytes) {
+      throw new TypeError("D13 expectedSizeBytes and maxSizeBytes must be the same positive safe integer");
+    }
+    if (!Number.isSafeInteger(readerSafetyLimitBytes) || readerSafetyLimitBytes < maxSizeBytes) {
+      throw new TypeError("D13 readerSafetyLimitBytes must not be lower than maxSizeBytes");
     }
     if (typeof reportMetadata !== "function") {
       throw new TypeError("reportMetadata must be a function");
     }
   }
   var PUBLIC_ERROR_CODES4 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
-  var SAFE_CASE_ID4 = /^[\x2D0-9A-Z_]{1,40}$/;
-  var SAFE_MIME_TYPE2 = /^image\/[\+\x2D\.0-9a-z]+$/;
-  function runResolverMimeDeviceCheck(_0) {
+  var SAFE_CASE_ID3 = /^[\x2D0-9A-Z_]{1,40}$/;
+  function runMimeFallbackDeviceCheck(_0) {
     return __async(this, arguments, function (_ref1) {
       var testCaseId = _ref1.testCaseId,
         sourceUri = _ref1.sourceUri,
-        expectedMimeType = _ref1.expectedMimeType,
         maxSizeBytes = _ref1.maxSizeBytes,
         readerSafetyLimitBytes = _ref1.readerSafetyLimitBytes,
         context = _ref1.context,
@@ -1177,14 +1220,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         _ref1$reportMetadata = _ref1.reportMetadata,
         reportMetadata = _ref1$reportMetadata === void 0 ? function () {} : _ref1$reportMetadata;
       return _regenerator().m(function _callee11() {
-        var record, reader, result, _t15, _t16;
+        var record, _a, reader, evidenceReader, result, _t14;
         return _regenerator().w(function (_context11) {
           while (1) switch (_context11.p = _context11.n) {
             case 0:
-              validateInputs({
+              validateHarnessInputs2({
                 testCaseId: testCaseId,
-                expectedMimeType: expectedMimeType,
-                maxSizeBytes: maxSizeBytes,
                 reportMetadata: reportMetadata
               });
               _context11.p = 1;
@@ -1197,22 +1238,130 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 openFileReadOnly: openFileReadOnly,
                 readerSafetyLimitBytes: readerSafetyLimitBytes
               });
+              evidenceReader = Object.freeze({
+                canAccess: function canAccess(value) {
+                  return reader.canAccess(value);
+                },
+                read: function read(value) {
+                  return __async(this, null, _regenerator().m(function _callee10() {
+                    var result2;
+                    return _regenerator().w(function (_context10) {
+                      while (1) switch (_context10.n) {
+                        case 0:
+                          _context10.n = 1;
+                          return reader.read(value);
+                        case 1:
+                          result2 = _context10.v;
+                          return _context10.a(2, Object.freeze({
+                            bytes: result2.bytes,
+                            mimeType: void 0
+                          }));
+                      }
+                    }, _callee10);
+                  }));
+                }
+              });
               _context11.n = 2;
+              return prepareImageInput({
+                sourceUri: sourceUri,
+                maxSizeBytes: maxSizeBytes,
+                reader: evidenceReader,
+                isFileUriApproved: isFileUriApproved
+              });
+            case 2:
+              result = _context11.v;
+              record = Object.freeze({
+                testCaseId: testCaseId,
+                status: "PASS",
+                mimeType: result.mimeType,
+                sizeBytes: result.sizeBytes
+              });
+              _context11.n = 4;
+              break;
+            case 3:
+              _context11.p = 3;
+              _t14 = _context11.v;
+              record = Object.freeze({
+                testCaseId: testCaseId,
+                status: "FAIL",
+                errorCode: PUBLIC_ERROR_CODES4.has(_t14 == null ? void 0 : _t14.code) ? _t14.code : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
+              });
+            case 4:
+              reportMetadata(record);
+              return _context11.a(2, record);
+          }
+        }, _callee11, null, [[1, 3]]);
+      })();
+    });
+  }
+  function validateHarnessInputs2(_ref10) {
+    var testCaseId = _ref10.testCaseId,
+      reportMetadata = _ref10.reportMetadata;
+    if (typeof testCaseId !== "string" || !SAFE_CASE_ID3.test(testCaseId)) {
+      throw new TypeError("testCaseId must be an opaque uppercase case ID");
+    }
+    if (typeof reportMetadata !== "function") {
+      throw new TypeError("reportMetadata must be a function");
+    }
+  }
+  var PUBLIC_ERROR_CODES5 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
+  var SAFE_CASE_ID4 = /^[\x2D0-9A-Z_]{1,40}$/;
+  var SAFE_MIME_TYPE2 = /^image\/[\+\x2D\.0-9a-z]+$/;
+  function runResolverMimeDeviceCheck(_0) {
+    return __async(this, arguments, function (_ref11) {
+      var testCaseId = _ref11.testCaseId,
+        sourceUri = _ref11.sourceUri,
+        expectedMimeType = _ref11.expectedMimeType,
+        maxSizeBytes = _ref11.maxSizeBytes,
+        readerSafetyLimitBytes = _ref11.readerSafetyLimitBytes,
+        context = _ref11.context,
+        contentResolver = _ref11.contentResolver,
+        parseUri = _ref11.parseUri,
+        javaBridge = _ref11.javaBridge,
+        _ref11$isFileUriAppro = _ref11.isFileUriApproved,
+        isFileUriApproved = _ref11$isFileUriAppro === void 0 ? function () {
+          return false;
+        } : _ref11$isFileUriAppro,
+        openFileReadOnly = _ref11.openFileReadOnly,
+        _ref11$reportMetadata = _ref11.reportMetadata,
+        reportMetadata = _ref11$reportMetadata === void 0 ? function () {} : _ref11$reportMetadata;
+      return _regenerator().m(function _callee12() {
+        var record, reader, result, _t15, _t16;
+        return _regenerator().w(function (_context12) {
+          while (1) switch (_context12.p = _context12.n) {
+            case 0:
+              validateInputs({
+                testCaseId: testCaseId,
+                expectedMimeType: expectedMimeType,
+                maxSizeBytes: maxSizeBytes,
+                reportMetadata: reportMetadata
+              });
+              _context12.p = 1;
+              reader = createAutoJs6AndroidImageReader({
+                context: context,
+                contentResolver: contentResolver,
+                parseUri: parseUri,
+                javaBridge: javaBridge,
+                isFileUriApproved: isFileUriApproved,
+                openFileReadOnly: openFileReadOnly,
+                readerSafetyLimitBytes: readerSafetyLimitBytes
+              });
+              _context12.n = 2;
               return reader.canAccess(sourceUri);
             case 2:
-              _t15 = _context11.v;
+              _t15 = _context12.v;
               if (!(_t15 !== true)) {
-                _context11.n = 3;
+                _context12.n = 3;
                 break;
               }
               record = failure2(testCaseId, IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED);
-              _context11.n = 5;
+              _context12.n = 5;
               break;
             case 3:
-              _context11.n = 4;
+              _context12.n = 4;
               return reader.read(sourceUri);
             case 4:
-              result = _context11.v;
+              result = _context12.v;
               record = normalizeReaderResult({
                 testCaseId: testCaseId,
                 expectedMimeType: expectedMimeType,
@@ -1220,27 +1369,27 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 result: result
               });
             case 5:
-              _context11.n = 7;
+              _context12.n = 7;
               break;
             case 6:
-              _context11.p = 6;
-              _t16 = _context11.v;
+              _context12.p = 6;
+              _t16 = _context12.v;
               record = failure2(testCaseId, normalizeErrorCode(_t16));
             case 7:
               reportMetadata(record);
-              return _context11.a(2, record);
+              return _context12.a(2, record);
           }
-        }, _callee11, null, [[1, 6]]);
+        }, _callee12, null, [[1, 6]]);
       })();
     });
   }
-  function normalizeReaderResult(_ref10) {
-    var testCaseId = _ref10.testCaseId,
-      expectedMimeType = _ref10.expectedMimeType,
-      maxSizeBytes = _ref10.maxSizeBytes,
-      result = _ref10.result;
-    var bytes = safelyReadProperty2(result, "bytes");
-    var reportedMimeType = safelyReadProperty2(result, "mimeType");
+  function normalizeReaderResult(_ref12) {
+    var testCaseId = _ref12.testCaseId,
+      expectedMimeType = _ref12.expectedMimeType,
+      maxSizeBytes = _ref12.maxSizeBytes,
+      result = _ref12.result;
+    var bytes = safelyReadProperty3(result, "bytes");
+    var reportedMimeType = safelyReadProperty3(result, "mimeType");
     if (!(bytes instanceof Uint8Array)) {
       return failure2(testCaseId, IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED);
     }
@@ -1262,11 +1411,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     });
   }
   function normalizeErrorCode(error) {
-    var code = safelyReadProperty2(error, "code");
-    if (PUBLIC_ERROR_CODES4.has(code)) {
+    var code = safelyReadProperty3(error, "code");
+    if (PUBLIC_ERROR_CODES5.has(code)) {
       return code;
     }
-    var classification = safelyReadProperty2(error, "classification");
+    var classification = safelyReadProperty3(error, "classification");
     if (classification === IMAGE_READER_ERROR_CLASSIFICATIONS.URI_ACCESS_DENIED) {
       return IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED;
     }
@@ -1276,10 +1425,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     return Object.freeze({
       testCaseId: testCaseId,
       status: "FAIL",
-      errorCode: PUBLIC_ERROR_CODES4.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
+      errorCode: PUBLIC_ERROR_CODES5.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
     });
   }
-  function safelyReadProperty2(value, propertyName) {
+  function safelyReadProperty3(value, propertyName) {
     if (value === null || _typeof(value) !== "object" && typeof value !== "function") {
       return void 0;
     }
@@ -1289,11 +1438,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       return void 0;
     }
   }
-  function validateInputs(_ref11) {
-    var testCaseId = _ref11.testCaseId,
-      expectedMimeType = _ref11.expectedMimeType,
-      maxSizeBytes = _ref11.maxSizeBytes,
-      reportMetadata = _ref11.reportMetadata;
+  function validateInputs(_ref13) {
+    var testCaseId = _ref13.testCaseId,
+      expectedMimeType = _ref13.expectedMimeType,
+      maxSizeBytes = _ref13.maxSizeBytes,
+      reportMetadata = _ref13.reportMetadata;
     if (typeof testCaseId !== "string" || !SAFE_CASE_ID4.test(testCaseId)) {
       throw new TypeError("testCaseId must be an opaque uppercase case ID");
     }
@@ -1314,14 +1463,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   function runAutoJs6FormatCheck(formatCase, injectedRuntime) {
     var runtime = injectedRuntime != null ? injectedRuntime : (typeof globalThis === "undefined" ? "undefined" : _typeof(globalThis)) === "object" ? globalThis : Function("return this")();
     return runFormatCheck(formatCase, {
-      showInstructions: function showInstructions(_ref12) {
-        var title = _ref12.title,
-          instructionText = _ref12.instructionText;
+      showInstructions: function showInstructions(_ref14) {
+        var title = _ref14.title,
+          instructionText = _ref14.instructionText;
         return runtime.dialogs.alert(title, instructionText);
       },
-      pickSingleImage: function pickSingleImage(_ref13) {
-        var pickerMimeType = _ref13.pickerMimeType,
-          requestCode = _ref13.requestCode;
+      pickSingleImage: function pickSingleImage(_ref15) {
+        var pickerMimeType = _ref15.pickerMimeType,
+          requestCode = _ref15.requestCode;
         return _pickSingleImage(runtime, pickerMimeType, requestCode);
       },
       executeOffUiThread: function executeOffUiThread(task) {
@@ -1457,6 +1606,23 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return _classifyError(runtime, error);
       }
     };
+    if (formatCase.verificationMode === "exact-portable-limit") {
+      return runExactPortableLimitDeviceCheck({
+        testCaseId: testCaseId,
+        sourceUri: sourceUri,
+        expectedSizeBytes: formatCase.expectedSizeBytes,
+        maxSizeBytes: formatCase.maxSizeBytes,
+        readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
+        context: context,
+        contentResolver: contentResolver,
+        parseUri: parseUri,
+        javaBridge: javaBridge,
+        isFileUriApproved: function isFileUriApproved() {
+          return false;
+        },
+        reportMetadata: function reportMetadata() {}
+      });
+    }
     if (formatCase.verificationMode === "mime-fallback") {
       return runMimeFallbackDeviceCheck({
         testCaseId: testCaseId,
