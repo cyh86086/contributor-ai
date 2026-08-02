@@ -11,7 +11,8 @@
       "!scripts/autojs6/d06-resolver-mime-device-check.js",
       "!scripts/autojs6/d07-mime-fallback-device-check.js",
       "!scripts/autojs6/d08-permission-granted-device-check.js",
-      "!scripts/autojs6/d13-exact-portable-limit-device-check.js"
+      "!scripts/autojs6/d13-exact-portable-limit-device-check.js",
+      "!scripts/autojs6/d14-portable-size-overflow-device-check.js"
     ]
   },
   "formatter": {

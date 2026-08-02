@@ -84,11 +84,13 @@ and AutoJs6 v6.7.0 `arm64-v8a`: the production reader returned the independently
 verified 6,406-byte `AT_PORTABLE_LIMIT` JPEG exactly at `maxSizeBytes`, with a
 separately higher reader ceiling and responsive UI. This result is only D13
 equality evidence and is not D14 or D15 evidence. The next active task is the
-D14 device-procedure preparation: its completed evidence-gap review found the
-existing complete-read, portable overflow, stable reporter, and privacy
-contracts sufficient to prepare a separately reviewed execution package. D14
-still has no launcher, device result, or PASS claim; D15-D26 and complete
-Android Image Input Adapter V1.0 migration remain pending.
+D14 device validation. Its unexecuted evidence-only launcher uses a newly
+measured 6,406-byte `OVER_PORTABLE` JPEG, a 6,405-byte portable limit, and a
+separately higher reader ceiling. It accepts only sanitized
+`IMAGE_TOO_LARGE` with responsive UI as the expected application failure and
+does not rewrite that result to PASS. D14 still has no device result or PASS
+claim; D15-D26 and complete Android Image Input Adapter V1.0 migration remain
+pending.
 
 ## Project layout
 

@@ -14,6 +14,7 @@ import {
 import { runExactPortableLimitDeviceCheck } from "./exact-portable-limit-device-check.js";
 import { runImageReaderDeviceCheck } from "./image-reader-device-check.js";
 import { runMimeFallbackDeviceCheck } from "./mime-fallback-device-check.js";
+import { runPortableSizeOverflowDeviceCheck } from "./portable-size-overflow-device-check.js";
 import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
@@ -171,6 +172,22 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
 
   if (formatCase.verificationMode === "exact-portable-limit") {
     return runExactPortableLimitDeviceCheck({
+      testCaseId,
+      sourceUri,
+      expectedSizeBytes: formatCase.expectedSizeBytes,
+      maxSizeBytes: formatCase.maxSizeBytes,
+      readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
+      context,
+      contentResolver,
+      parseUri,
+      javaBridge,
+      isFileUriApproved: () => false,
+      reportMetadata: () => {},
+    });
+  }
+
+  if (formatCase.verificationMode === "portable-size-overflow") {
+    return runPortableSizeOverflowDeviceCheck({
       testCaseId,
       sourceUri,
       expectedSizeBytes: formatCase.expectedSizeBytes,
