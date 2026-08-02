@@ -88,15 +88,16 @@ failure on the same device/runtime class against its own authoritative SHA and
 configuration: the independently counted 6,406-byte `OVER_PORTABLE` JPEG was
 above the 6,405-byte portable limit and below the separately higher reader
 ceiling, producing `IMAGE_TOO_LARGE` with responsive UI. The public
-`status: "FAIL"` is retained and is not called PASS. D15 device-procedure
-preparation is complete: its separately measured `OVER_READER_CEILING` JPEG is
-6,406 bytes, while the evidence-only launcher pins both the reader ceiling to
-6,405 bytes and the portable limit to 6,406 bytes. The wrapper delegates to the
-existing production path and preserves accidental success or non-target public
-failures rather than manufacturing `IMAGE_READ_FAILED`. Offline tests are not
-Android evidence. The next active task is D15 device validation; D15 still has
-no device result or PASS claim, and D16-D26 plus complete Android Image Input
-Adapter V1.0 migration remain pending.
+`status: "FAIL"` is retained and is not called PASS. D15 separately observed
+the expected sanitized application failure on the same device/runtime class
+against authoritative SHA `9826a438b41582b594a692e9ff88214b2f75193b`:
+the independently counted 6,406-byte `OVER_READER_CEILING` JPEG was above the
+6,405-byte reader ceiling and equal to the 6,406-byte portable limit, producing
+`IMAGE_READ_FAILED` with responsive UI. This shared public code is not unique
+internal branch telemetry, so the result is scoped to the reviewed static
+ordering and is not called PASS. The next active task is the D16 evidence-gap
+review; D16-D26 plus complete Android Image Input Adapter V1.0 migration remain
+pending.
 
 ## Project layout
 
