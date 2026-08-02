@@ -84,8 +84,11 @@ and AutoJs6 v6.7.0 `arm64-v8a`: the production reader returned the independently
 verified 6,406-byte `AT_PORTABLE_LIMIT` JPEG exactly at `maxSizeBytes`, with a
 separately higher reader ceiling and responsive UI. This result is only D13
 equality evidence and is not D14 or D15 evidence. The next active task is the
-documentation-only `D14-EVIDENCE-GAP-REVIEW`; D14-D26 and complete Android
-Image Input Adapter V1.0 migration remain pending.
+D14 device-procedure preparation: its completed evidence-gap review found the
+existing complete-read, portable overflow, stable reporter, and privacy
+contracts sufficient to prepare a separately reviewed execution package. D14
+still has no launcher, device result, or PASS claim; D15-D26 and complete
+Android Image Input Adapter V1.0 migration remain pending.
 
 ## Project layout
 

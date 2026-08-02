@@ -55,7 +55,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 **Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
 platform; D11 is blocked by unproven classification; the D12 fake-only offline
-contract is proved; D13 has scoped device validation; D14-D26 remain pending.**
+contract is proved; D13 has scoped device validation; the D14 evidence-gap
+review is complete; D15-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -171,6 +172,18 @@ procedure, and
 [`testing/device-validation/d13-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d13-vivo-x-fold5-autojs6-v6.7.0.md)
 device record.
 
+The D14 evidence-gap review confirmed that the production reader returns a
+complete in-memory byte array when the controlled source remains below a
+separately higher reader safety ceiling. The portable core then compares that
+array's actual length with `maxSizeBytes` and produces `IMAGE_TOO_LARGE` when
+the length is greater, before MIME fallback or encoding. Existing offline tests
+cover the production-reader, portable-core, shared-harness, reporter, and
+privacy boundaries sufficiently for procedure preparation, but are not Android
+or device evidence. D14 is ready for governed device-procedure preparation; no
+launcher, private fixture mapping, device result, or PASS claim exists. The
+review is recorded in
+[`testing/d14-portable-size-overflow-evidence-gap-review.md`](testing/d14-portable-size-overflow-evidence-gap-review.md).
+
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
 
@@ -268,9 +281,9 @@ satisfy these requirements.
   [`testing/d12-null-stream-evidence-gap-review.md`](testing/d12-null-stream-evidence-gap-review.md).
 - D13 evidence-gap review, device-procedure preparation, and scoped device
   validation are complete. The user-approved `AT_PORTABLE_LIMIT` JPEG was
-  independently measured anew as
-  6,406 bytes outside the launcher and production reader; only the opaque ID
-  and count are retained. The reviewed evidence-only launcher used that exact
+  independently measured anew as 6,406 bytes outside the launcher and
+  production reader; only the opaque ID and count are retained. The reviewed
+  evidence-only launcher used that exact
   portable limit, a 12,582,912-byte reader ceiling, the existing fresh picker,
   production reader, portable core, and sanitized reporter path. The scoped
   Vivo X Fold5 execution returned PASS with `image/jpeg`, exact
@@ -282,7 +295,12 @@ satisfy these requirements.
   procedure, and
   [`testing/device-validation/d13-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d13-vivo-x-fold5-autojs6-v6.7.0.md)
   device record.
-- D14-D26 still require scoped review, preparation, and in several cases
+- D14 evidence-gap review is complete and found the existing production-reader
+  completion, portable overflow, stable reporter, and privacy contracts
+  sufficient for device-procedure preparation. No D14 device result or PASS is
+  claimed, and no D13 or D15 result is reused. The review is recorded in
+  [`testing/d14-portable-size-overflow-evidence-gap-review.md`](testing/d14-portable-size-overflow-evidence-gap-review.md).
+- D15-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -299,7 +317,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D14-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D14-DEVICE-PROCEDURE-PREPARATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
