@@ -5,71 +5,92 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D14-EVIDENCE-GAP-REVIEW`
+**Task ID:** `D14-DEVICE-PROCEDURE-PREPARATION`
 
-**Objective:** Perform a repository-first, documentation-only evidence-gap
-review for formal matrix case D14, portable size overflow.
+**Objective:** Prepare, but do not execute, a minimal reviewed D14 package that
+can demonstrate formal portable size overflow on Vivo X Fold5 while retaining
+only sanitized evidence.
 
-Formal D14 runs fixture ID `OVER_PORTABLE` with its complete byte length greater
-than `maxSizeBytes` while a separately higher `readerSafetyLimitBytes` allows
-the production reader to return the complete source. The expected stable public
-result is `IMAGE_TOO_LARGE`.
+Formal D14 uses fixture ID `OVER_PORTABLE`. Its independently verified complete
+size must be greater than `maxSizeBytes` and lower than a separately higher
+`readerSafetyLimitBytes`. The expected stable public result is
+`IMAGE_TOO_LARGE`.
 
 ## Required work
 
-1. Complete mandatory preflight from live `main` and re-read the formal D14
-   matrix definition.
-2. Inspect the existing production reader, portable core, stable error mapping,
-   shared reporter, and sanitization boundary for the D14 sequence.
-3. Inventory every relevant fake, injected, reader/core integration, portable
-   overflow, reporter, and privacy test. State exactly what each proves and why
-   offline coverage is not Android or device evidence.
-4. Determine whether D14 can safely use one privately mapped, non-sensitive
-   controlled fixture whose exact positive count is measured independently,
-   with `maxSizeBytes` deliberately lower and `readerSafetyLimitBytes`
-   deliberately higher than that count.
-5. Determine whether the existing path can prove that the complete source was
-   read before the portable core returns `IMAGE_TOO_LARGE`, without recording
-   source data or adding source-copy behavior.
-6. Distinguish D14 from D13 equality and D15 reader-ceiling overflow. Evidence
-   from either neighboring case must not be reused as D14 evidence.
-7. Add a scoped D14 evidence-gap review and update project state. If a safe,
-   reproducible device procedure is feasible, advance only to a separately
-   governed preparation task; otherwise record the existing governed blocker
-   accurately.
+1. Complete mandatory preflight from live `main` and confirm no open PR,
+   branch, launcher, private mapping, or device evidence already owns D14.
+2. Privately map `OVER_PORTABLE` to one user-approved, non-sensitive controlled
+   supported image and independently measure its complete exact count with a
+   trusted read-only tool outside the launcher and production reader. Retain
+   only the opaque fixture ID and numeric count.
+3. Choose and statically validate positive safe integers satisfying
+   `maxSizeBytes < verified source size < readerSafetyLimitBytes`.
+4. Add the smallest D14-only evidence wrapper, immutable manifest entry, source
+   entry, generated AutoJs6 v6.7.0 bundle, and deterministic build wiring needed
+   to delegate to the existing system picker, production reader, portable core,
+   shared reporter, and off-UI-thread path.
+5. Fail closed unless the underlying sanitized result is exactly
+   `IMAGE_TOO_LARGE`. A smaller or wrong fixture, reader-ceiling failure,
+   permission failure, picker cancellation, malformed result, or accidental
+   success must not become the accepted D14 result.
+6. Add offline tests for D14 static numeric ordering, production-path
+   delegation, failure-only normalization, output sanitization, deterministic
+   bundle freshness, and AutoJs6 legacy syntax compatibility. These tests are
+   not Android or device evidence.
+7. Add a Traditional Chinese Vivo X Fold5 execution guide that requires a
+   fresh Android system-picker selection and preserves the private fixture
+   mapping outside Git.
+8. Update project state and set the sole next task to D14 device validation only
+   after the unexecuted package passes review.
 
 ## Acceptance criteria
 
-- The review answers whether production-reader completion, portable overflow
-  classification, and stable sanitized reporting are already covered along the
-  required path.
-- Fixture provenance, exact-count requirements, and the strict ordering of
-  `maxSizeBytes < source size <= readerSafetyLimitBytes` are explicit.
-- The conclusion is one supported by existing repository terminology; no PASS,
-  classification, acceptance criterion, or device behavior is invented.
-- `PROJECT_STATE.md`, this file, and the D14 review agree on one next task.
-- All changed files are Markdown and repository verification passes.
+- The retained configuration contains only `OVER_PORTABLE`, its independently
+  verified positive count, the lower `maxSizeBytes`, the higher
+  `readerSafetyLimitBytes`, and non-sensitive static launcher metadata.
+- The package delegates to existing production and shared verification layers;
+  no image-reader or portable-core behavior is duplicated or changed.
+- The only device record that a later validation may accept is:
+
+  ```json
+  {
+    "testCaseId": "D14_PORTABLE_SIZE_OVERFLOW",
+    "status": "FAIL",
+    "errorCode": "IMAGE_TOO_LARGE",
+    "uiResponsive": true
+  }
+  ```
+
+- The package and guide explicitly state that this expected application failure
+  must not be rewritten as `status: "PASS"` and is not D13 or D15 evidence.
+- No URI, path, filename, source bytes, Base64, image content, exception detail,
+  stack, credential, or private fixture mapping is retained.
+- Repository checks, D14 bundle freshness, D14 legacy syntax scan, secret scan,
+  sensitive-value scan, and `git diff --check` pass.
 
 ## Prohibited scope
 
-Do not create a D14 launcher, test, fixture, device result, or PASS claim during
-this review. Do not run a phone test, reuse the D13 result, or treat a D15 reader
-failure as portable overflow evidence.
+Do not execute the phone case, create device evidence, or claim that D14 has
+been observed on Android. Do not reuse the D13 device result, relabel D15
+reader-ceiling behavior, or infer device completion from offline tests.
 
 Do not add production reader or portable-core behavior, source-copy
 architecture, permission manager, persistable grant, broad storage permission,
 provider, network, queue, Contributor app, credential, submission, or unrelated
-module work. Do not record any URI, path, filename, source bytes, Base64, image
-content, exception detail, stack, credential, or private fixture mapping.
+module work.
 
 ## Stop conditions
 
 Stop and report when:
 
-- an open pull request or branch already owns D14 review work;
+- an open pull request or branch already owns D14 preparation;
 - repository state conflicts;
-- the formal D14 contract or controlled fixture provenance is ambiguous;
-- a reliable procedure would require production architecture or permission
-  changes;
+- no approved controlled source can be independently counted without retaining
+  sensitive data;
+- the required numeric ordering cannot be represented with positive safe
+  integers;
+- the package would require production architecture or permission changes;
+- tests fail outside the preparation scope;
 - sensitive data may have appeared;
 - write access is unavailable.
