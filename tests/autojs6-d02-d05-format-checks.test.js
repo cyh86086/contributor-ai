@@ -9,6 +9,7 @@ import {
   D05_FORMAT_CHECK_CASE,
   D13_EXACT_PORTABLE_LIMIT_CHECK_CASE,
   D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE,
+  D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE,
   FORMAT_CHECK_CASES,
 } from "../scripts/autojs6/format-check-case-manifest.js";
 import { runFormatCheck } from "../scripts/autojs6/format-check-launcher-core.js";
@@ -44,6 +45,7 @@ test("format-check manifest is static, immutable, and complete", () => {
       ["D08_PERMISSION_GRANTED", "image/jpeg", "image/jpeg", 6108],
       ["D13_EXACT_PORTABLE_LIMIT", "image/jpeg", "image/jpeg", 6113],
       ["D14_PORTABLE_SIZE_OVERFLOW", "image/jpeg", "image/jpeg", 6114],
+      ["D15_READER_SAFETY_CEILING_OVERFLOW", "image/jpeg", "image/jpeg", 6115],
     ],
   );
   assert.equal(Object.isFrozen(FORMAT_CHECK_CASES), true);
@@ -89,6 +91,28 @@ test("D14 manifest pins the independently verified overflow ordering", () => {
       maxSizeBytes: 6_405,
       readerSafetyLimitBytes: 12 * 1024 * 1024,
       verificationMode: "portable-size-overflow",
+    },
+  );
+});
+
+test("D15 manifest pins the independently verified reader-ceiling ordering", () => {
+  assert.deepEqual(
+    {
+      fixtureId: D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE.fixtureId,
+      expectedSizeBytes:
+        D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE.expectedSizeBytes,
+      maxSizeBytes: D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE.maxSizeBytes,
+      readerSafetyLimitBytes:
+        D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE.readerSafetyLimitBytes,
+      verificationMode:
+        D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE.verificationMode,
+    },
+    {
+      fixtureId: "OVER_READER_CEILING",
+      expectedSizeBytes: 6_406,
+      maxSizeBytes: 6_406,
+      readerSafetyLimitBytes: 6_405,
+      verificationMode: "reader-safety-ceiling-overflow",
     },
   );
 });

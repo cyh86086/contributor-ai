@@ -142,6 +142,24 @@ export const D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d14-portable-size-overflow-device-check.js",
 });
 
+export const D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE = defineCase({
+  testCaseId: "D15_READER_SAFETY_CEILING_OVERFLOW",
+  fixtureId: "OVER_READER_CEILING",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 6_405,
+  requestCode: 6115,
+  verificationMode: "reader-safety-ceiling-overflow",
+  title: "D15 reader safety ceiling 超限裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選擇私下對應 OVER_READER_CEILING、且已重新獨立確認為 6,406 bytes 的非敏感 JPEG。此 evidence-only 案例以 6,405 bytes reader ceiling 與 6,406 bytes portable 上限執行；預期 public result 是 IMAGE_READ_FAILED，不得改寫為 PASS，且其他結果必須原樣保留。",
+  sourceEntryPath:
+    "autojs6/source/d15-reader-safety-ceiling-overflow-device-check.entry.js",
+  generatedPath: "autojs6/d15-reader-safety-ceiling-overflow-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -153,6 +171,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D08_PERMISSION_GRANTED_CHECK_CASE,
   D13_EXACT_PORTABLE_LIMIT_CHECK_CASE,
   D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE,
+  D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

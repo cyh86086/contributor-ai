@@ -12,3 +12,4 @@ scripts/autojs6/d07-mime-fallback-device-check.js
 scripts/autojs6/d08-permission-granted-device-check.js
 scripts/autojs6/d13-exact-portable-limit-device-check.js
 scripts/autojs6/d14-portable-size-overflow-device-check.js
+scripts/autojs6/d15-reader-safety-ceiling-overflow-device-check.js
