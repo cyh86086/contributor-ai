@@ -2,18 +2,20 @@
 
 ## Conclusion
 
-**Blocked pending explicit contract clarification.**
+**Contract clarification complete; readiness review required.**
 
 The formal D16 row requires the same non-sensitive granted URI to be read
 repeatedly in a recorded loop and expects the same success metadata from every
-iteration. The repository does not define the required iteration count, bind
-the case to a controlled fixture, define the exact equality fields, select the
-grant lifetime, or define a multi-iteration evidence shape compatible with the
-current single-record reporter.
+iteration. The original review found that the repository did not define the
+required iteration count, controlled fixture, equality fields, grant lifetime,
+or aggregate evidence shape. The user explicitly approved the complete
+contract on 2026-08-02, and the formal verification plan now records it.
 
-Those values are acceptance criteria, not implementation details. This review
-does not invent them, does not assign a new classification name, and does not
-authorize a launcher, offline PASS, Android claim, or device execution.
+This documentation-only clarification closes the contract blocker. It does not
+assign a new classification name and does not authorize a launcher, test-only
+PASS, Android claim, or device execution. A separately governed readiness
+review must determine whether test-only coverage preparation is required before
+device-procedure preparation.
 
 ## Review scope
 
@@ -25,49 +27,72 @@ authorize a launcher, offline PASS, Android claim, or device execution.
 - **Formal expected result:** every iteration returns the same success metadata
 - **Change scope:** documentation-only evidence-gap review
 
-## Formal contract gaps
+## Approved clarification
+
+The approved contract is canonical in
+[`autojs6-image-reader-device-verification-v1.md`](autojs6-image-reader-device-verification-v1.md).
+Its binding terms are:
+
+- exactly 10 complete reads using the same one system-picker selection and the
+  full `canAccess() → read() → portable core → verification reporter path`;
+- dedicated opaque fixture ID `JPEG_REPEAT_VALID`, a non-sensitive synthetic
+  JPEG whose positive byte count must be independently re-measured with a
+  read-only tool outside the launcher and production reader before a future
+  procedure;
+- one fresh temporary Android system-picker grant for the entire loop, with no
+  reselection, persistable grant, broad storage permission, or permission
+  manager;
+- every successful iteration reports `PASS`, `image/jpeg`, and the independently
+  verified count; iterations 2–10 must equal iteration 1 for MIME and byte
+  count;
+- one loop-level responsiveness assessment, which must complete after any
+  fail-fast condition and must be true for success;
+- immediate fail-fast on inaccessible source, read/public failure, non-PASS
+  status, wrong MIME, wrong independently verified count, or MIME/count
+  inequality;
+- exactly one frozen sanitized aggregate record, not 10 per-iteration reports;
+- evidence-only failure reasons `PUBLIC_ERROR`, `METADATA_MISMATCH`, and
+  `UI_NOT_RESPONSIVE`; these are not new production errors or project
+  classifications, and an existing stable public error is preserved unchanged
+  only for `PUBLIC_ERROR`.
+
+No selected identifier, source location, source name, source bytes, Base64,
+image content, exception detail, stack, credential, or uncontrolled runtime
+value may enter evidence.
+
+## Closed contract gaps (historical review finding)
 
 ### Iteration count
 
-The matrix says "repeatedly in a recorded loop" but supplies neither an exact
-count nor a minimum. No other repository document defines a D16 loop count.
-Choosing a number in a launcher or test would therefore create an unreviewed
-acceptance rule.
+At the review baseline, the matrix supplied neither an exact count nor a
+minimum. The approved contract now fixes the count at 10 complete reads.
 
 ### Controlled fixture
 
-The required fixture table has no D16-specific fixture, and the D16 row does
-not bind itself to `JPEG_VALID` or another listed supported source. Reusing a
-source that previously established D01 or a size-boundary case would not turn
-that earlier evidence into D16 evidence. A future contract must identify an
-opaque fixture ID, format, independent count requirement, and provenance for
-the repeated-read case.
+At the review baseline, the required fixture table had no D16-specific fixture.
+The approved contract now binds D16 to opaque `JPEG_REPEAT_VALID`, a
+non-sensitive synthetic JPEG with an independently re-measured positive count.
+Evidence from D01 or a size-boundary case still cannot be relabeled as D16.
 
 ### Grant lifetime
 
-The common preconditions allow the approved picker flow to grant either
-temporary or persistable access and require the chosen grant type to be
-recorded. The D16 row says only "granted URI." It does not say whether one fresh
-temporary selection must remain active for the complete loop or whether a
-persistable grant is part of the case. No persistable request, broad storage
-permission, or permission manager is authorized by this review.
+At the review baseline, the common preconditions did not choose the D16 grant
+lifetime. The approved contract now requires one fresh temporary picker grant
+for all 10 iterations and forbids reselection, persistable access, broad
+storage permission, and a permission manager.
 
 ### Equality fields and failure rule
 
-The general sanitized success record permits case ID, status, normalized MIME,
-byte count, and UI responsiveness. The D16 row does not state which of those
-fields constitute "the same success metadata," whether responsiveness is
-measured once for the complete loop or once per iteration, or whether a single
-failed or unequal iteration stops immediately and determines the public result.
+The approved contract now defines `mimeType` and `sizeBytes` as the equality
+fields, uses one loop-level responsiveness result, and fixes the fail-fast and
+failure-reason rules. The fixed test case ID is not an equality field.
 
 ### Evidence and reporter shape
 
-The shared launcher path currently selects once, executes one task, normalizes
-one result, reports one frozen allowlisted record, and returns that record. The
-formal plan permits metadata-only console output but defines no repeated-record
-or aggregate D16 shape. A future contract must decide how the recorded count
-and per-iteration equality are proved without adding uncontrolled fields or
-retaining source data.
+The approved contract now requires one frozen sanitized aggregate with exact
+requested, attempted, and successful counts, equality and responsiveness
+booleans, and allowlisted success or failure fields. It forbids 10
+per-iteration reports and all source or uncontrolled runtime values.
 
 ## Production execution order
 
@@ -119,12 +144,12 @@ establish real Android temporary-grant lifetime or provider repeatability.
 
 ## Disposition
 
-- Close the evidence-gap review as blocked pending contract clarification.
+- Close the contract-clarification blocker using the explicit user approval
+  dated 2026-08-02.
 - Assign no new PASS or classification name.
 - Do not create a D16 launcher, test-only implementation, or device procedure.
-- Require an explicit repository-authoritative decision for loop count,
-  fixture, grant type, equality fields, failure handling, and sanitized evidence
-  shape before further D16 work.
-- After clarification, perform a new mandatory preflight and decide whether a
-  separately governed test-only coverage task is required before device
-  procedure preparation.
+- Set `D16-POST-CLARIFICATION-READINESS-REVIEW` as the only next task. That
+  documentation/repository review must decide whether
+  `D16-TEST-COVERAGE-PREPARATION` is required or the workflow may advance to
+  `D16-DEVICE-PROCEDURE-PREPARATION`.
+- Do not perform that readiness review in this clarification change.

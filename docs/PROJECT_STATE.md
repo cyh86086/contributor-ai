@@ -57,8 +57,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 platform; D11 is blocked by unproven classification; the D12 fake-only offline
 contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
-observation; D16 is blocked pending explicit contract clarification; D17-D26
-remain pending.**
+observation; D16's explicit contract is approved and awaits a post-clarification
+readiness review; D17-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -241,12 +241,17 @@ The D16 evidence-gap review confirmed that each production
 fresh read, closing both streams independently. Existing offline tests prove
 that single-invocation order, cleanup, public mapping, and sanitization, but no
 test repeats the complete production reader, portable core, and reporter path
-for one grant. The formal D16 row also leaves the loop count, controlled
-fixture, grant lifetime, equality fields, failure rule, and multi-iteration
-evidence shape undefined. Selecting those values during implementation would
-invent acceptance criteria. D16 is therefore blocked pending explicit contract
-clarification, without a new classification name, launcher, test-only PASS,
-Android claim, or device execution. The review is recorded in
+for one grant. On 2026-08-02 the user explicitly approved the full D16
+contract: exactly 10 complete reads of the dedicated synthetic
+`JPEG_REPEAT_VALID` fixture through the full path, using one fresh temporary
+picker grant; independent positive byte-count verification; MIME/count
+equality; one loop-level responsiveness result; fail-fast behavior; and one
+frozen sanitized aggregate record. The evidence-only failure reasons do not
+create production errors or project classifications. This clarification adds
+no launcher, test, PASS, Android claim, or device execution. A governed
+post-clarification readiness review must next decide whether test-only coverage
+preparation is required before device-procedure preparation. The review is
+recorded in
 [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
@@ -396,14 +401,14 @@ satisfy these requirements.
   [`user-guides/autojs6-d15-reader-safety-ceiling-overflow-check-zh-tw.md`](user-guides/autojs6-d15-reader-safety-ceiling-overflow-check-zh-tw.md)
   and
   [`testing/device-validation/d15-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d15-vivo-x-fold5-autojs6-v6.7.0.md).
-- D16 evidence-gap review is complete and found an incomplete formal contract.
-  The repository does not define the exact loop count, a D16-controlled
-  fixture, grant lifetime, metadata-equality fields, per-iteration failure
-  handling, or a sanitized multi-iteration reporter shape. Existing tests prove
-  only single-invocation production-path behavior. D16 is blocked pending an
-  explicit repository-authoritative clarification; no new classification name,
-  launcher, offline PASS, Android claim, or device execution is authorized. The
-  review is recorded in
+- D16 evidence-gap review is complete, and the user explicitly approved its
+  full contract on 2026-08-02: 10 full-path reads of `JPEG_REPEAT_VALID` under
+  one fresh temporary grant; independently re-measured byte count; exact
+  MIME/count equality; loop-level responsiveness; fail-fast; and one sanitized
+  aggregate record. The prior contract blocker is closed, but repository
+  readiness is not yet established. No new classification name, launcher,
+  test-only PASS, Android claim, or device execution is authorized. The review
+  is recorded in
   [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
 - D17-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
@@ -422,7 +427,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D16-CONTRACT-CLARIFICATION`.
+At this snapshot it is `D16-POST-CLARIFICATION-READINESS-REVIEW`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
