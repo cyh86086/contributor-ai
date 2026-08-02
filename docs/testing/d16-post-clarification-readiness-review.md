@@ -3,18 +3,24 @@
 ## Conclusion
 
 **Offline contract coverage is incomplete; a separately governed test-only
-coverage change is required.**
+coverage change is required after one more contract clarification.**
 
-The approved D16 contract is explicit and unchanged, but the repository has no
-D16-specific orchestration, aggregate reporter, or offline test. Existing
-component tests prove single invocations of the production reader, portable
-core, and shared reporter. They do not prove one integrated 10-iteration loop,
-its counters, fail-fast behavior, failure precedence, or its one aggregate
-record.
+The repository has no D16-specific orchestration, aggregate reporter, or
+offline test. Existing component tests prove single invocations of the
+production reader, portable core, and shared reporter. They do not prove one
+integrated 10-iteration loop, its counters, fail-fast behavior, failure
+precedence, or its one aggregate record.
 
-The only next task is `D16-TEST-COVERAGE-PREPARATION`. This review adds no test,
-launcher, procedure, fixture, production behavior, generated bundle, Android
-claim, device evidence, or PASS.
+The readiness review also found that the formal failure aggregate did not yet
+state exact counter timing, equality behavior after failure, or combined
+failure precedence. The user explicitly approved the missing semantics on
+2026-08-02, but they remain outside the formal D16 contract until a separate
+documentation-only clarification is reviewed and merged. Test-only work must
+not start first.
+
+The only next task is `D16-AGGREGATE-SEMANTICS-CLARIFICATION`. This review adds
+no test, launcher, procedure, fixture, production behavior, generated bundle,
+Android claim, device evidence, or PASS.
 
 ## Authoritative scope
 
@@ -24,11 +30,59 @@ claim, device evidence, or PASS.
 - **Approved iteration count:** exactly 10
 - **Grant contract:** one fresh temporary picker grant and no reselection
 - **Review class:** documentation/repository-only readiness review
+- **Formal aggregate status:** user-approved addendum awaits a separate
+  documentation-only clarification
 
 The canonical approved contract remains in
 [`autojs6-image-reader-device-verification-v1.md`](autojs6-image-reader-device-verification-v1.md).
-This review does not amend its fixture, grant, iteration, equality,
-responsiveness, failure, aggregate, or privacy rules.
+This review intentionally does not amend that formal contract. The next
+governed clarification must write the approved addendum there before any test
+coverage is implemented.
+
+## Approved aggregate-semantics addendum awaiting formalization
+
+The following user-approved semantics are recorded here only as the blocker
+disposition for the next clarification task. This readiness-review PR does not
+make them part of the formal D16 contract.
+
+### Counters
+
+- Increment `attemptedIterations` as soon as an iteration begins the complete
+  path. Count the iteration that produces a public error or metadata mismatch.
+  Do not count later iterations that never start because of fail-fast.
+- Increment `successfulIterations` only when the same iteration has underlying
+  `status === "PASS"`, `mimeType === "image/jpeg"`,
+  `sizeBytes === independentlyVerifiedByteCount`, and MIME/count equal to
+  iteration 1. A public-error or metadata-mismatch iteration is not successful.
+
+### Equality
+
+- `allMetadataEqual` is `true` only when all 10 reads succeed and every MIME
+  and count is equal.
+- It is `false` after any early public error or metadata mismatch.
+- If all 10 reads succeed but the final loop-level `uiResponsive` is `false`,
+  it remains `true`.
+- If UI failure overrides an earlier public error or metadata mismatch, it is
+  `false`.
+
+### Failure precedence
+
+1. `uiResponsive === false` has highest priority. Emit
+   `failureReason: "UI_NOT_RESPONSIVE"` and omit `errorCode`.
+2. Otherwise, when a stable public error exists, emit
+   `failureReason: "PUBLIC_ERROR"` and preserve the original stable public
+   `errorCode`.
+3. Otherwise, when metadata differs, emit
+   `failureReason: "METADATA_MISMATCH"` and omit `errorCode`.
+
+The approved examples are:
+
+- Public error on iteration 4 with responsive UI: attempted 4, successful 3,
+  metadata equality false, `PUBLIC_ERROR`, and the original stable public code.
+- Metadata mismatch on iteration 4 with responsive UI: attempted 4, successful
+  3, metadata equality false, `METADATA_MISMATCH`, and no `errorCode`.
+- All 10 iterations succeed but UI is not responsive: attempted 10, successful
+  10, metadata equality true, `UI_NOT_RESPONSIVE`, and no `errorCode`.
 
 ## Repository path reviewed
 
@@ -53,23 +107,23 @@ them.
 
 ## Required-coverage assessment
 
-| #   | Approved D16 requirement                                                   | Repository finding                                                                                                                                | Readiness |
-| --- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| 1   | Exactly 10 complete-path iterations                                        | Every existing harness/test execution invokes the complete path once.                                                                             | Missing   |
-| 2   | Reuse the same injected source/grant context                               | D08 proves one fresh selection only; no test repeats one injected source context.                                                                 | Missing   |
-| 3   | Every iteration executes `canAccess() → read() → portable core`            | The order is proved for one invocation, including two resolver opens, but not across 10 iterations.                                               | Partial   |
-| 4   | Every successful iteration is `PASS`, JPEG, and the independent byte count | D08 proves one JPEG success and D13 proves one exact-count success; neither is a D16 10-iteration test.                                           | Partial   |
-| 5   | Iterations 2–10 equal iteration 1 for MIME and count                       | No cross-iteration comparison exists.                                                                                                             | Missing   |
-| 6   | A stable public error fails fast                                           | Public codes are preserved in single-invocation tests, but no loop stops and counts the failed iteration.                                         | Partial   |
-| 7   | A metadata mismatch fails fast                                             | No D16 MIME/count mismatch loop exists.                                                                                                           | Missing   |
-| 8   | After fail-fast, safely finish loop-level responsiveness assessment        | Existing responsiveness coverage wraps one task and has no D16 post-failure assessment order.                                                     | Missing   |
-| 9   | Preserve an existing stable public `errorCode` unchanged                   | Single-record reporters preserve allowlisted codes, but no D16 aggregate `PUBLIC_ERROR` path is tested.                                           | Partial   |
-| 10  | Three D16 failure reasons remain evidence-only                             | `PUBLIC_ERROR`, `METADATA_MISMATCH`, and `UI_NOT_RESPONSIVE` are documentation-only and absent from executable/test coverage.                     | Missing   |
-| 11  | Emit exactly one frozen aggregate record                                   | Existing tests freeze one single-read record, not the approved D16 aggregate.                                                                     | Partial   |
-| 12  | Emit no 10 per-iteration records                                           | No D16 reporter path exists to prove per-iteration reporting is suppressed.                                                                       | Missing   |
-| 13  | Correct requested, attempted, and successful counters                      | No aggregate counters exist in source or tests.                                                                                                   | Missing   |
-| 14  | Test success and all failure shapes/precedence                             | The formal contract defines them, but no executable D16 success, public-error, metadata-mismatch, UI-failure, or combined-precedence case exists. | Missing   |
-| 15  | Leak no source or uncontrolled value                                       | Reader/core/single-record tests prove local sanitization; no D16 aggregate allowlist or hostile-value case exists.                                | Partial   |
+| #   | Approved D16 requirement                                                   | Repository finding                                                                                                                        | Readiness |
+| --- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 1   | Exactly 10 complete-path iterations                                        | Every existing harness/test execution invokes the complete path once.                                                                     | Missing   |
+| 2   | Reuse the same injected source/grant context                               | D08 proves one fresh selection only; no test repeats one injected source context.                                                         | Missing   |
+| 3   | Every iteration executes `canAccess() → read() → portable core`            | The order is proved for one invocation, including two resolver opens, but not across 10 iterations.                                       | Partial   |
+| 4   | Every successful iteration is `PASS`, JPEG, and the independent byte count | D08 proves one JPEG success and D13 proves one exact-count success; neither is a D16 10-iteration test.                                   | Partial   |
+| 5   | Iterations 2–10 equal iteration 1 for MIME and count                       | No cross-iteration comparison exists.                                                                                                     | Missing   |
+| 6   | A stable public error fails fast                                           | Public codes are preserved in single-invocation tests, but no loop stops and counts the failed iteration.                                 | Partial   |
+| 7   | A metadata mismatch fails fast                                             | No D16 MIME/count mismatch loop exists.                                                                                                   | Missing   |
+| 8   | After fail-fast, safely finish loop-level responsiveness assessment        | Existing responsiveness coverage wraps one task and has no D16 post-failure assessment order.                                             | Missing   |
+| 9   | Preserve an existing stable public `errorCode` unchanged                   | Single-record reporters preserve allowlisted codes, but no D16 aggregate `PUBLIC_ERROR` path is tested.                                   | Partial   |
+| 10  | Three D16 failure reasons remain evidence-only                             | `PUBLIC_ERROR`, `METADATA_MISMATCH`, and `UI_NOT_RESPONSIVE` are documentation-only and absent from executable/test coverage.             | Missing   |
+| 11  | Emit exactly one frozen aggregate record                                   | Existing tests freeze one single-read record, not the approved D16 aggregate.                                                             | Partial   |
+| 12  | Emit no 10 per-iteration records                                           | No D16 reporter path exists to prove per-iteration reporting is suppressed.                                                               | Missing   |
+| 13  | Correct requested, attempted, and successful counters                      | No aggregate counters exist in source or tests, and their exact approved semantics still await formal clarification.                      | Missing   |
+| 14  | Test success and all failure shapes/precedence                             | The user approved the exact semantics, but they still await formal clarification and no executable D16 failure or precedence case exists. | Missing   |
+| 15  | Leak no source or uncontrolled value                                       | Reader/core/single-record tests prove local sanitization; no D16 aggregate allowlist or hostile-value case exists.                        | Partial   |
 
 `Partial` means a component or one-invocation contract is proved. It does not
 mean the integrated D16 requirement is proved.
@@ -92,8 +146,10 @@ offline contract is proved.
 
 ## Exact test-only contract still required
 
-A separately governed test-only coverage change must prove the following as
-one D16 verification contract without modifying production behavior:
+After the approved addendum is written into the formal contract and that
+clarification is reviewed and merged, a separately governed test-only coverage
+change must prove the following as one D16 verification contract without
+modifying production behavior:
 
 1. Use one injected synthetic source context for exactly 10 calls to the
    existing complete production reader/core path and prove 10 access probes and
@@ -130,8 +186,11 @@ permission implementation.
 - Existing repository coverage does not fully prove the approved offline D16
   contract.
 - Component tests must not be combined into a false integrated proof.
+- Exact aggregate semantics are user-approved but not yet part of the formal
+  contract; test-only work must wait for a separate documentation-only
+  clarification.
 - Do not create a launcher, procedure, fixture, device result, or PASS in this
   review.
-- Set the sole active task to `D16-TEST-COVERAGE-PREPARATION`.
+- Set the sole active task to `D16-AGGREGATE-SEMANTICS-CLARIFICATION`.
 - Do not advance to device-procedure preparation until the separate test-only
   change is implemented, verified, committed, and reviewed.

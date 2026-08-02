@@ -103,10 +103,12 @@ independent byte-count verification, MIME/count equality, loop-level UI
 assessment, fail-fast handling, and one sanitized aggregate record. A governed
 readiness review found that existing single-invocation component tests do not
 prove D16's integrated 10-iteration orchestration, fail-fast counters,
-responsiveness precedence, or frozen aggregate. Test-only coverage preparation
-is now required; no launcher, PASS, device claim, or new classification was
-created. D17-D26 plus complete Android Image Input Adapter V1.0 migration remain
-pending.
+responsiveness precedence, or frozen aggregate. It also found that the formal
+failure aggregate still needs the user-approved counter, equality, and
+precedence semantics recorded explicitly. A separate documentation-only
+clarification must complete before the required test-only coverage preparation;
+no launcher, PASS, device claim, or new classification was created. D17-D26
+plus complete Android Image Input Adapter V1.0 migration remain pending.
 
 ## Project layout
 
