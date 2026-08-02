@@ -5,82 +5,82 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D14-DEVICE-VALIDATION`
+**Task ID:** `D15-EVIDENCE-GAP-REVIEW`
 
-**Objective:** Execute the separately reviewed D14 portable size-overflow
-procedure on Vivo X Fold5 and record only scoped, sanitized Android and AutoJs6
-evidence.
+**Objective:** Review the repository evidence gap for formal verification
+matrix D15, where a controlled source exceeds a deliberately lower recorded
+`readerSafetyLimitBytes` and the expected stable public result is
+`IMAGE_READ_FAILED` with no truncated success.
 
-The reviewed launcher uses fixture ID `OVER_PORTABLE`, independently verified
-size `6406`, `maxSizeBytes: 6405`, and
-`readerSafetyLimitBytes: 12582912`. It must use the existing Android system
-picker, fresh temporary grant, production reader, portable core, shared
-reporter, and off-UI-thread responsiveness path without modification.
+The review must determine whether existing production-reader ordering,
+offline tests, sanitized reporting, and a separately counted controlled source
+are sufficient to prepare a safe Vivo X Fold5 procedure. It must not create or
+execute a D15 launcher.
 
 ## Required work
 
-1. Complete mandatory preflight from live `main` and confirm the reviewed D14
-   launcher, generated bundle, procedure, and configuration are unchanged.
-2. Confirm all repository checks pass against the exact execution SHA.
-3. Have the user place the privately mapped, unchanged `OVER_PORTABLE` fixture
-   where the Vivo X Fold5 system picker can select it.
-4. Have the user import the committed generated D14 bundle into AutoJs6 v6.7.0
-   `arm64-v8a` without editing it.
-5. Use the Android system picker opened by that run to select the fixture and
-   execute with a fresh temporary grant.
-6. Retain only the exact repository SHA, device/runtime scope, opaque fixture
-   ID, independent count, numeric limits, one sanitized public result,
-   responsiveness, and non-sensitive notes.
-7. If and only if the record is the exact approved expected-result shape, add a
-   scoped device-validation evidence document and advance to the next governed
-   matrix review. Otherwise record the sanitized result honestly without
-   inventing PASS or a classification.
+1. Complete mandatory preflight from live `main`; confirm no open PR, branch,
+   launcher, device evidence, or other implementation already owns D15.
+2. Read the formal D15 matrix row and the production reader's stream loop,
+   accumulated-count ceiling check, failure mapping, stream cleanup, and
+   returned-byte behavior.
+3. Inventory all related offline tests for exact reader-ceiling equality,
+   reader-ceiling overflow, partial reads, cleanup after failure, public error
+   mapping, stable reporter output, privacy, and UI responsiveness.
+4. Determine whether D15 can prove that a source whose independently measured
+   complete size exceeds the configured reader ceiling returns
+   `IMAGE_READ_FAILED` before any truncated content can reach the portable core.
+5. Define how a future procedure would keep D15 separate from D14: D14 requires
+   a higher reader ceiling and portable `IMAGE_TOO_LARGE`; D15 requires a lower
+   reader ceiling and reader-level `IMAGE_READ_FAILED`.
+6. Determine whether one user-approved, non-sensitive controlled image can be
+   privately mapped to `OVER_READER_CEILING`, independently counted outside the
+   launcher and production reader, and selected through a fresh Android system
+   picker grant without retaining source data.
+7. State precisely what existing offline evidence proves and what scoped
+   Android / AutoJs6 evidence remains missing.
+8. Update the evidence-gap record, project state, and sole next task. If a safe
+   procedure is supported, advance only to
+   `D15-DEVICE-PROCEDURE-PREPARATION`; otherwise record the exact governed
+   blocker or separately required test-only task without inventing PASS or a
+   classification.
 
 ## Acceptance criteria
 
-- Execution uses the reviewed generated bundle from a clean authoritative SHA.
-- The selected private fixture mapping remains outside Git and the source is
-  unchanged after its independent count was established.
-- The only accepted expected-result record is:
-
-  ```json
-  {
-    "testCaseId": "D14_PORTABLE_SIZE_OVERFLOW",
-    "status": "FAIL",
-    "errorCode": "IMAGE_TOO_LARGE",
-    "uiResponsive": true
-  }
-  ```
-
-- The public `status: "FAIL"` is retained exactly and is never rewritten to
-  `status: "PASS"`.
+- The review identifies the exact production order in which
+  `readerSafetyLimitBytes` is checked and confirms whether any truncated byte
+  array can be returned after overflow.
+- D15 is explicitly distinguished from D14 portable overflow, ordinary read
+  failure, permission denial, D11 missing source, D12 null stream, and any
+  private-cache observation.
+- Offline tests are described only as offline evidence and are not expanded
+  into Android, provider, or device claims.
+- No D13 or D14 result is reused, relabeled, or treated as D15 evidence.
 - No URI, path, filename, source bytes, Base64, image content, exception detail,
-  stack, credential, or uncontrolled runtime value is retained.
-- D13 or D15 evidence is not reused for D14.
+  stack, credential, or private fixture mapping is retained.
+- The change is documentation-only and `NEXT_ACTION.md` contains exactly one
+  Task ID.
 
 ## Prohibited scope
 
-Do not edit the launcher on the device, change any numeric value, reuse a saved
-URI, request persistable access, add broad storage permission, copy the source
-into repository or application storage, or infer the expected result from
-offline tests.
+Do not create or execute a D15 launcher, perform a phone test, change the
+production reader or portable core, or add test coverage during this review.
+Do not manufacture a fake-only PASS or call `IMAGE_READ_FAILED` a PASS.
 
-Do not add production reader or portable-core behavior, permission manager,
-provider, network, queue, Contributor app, credential, submission, or unrelated
-module work. Do not begin D15-D26 before D14 is dispositioned through reviewed
-evidence.
+Do not add a permission manager, persistable grant, broad storage permission,
+source-copy architecture, provider, network, queue, Contributor app,
+credential, submission, or unrelated module work.
 
 ## Stop conditions
 
 Stop and report when:
 
-- the user is not available to operate the Vivo X Fold5, AutoJs6, or Android
-  system picker;
-- the private fixture cannot be selected unchanged;
-- the execution SHA or generated bundle is not clean and authoritative;
-- the returned record is incomplete, unsanitized, or not one of the reviewed
-  stable shapes;
-- an open pull request or branch already owns D14 device evidence;
+- an open pull request or branch already owns D15;
+- the formal matrix, failure boundary, fixture provenance, or expected public
+  contract is ambiguous;
+- a safe device procedure would require retaining sensitive source data or
+  changing production architecture;
 - repository state conflicts;
+- required checks fail outside the review scope;
 - sensitive data may have appeared;
 - write access is unavailable.
