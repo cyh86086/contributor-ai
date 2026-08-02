@@ -95,9 +95,12 @@ the independently counted 6,406-byte `OVER_READER_CEILING` JPEG was above the
 6,405-byte reader ceiling and equal to the 6,406-byte portable limit, producing
 `IMAGE_READ_FAILED` with responsive UI. This shared public code is not unique
 internal branch telemetry, so the result is scoped to the reviewed static
-ordering and is not called PASS. The next active task is the D16 evidence-gap
-review; D16-D26 plus complete Android Image Input Adapter V1.0 migration remain
-pending.
+ordering and is not called PASS. The D16 evidence-gap review found the formal
+contract incomplete: it does not fix the loop count, controlled fixture, grant
+lifetime, equality fields, or multi-iteration evidence shape. D16 is blocked
+pending the next active contract-clarification task; no launcher, test-only
+PASS, device claim, or new classification was created. D17-D26 plus complete
+Android Image Input Adapter V1.0 migration remain pending.
 
 ## Project layout
 

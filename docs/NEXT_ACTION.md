@@ -5,62 +5,57 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D16-EVIDENCE-GAP-REVIEW`
+**Task ID:** `D16-CONTRACT-CLARIFICATION`
 
-**Objective:** Perform a documentation-only repository evidence-gap review of
-formal matrix D16: read the same non-sensitive URI repeatedly in a recorded
-loop, with every iteration expected to return the same success metadata.
+**Objective:** Obtain an explicit user-approved, repository-authoritative D16
+contract before any test, launcher, procedure, or device execution is created.
 
-## Required review
+## Required decisions
 
-1. Read the formal D16 matrix row, fixture requirements, and all adjacent
-   safeguards without inventing an iteration count or acceptance rule.
-2. Trace each iteration through the production reader's `canAccess()` and
-   `read()` sequence, stream-open and cleanup behavior, portable core, stable
-   reporter, and off-UI-thread responsiveness path.
-3. Inventory existing fake, injected, integration, cleanup, repetition, and
-   sanitization tests, stating exactly which behavior each proves and which
-   Android behavior remains unproved.
-4. Determine whether the repository already defines a reproducible loop count,
-   metadata-equality fields, grant lifetime, fixture provenance, and failure
-   handling for a future device procedure.
-5. Distinguish repeated reads of one fresh picker grant from single-read D13,
-   D14, or D15 evidence, private-cache observations, multiple-image cases, and
-   provider-specific behavior.
-6. Decide whether existing evidence fully proves an offline prerequisite,
-   whether a separately governed test-only task is required, whether device
-   procedure preparation is feasible, or whether the formal contract is
-   ambiguous or otherwise blocked under repository terminology.
-7. Update project state and select exactly one governed next task from the
-   review conclusion.
+The user must explicitly approve all of the following:
+
+1. the exact bounded number of complete read iterations;
+2. the dedicated opaque fixture ID, supported format, independent count rule,
+   and non-sensitive provenance;
+3. whether one fresh temporary system-picker grant must remain active for the
+   complete loop;
+4. the exact per-iteration fields that must remain equal;
+5. whether responsiveness is one loop-level field or a per-iteration field;
+6. the fail-fast and public-result rule for an inaccessible, failed, unequal,
+   or non-responsive iteration;
+7. the sanitized console/evidence shape that proves the recorded count and
+   equality without retaining source data.
+
+After approval, update the formal matrix and any affected evidence contract in
+a documentation-only change. Only a later governed task may decide whether
+test-only coverage or device-procedure preparation comes next.
 
 ## Acceptance criteria
 
-- The change is documentation-only and creates no launcher or test.
-- The review identifies the exact production path and existing evidence without
-  treating fake or single-read evidence as Android repeated-read evidence.
-- Any missing iteration count, equality field, grant rule, or fixture rule is
-  recorded honestly rather than supplied by assumption.
+- The approved values are explicit and leave no implementation-defined
+  acceptance rule.
+- The clarification remains scoped to formal D16 and does not alter D17-D26.
+- The formal matrix and evidence rules agree on iteration count, fixture,
+  grant, equality, failure, responsiveness, and reporting.
 - No URI, source location, source name, source bytes, Base64, image content,
   exception detail, stack, credential, or uncontrolled runtime value is
   retained.
-- Repository verification, formatting, secret scanning, sensitive-value
-  scanning, and Markdown-only scope checks pass.
-- This file contains one active Task ID.
+- Project state and the single next task are updated in the same reviewed
+  documentation-only change.
 
 ## Prohibited scope
 
-Do not create or execute a D16 launcher, operate a device, add production
-reader behavior, alter the verification matrix, manufacture a loop count, or
-claim Android or device evidence from offline tests.
+Do not choose the missing values without explicit user approval. Do not create
+or run a launcher, add tests, operate a device, claim PASS, assign a new
+classification name, or infer Android behavior from offline evidence.
 
-Do not add persistable access, broad storage permission, permission manager,
-source-copy architecture, provider, network, queue, Contributor app,
-credential, submission, or unrelated module work.
+Do not add production behavior, persistable access, broad storage permission,
+permission manager, source-copy architecture, provider, network, queue,
+Contributor app, credential, submission, or unrelated module work.
 
 ## Stop conditions
 
-Stop and report when the formal contract or fixture provenance remains
-ambiguous, an existing pull request or branch already owns the work,
-repository state conflicts, required verification fails outside scope,
-sensitive data may have appeared, or GitHub write access is unavailable.
+Stop until the user explicitly approves the complete D16 contract. Also stop
+for repository drift, conflicting governance, an existing owning pull request,
+sensitive data, failed verification outside scope, or unavailable GitHub write
+access.
