@@ -196,9 +196,9 @@ satisfy these requirements.
 - Repository write access: an approved local GitHub CLI workflow is available.
   The 2026-08-02 preflight authenticated `gh` as the repository owner, confirmed
   `ADMIN` repository permission, and completed a dry-run push for the task
-  branch. GitHub Connector writes were not used or newly verified; Connector
-  capability must remain classified separately from the confirmed local CLI
-  workflow.
+  branch. GitHub Connector pull-request creation then returned HTTP 403, so the
+  Connector remains read-only for that write. The confirmed local CLI workflow
+  was used for branch, push, and pull-request creation.
 
 ## Next planned actions
 
