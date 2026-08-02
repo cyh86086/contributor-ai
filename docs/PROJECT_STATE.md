@@ -54,7 +54,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 ## Current phase
 
 **Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
-platform; D11 is blocked by unproven classification; D12-D26 remain pending.**
+platform; D11 is blocked by unproven classification; D12 requires one exact
+test-only coverage change; D13-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -131,6 +132,18 @@ provider-independent missing-source result. D11 is therefore
 `BLOCKED_UNPROVEN_CLASSIFICATION`; no launcher or device-result claim is
 authorized. The review is recorded in
 [`testing/d11-missing-source-evidence-gap-review.md`](testing/d11-missing-source-evidence-gap-review.md).
+
+The D12 evidence-gap review preserved D12 as a fake-only offline contract. A
+null probe stream at `canAccess()` becomes `URI_ACCESS_DENIED`, so the formal
+`IMAGE_READ_FAILED` result requires a successful first probe followed by a
+controlled null from the read-stage second open. Existing tests separately
+prove reader null handling, portable error mapping, ordinary read failure,
+first-open denial, and sanitized reporting, but no single test carries the
+second-open null through the production reader, portable core, and shared
+reporter. D12 therefore requires one separately governed test-only coverage
+change; no launcher or device execution is authorized. The review is recorded
+in
+[`testing/d12-null-stream-evidence-gap-review.md`](testing/d12-null-stream-evidence-gap-review.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
@@ -219,7 +232,14 @@ satisfy these requirements.
   do not prove which path occurs on the scoped device and provider. No D11
   launcher or device-result claim is authorized. The review is recorded in
   [`testing/d11-missing-source-evidence-gap-review.md`](testing/d11-missing-source-evidence-gap-review.md).
-- D12-D26 still require scoped review, preparation, and in several cases
+- D12 evidence-gap review is complete. Existing tests do not yet provide one
+  exact production-reader, portable-core, and reporter execution in which the
+  access probe succeeds and the read-stage resolver open returns `null`. A
+  separately governed test-only change is required before the repository may
+  record the D12 offline contract as proven. D12 remains fake-only and requires
+  no device execution. The review is recorded in
+  [`testing/d12-null-stream-evidence-gap-review.md`](testing/d12-null-stream-evidence-gap-review.md).
+- D13-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -228,16 +248,15 @@ satisfy these requirements.
 - No provider credential strategy has been approved. Secrets must remain
   outside Git.
 - Repository write access: an approved local GitHub CLI workflow is available.
-  The 2026-08-02 preflight authenticated `gh` as the repository owner, confirmed
-  `ADMIN` repository permission, and completed a dry-run push for the task
-  branch. GitHub Connector pull-request creation then returned HTTP 403, so the
-  Connector remains read-only for that write. The confirmed local CLI workflow
-  was used for branch, push, and pull-request creation.
+  The 2026-08-02 preflight authenticated `gh` as the repository owner and
+  confirmed `ADMIN` repository permission. GitHub Connector repository reads
+  succeed, but pull-request creation and Ready-for-review writes returned HTTP 403. The Connector remains read-only for those writes, so the confirmed local
+  CLI workflow is used for branch, push, pull-request, and merge operations.
 
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D12-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D12-TEST-COVERAGE-PREPARATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
