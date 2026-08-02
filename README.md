@@ -71,9 +71,12 @@ classified `BLOCKED_PLATFORM`: the scoped platform revocation call returned,
 but access remained available, so no D09 launcher may be implemented. The D10
 evidence-gap review found that the same platform limitation prevents formal
 revocation between `canAccess()` and `read()`; D10 is also
-`BLOCKED_PLATFORM`, with no launcher or PASS claim. The next active task is the
-formal D11 evidence-gap review; D11-D26 and complete Android Image Input Adapter
-V1.0 migration remain pending.
+`BLOCKED_PLATFORM`, with no launcher or PASS claim. The D11 review found that a
+real missing source can fail at the initial access probe or the later read, which
+the current pipeline maps to different public results; D11 is
+`BLOCKED_UNPROVEN_CLASSIFICATION`, with no launcher or device-result claim. The
+next active task is the formal D12 fake-only null-stream evidence review; D12-D26
+and complete Android Image Input Adapter V1.0 migration remain pending.
 
 ## Project layout
 

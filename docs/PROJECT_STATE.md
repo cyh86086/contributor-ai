@@ -54,7 +54,7 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 ## Current phase
 
 **Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
-platform; D11-D26 remain pending.**
+platform; D11 is blocked by unproven classification; D12-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -120,6 +120,17 @@ ineffective operation cannot establish D10. D10 is therefore
 `BLOCKED_PLATFORM`; no launcher, PASS, or `URI_ACCESS_DENIED` device claim is
 authorized. The review is recorded in
 [`testing/d10-permission-revoked-between-access-and-read-evidence-gap-review.md`](testing/d10-permission-revoked-between-access-and-read-evidence-gap-review.md).
+
+The D11 evidence-gap review confirmed that formal deletion occurs before the
+production access probe. The reader's `canAccess()` collapses a `null` stream or
+any open failure to `false`, which the portable core maps to
+`URI_ACCESS_DENIED` without calling `read()`. `IMAGE_READ_FAILED` is available
+only when the probe first succeeds and a later non-permission read failure
+occurs. The system picker and provider do not establish that ordering or a
+provider-independent missing-source result. D11 is therefore
+`BLOCKED_UNPROVEN_CLASSIFICATION`; no launcher or device-result claim is
+authorized. The review is recorded in
+[`testing/d11-missing-source-evidence-gap-review.md`](testing/d11-missing-source-evidence-gap-review.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
@@ -200,7 +211,15 @@ satisfy these requirements.
   device claim is made. A repository-external private-cache lifecycle
   exploration is not formal D10 evidence. The review is recorded in
   [`testing/d10-permission-revoked-between-access-and-read-evidence-gap-review.md`](testing/d10-permission-revoked-between-access-and-read-evidence-gap-review.md).
-- D11-D26 still require scoped review, preparation, and in several cases
+- D11 evidence-gap review is complete with classification
+  `BLOCKED_UNPROVEN_CLASSIFICATION`. A real deleted picker source may fail or
+  remain readable at either of the production stream opens. Failure at
+  `canAccess()` becomes `URI_ACCESS_DENIED`; only a later non-permission failure
+  during `read()` becomes `IMAGE_READ_FAILED`. Existing fake and injected tests
+  do not prove which path occurs on the scoped device and provider. No D11
+  launcher or device-result claim is authorized. The review is recorded in
+  [`testing/d11-missing-source-evidence-gap-review.md`](testing/d11-missing-source-evidence-gap-review.md).
+- D12-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -218,7 +237,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D11-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D12-EVIDENCE-GAP-REVIEW`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
