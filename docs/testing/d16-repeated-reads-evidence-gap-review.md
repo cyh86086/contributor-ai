@@ -2,7 +2,8 @@
 
 ## Conclusion
 
-**Contract clarification complete; readiness review required.**
+**Aggregate semantics clarification complete; test-only coverage preparation
+is required.**
 
 The formal D16 row requires the same non-sensitive granted URI to be read
 repeatedly in a recorded loop and expects the same success metadata from every
@@ -11,10 +12,13 @@ required iteration count, controlled fixture, equality fields, grant lifetime,
 or aggregate evidence shape. The user explicitly approved the complete
 contract on 2026-08-02, and the formal verification plan now records it.
 
-This documentation-only clarification closes the contract blocker. It does not
-assign a new classification name and does not authorize a launcher, test-only
-PASS, Android claim, or device execution. A separately governed readiness
-review must determine whether test-only coverage preparation is required before
+The governed readiness review subsequently found that repository offline
+coverage does not prove the integrated D16 contract and that the aggregate
+counter, equality, and precedence rules still needed formalization. The user
+approved that addendum on 2026-08-02, and the formal verification plan now
+records it. This documentation-only clarification assigns no new classification
+name and authorizes no launcher, test-only PASS, Android claim, or device
+execution. A separately governed test-only coverage change is required before
 device-procedure preparation.
 
 ## Review scope
@@ -54,7 +58,16 @@ Its binding terms are:
 - evidence-only failure reasons `PUBLIC_ERROR`, `METADATA_MISMATCH`, and
   `UI_NOT_RESPONSIVE`; these are not new production errors or project
   classifications, and an existing stable public error is preserved unchanged
-  only for `PUBLIC_ERROR`.
+  only for `PUBLIC_ERROR`;
+- attempted iterations count the iteration as soon as its complete path begins,
+  successful iterations require all approved success and equality conditions,
+  and fail-fast-skipped iterations count as neither;
+- metadata equality is true only for 10 successful equal-metadata reads, except
+  that it remains true when those reads are followed by a loop-level UI
+  failure; an earlier public error or metadata mismatch makes it false;
+- loop-level UI failure has priority over an earlier public error or metadata
+  mismatch and omits `errorCode`; otherwise a responsive public error preserves
+  its stable code, while a responsive metadata mismatch omits `errorCode`.
 
 No selected identifier, source location, source name, source bytes, Base64,
 image content, exception detail, stack, credential, or uncontrolled runtime
@@ -84,8 +97,9 @@ storage permission, and a permission manager.
 ### Equality fields and failure rule
 
 The approved contract now defines `mimeType` and `sizeBytes` as the equality
-fields, uses one loop-level responsiveness result, and fixes the fail-fast and
-failure-reason rules. The fixed test case ID is not an equality field.
+fields, uses one loop-level responsiveness result, fixes the fail-fast and
+failure-reason rules, and records exact counter timing, equality values, and
+failure precedence. The fixed test case ID is not an equality field.
 
 ### Evidence and reporter shape
 
@@ -144,12 +158,10 @@ establish real Android temporary-grant lifetime or provider repeatability.
 
 ## Disposition
 
-- Close the contract-clarification blocker using the explicit user approval
-  dated 2026-08-02.
+- Close the aggregate-semantics contract blocker using the explicit user
+  approval dated 2026-08-02.
 - Assign no new PASS or classification name.
 - Do not create a D16 launcher, test-only implementation, or device procedure.
-- Set `D16-POST-CLARIFICATION-READINESS-REVIEW` as the only next task. That
-  documentation/repository review must decide whether
-  `D16-TEST-COVERAGE-PREPARATION` is required or the workflow may advance to
-  `D16-DEVICE-PROCEDURE-PREPARATION`.
-- Do not perform that readiness review in this clarification change.
+- The completed readiness review requires a separately governed test-only
+  coverage change. Set `D16-TEST-COVERAGE-PREPARATION` as the only next task.
+- Do not add that test coverage in this documentation-only clarification.
