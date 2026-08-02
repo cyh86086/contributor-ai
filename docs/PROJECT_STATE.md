@@ -55,9 +55,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 **Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
 platform; D11 is blocked by unproven classification; the D12 fake-only offline
-contract is proved; D13 has scoped device validation; the D14 evidence-gap
-review and device-procedure preparation are complete, but D14 is unexecuted;
-D15-D26 remain pending.**
+contract is proved; D13 has scoped device validation; D14 has a scoped expected
+application-failure observation; D15-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -177,21 +176,23 @@ The D14 evidence-gap review confirmed that the production reader returns a
 complete in-memory byte array when the controlled source remains below a
 separately higher reader safety ceiling. The portable core then compares that
 array's actual length with `maxSizeBytes` and produces `IMAGE_TOO_LARGE` when
-the length is greater, before MIME fallback or encoding. Existing offline tests
-cover the production-reader, portable-core, shared-harness, reporter, and
-privacy boundaries sufficiently for procedure preparation, but are not Android
-or device evidence. The preparation task independently measured the privately
-mapped `OVER_PORTABLE` JPEG anew as 6,406 bytes outside the launcher and
-production reader. The evidence-only D14 wrapper statically enforces a
-6,405-byte portable limit and a 12,582,912-byte reader ceiling, delegates to the
-existing picker, production reader, portable core, and sanitized reporter, and
-accepts only the expected `IMAGE_TOO_LARGE` failure record. The private mapping
-remains outside Git. D14 has no device result or PASS claim. The review and
-unexecuted procedure are recorded in the
+the length is greater, before MIME fallback or encoding. The preparation task
+independently measured the privately mapped `OVER_PORTABLE` JPEG anew as 6,406
+bytes outside the launcher and production reader. The evidence-only D14 wrapper
+statically enforces a 6,405-byte portable limit and a 12,582,912-byte reader
+ceiling, delegates to the existing picker, production reader, portable core,
+and sanitized reporter, and accepts only the expected `IMAGE_TOO_LARGE`
+failure record. The scoped Vivo X Fold5 execution against authoritative SHA
+`e648b57e8b756017b5716f3e8e145ff95de14683` observed that exact stable
+application failure with `uiResponsive: true`. Its public `status: "FAIL"` is
+retained and is not called PASS. The private mapping remains outside Git. The
+review, procedure, and scoped device record are recorded in the
 [`testing/d14-portable-size-overflow-evidence-gap-review.md`](testing/d14-portable-size-overflow-evidence-gap-review.md)
-review
-and
-[`user-guides/autojs6-d14-portable-size-overflow-check-zh-tw.md`](user-guides/autojs6-d14-portable-size-overflow-check-zh-tw.md).
+review,
+[`user-guides/autojs6-d14-portable-size-overflow-check-zh-tw.md`](user-guides/autojs6-d14-portable-size-overflow-check-zh-tw.md)
+procedure, and
+[`testing/device-validation/d14-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d14-vivo-x-fold5-autojs6-v6.7.0.md)
+device record.
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
@@ -304,19 +305,22 @@ satisfy these requirements.
   procedure, and
   [`testing/device-validation/d13-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d13-vivo-x-fold5-autojs6-v6.7.0.md)
   device record.
-- D14 evidence-gap review and device-procedure preparation are complete. The
-  user-approved, privately mapped `OVER_PORTABLE` JPEG was independently
-  measured anew as 6,406 bytes; only the opaque ID and count are retained. The
-  unexecuted evidence-only launcher uses a 6,405-byte portable limit, a
-  12,582,912-byte reader ceiling, the existing fresh picker, production reader,
-  portable core, and sanitized reporter path. It accepts only the stable
-  `IMAGE_TOO_LARGE` application failure with responsive UI as the expected D14
-  observation and never rewrites it to PASS. No D14 device result or PASS is
-  claimed, and no D13 or D15 result is reused. The review and procedure are
-  recorded in
+- D14 evidence-gap review, device-procedure preparation, and scoped device
+  validation are complete. The user-approved, privately mapped `OVER_PORTABLE`
+  JPEG was independently measured anew as 6,406 bytes; only the opaque ID and
+  count are retained. The reviewed evidence-only launcher used a 6,405-byte
+  portable limit, a 12,582,912-byte reader ceiling, the existing fresh picker,
+  production reader, portable core, and sanitized reporter path. The scoped
+  Vivo X Fold5 execution observed the stable `IMAGE_TOO_LARGE` application
+  failure with `uiResponsive: true`. Its public `status: "FAIL"` remains exact
+  and is not called PASS. No D13 or D15 result is reused. The review, procedure,
+  and evidence are recorded in
   [`testing/d14-portable-size-overflow-evidence-gap-review.md`](testing/d14-portable-size-overflow-evidence-gap-review.md)
-  and
-  [`user-guides/autojs6-d14-portable-size-overflow-check-zh-tw.md`](user-guides/autojs6-d14-portable-size-overflow-check-zh-tw.md).
+  review,
+  [`user-guides/autojs6-d14-portable-size-overflow-check-zh-tw.md`](user-guides/autojs6-d14-portable-size-overflow-check-zh-tw.md)
+  procedure, and
+  [`testing/device-validation/d14-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d14-vivo-x-fold5-autojs6-v6.7.0.md)
+  device record.
 - D15-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
@@ -334,7 +338,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D14-DEVICE-VALIDATION`.
+At this snapshot it is `D15-EVIDENCE-GAP-REVIEW`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state

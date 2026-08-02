@@ -83,14 +83,14 @@ device, or D11 evidence. D13 has a scoped PASS on Vivo X Fold5 with Android 16
 and AutoJs6 v6.7.0 `arm64-v8a`: the production reader returned the independently
 verified 6,406-byte `AT_PORTABLE_LIMIT` JPEG exactly at `maxSizeBytes`, with a
 separately higher reader ceiling and responsive UI. This result is only D13
-equality evidence and is not D14 or D15 evidence. The next active task is the
-D14 device validation. Its unexecuted evidence-only launcher uses a newly
-measured 6,406-byte `OVER_PORTABLE` JPEG, a 6,405-byte portable limit, and a
-separately higher reader ceiling. It accepts only sanitized
-`IMAGE_TOO_LARGE` with responsive UI as the expected application failure and
-does not rewrite that result to PASS. D14 still has no device result or PASS
-claim; D15-D26 and complete Android Image Input Adapter V1.0 migration remain
-pending.
+equality evidence. D14 separately observed the expected sanitized application
+failure on the same device/runtime class against its own authoritative SHA and
+configuration: the independently counted 6,406-byte `OVER_PORTABLE` JPEG was
+above the 6,405-byte portable limit and below the separately higher reader
+ceiling, producing `IMAGE_TOO_LARGE` with responsive UI. The public
+`status: "FAIL"` is retained and is not called PASS. The next active task is the
+D15 evidence-gap review; D15-D26 and complete Android Image Input Adapter V1.0
+migration remain pending.
 
 ## Project layout
 
