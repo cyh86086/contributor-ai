@@ -5,55 +5,77 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D16-POST-CLARIFICATION-READINESS-REVIEW`
+**Task ID:** `D16-TEST-COVERAGE-PREPARATION`
 
-**Objective:** Perform a documentation/repository-only readiness review of the
-approved D16 repeated-read contract and decide the next governed preparation
-stage.
+**Objective:** Implement the smallest separately governed verification-only
+coverage change that proves the approved D16 offline 10-iteration contract
+before any device-procedure preparation.
 
-## Required review
+The change must exercise the existing production Android reader and portable
+core through injected offline dependencies. It must add no production behavior
+and must not claim Android, AutoJs6, temporary-grant lifetime, device, or PASS
+evidence.
 
-1. Re-read the approved D16 contract in
-   `docs/testing/autojs6-image-reader-device-verification-v1.md` and the closed
-   evidence-gap review.
-2. Inspect the existing production reader, portable core, verification reporter
-   path, and relevant offline tests without modifying them.
-3. Determine whether repository coverage already proves the required
-   10-iteration orchestration, fail-fast rules, equality checks, loop-level
-   responsiveness handling, public-error preservation, and one frozen
-   aggregate record.
-4. If coverage is incomplete, set the next sole task to
-   `D16-TEST-COVERAGE-PREPARATION` and identify the exact test-only gap.
-5. If coverage is complete, set the next sole task to
-   `D16-DEVICE-PROCEDURE-PREPARATION` and document why no test-only preparation
-   is needed.
+## Required work
+
+1. Complete mandatory preflight and re-read the approved D16 contract and the
+   post-clarification readiness review.
+2. Add D16-specific offline coverage for exactly 10 complete-path iterations
+   using the same injected source context.
+3. Prove that each iteration executes the existing access probe, read, and
+   portable-core validation in order.
+4. Prove the exact success conditions, MIME/count equality against iteration 1,
+   correct counters, and one frozen aggregate record with no per-iteration
+   reports.
+5. Prove immediate public-error and metadata-mismatch fail-fast, stable public
+   code preservation, and exact attempted/successful counters.
+6. Prove that the safe loop-level responsiveness assessment completes after
+   fail-fast and that UI non-responsiveness has the approved precedence.
+7. Prove all three evidence-only failure-reason shapes and privacy allowlists,
+   including absence of selected-source, per-iteration, exception, diagnostic,
+   and uncontrolled values.
+8. Run the complete repository verification suite and publish the scoped
+   coverage change for review.
 
 ## Acceptance criteria
 
-- The review uses the approved exact count of 10 and opaque fixture ID
-  `JPEG_REPEAT_VALID` without changing the contract.
-- It distinguishes offline repository evidence from Android/device evidence
-  and does not claim D16 PASS.
-- It reaches exactly one of the two governed next-task outcomes above using
-  repository evidence.
-- It updates project state, this single-task register, and a scoped review
-  document in one documentation-only change.
-- It records no selected identifier, source location, source name, source
-  bytes, Base64, image content, exception detail, stack, credential, or
-  uncontrolled runtime value.
+- One integrated offline success case performs exactly 10 complete reads and
+  returns the approved 10/10 aggregate.
+- Public-error, metadata-mismatch, and UI-non-responsive cases prove fail-fast,
+  precedence, counters, public-code preservation where applicable, and exact
+  failure field shapes.
+- The reporter is called exactly once with the same frozen aggregate returned
+  to the caller; no per-iteration record is emitted.
+- Evidence-only failure reasons remain outside production public error codes
+  and reader classifications.
+- The same injected source context is reused, but no Android, AutoJs6, provider,
+  or real temporary-grant behavior is inferred.
+- The change is limited to tests and, only if required, a minimal explicitly
+  non-production verification-only orchestration seam plus required
+  documentation/state updates.
+- All checks and privacy/scope scans pass, and the change is committed and
+  reviewed through a pull request.
 
 ## Prohibited scope
 
-Do not add tests, create a D16 launcher or procedure, run a device, measure or
-commit a binary fixture, claim PASS, or assign a new classification name during
-this review.
+Do not create a D16 launcher, generated bundle, device procedure, fixture, or
+device result. Do not run a phone or claim D16 PASS.
 
-Do not add production behavior, persistable access, broad storage permission,
-permission manager, source-copy architecture, provider, network, queue,
-Contributor app, credential, submission, or unrelated module work.
+Do not change the production reader, portable core, production reporter,
+Android permissions, persistable access, broad storage permission, permission
+manager, application architecture, provider, network, queue, Contributor app,
+credential, submission, or unrelated module work.
 
 ## Stop conditions
 
-Stop for repository drift, an existing owning pull request or branch,
-conflicting governance, ambiguous approved-contract text, sensitive data,
-failed verification outside scope, or unavailable GitHub write access.
+Stop and report when:
+
+- meaningful integrated coverage would require a production or generated
+  runtime change;
+- the approved iteration, counter, failure, precedence, or privacy contract
+  cannot be tested deterministically with injected offline dependencies;
+- a pull request or branch already owns the D16 coverage task;
+- repository state conflicts or the formal contract becomes ambiguous;
+- sensitive values would need to be retained;
+- required checks fail outside the authorized test-only scope;
+- GitHub write access is unavailable.

@@ -57,8 +57,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 platform; D11 is blocked by unproven classification; the D12 fake-only offline
 contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
-observation; D16's explicit contract is approved and awaits a post-clarification
-readiness review; D17-D26 remain pending.**
+observation; D16's explicit contract is approved and its readiness review
+requires test-only coverage preparation; D17-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -254,6 +254,20 @@ preparation is required before device-procedure preparation. The review is
 recorded in
 [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
 
+The D16 post-clarification readiness review then traced the production reader,
+portable core, shared verification harness/reporter, and related offline tests
+against every approved D16 requirement. The repository proves only
+single-invocation components. It has no integrated 10-iteration orchestration,
+same-source reuse proof, cross-iteration equality, loop fail-fast counters,
+post-failure responsiveness ordering, D16 failure-reason precedence, or frozen
+aggregate reporter test. Existing D08, D13, D15, shared-reporter, and repeated
+zero-length-read evidence cannot be combined into a D16 proof. A separately
+governed `D16-TEST-COVERAGE-PREPARATION` task is therefore required before
+device-procedure preparation. This documentation-only review adds no test,
+launcher, procedure, production behavior, device evidence, or PASS. The review
+is recorded in
+[`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md).
+
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
 
@@ -410,6 +424,14 @@ satisfy these requirements.
   test-only PASS, Android claim, or device execution is authorized. The review
   is recorded in
   [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
+- D16 post-clarification readiness review is complete. Existing tests prove
+  only single-invocation reader/core/reporter behavior; no test proves the exact
+  10-iteration same-source loop, equality, fail-fast counters, post-failure
+  responsiveness, evidence-only failure precedence, or one frozen aggregate.
+  The sole next task is a separately governed test-only coverage preparation.
+  No launcher, procedure, device evidence, or PASS is authorized. The review is
+  recorded in
+  [`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md).
 - D17-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
@@ -427,7 +449,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D16-POST-CLARIFICATION-READINESS-REVIEW`.
+At this snapshot it is `D16-TEST-COVERAGE-PREPARATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
