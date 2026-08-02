@@ -2,25 +2,24 @@
 
 ## Conclusion
 
-**Offline contract coverage is incomplete; a separately governed test-only
-coverage change is required after one more contract clarification.**
+**The separately governed test-only change now proves the clarified offline D16
+aggregate contract; device-procedure preparation remains separate.**
 
-The repository has no D16-specific orchestration, aggregate reporter, or
-offline test. Existing component tests prove single invocations of the
-production reader, portable core, and shared reporter. They do not prove one
-integrated 10-iteration loop, its counters, fail-fast behavior, failure
-precedence, or its one aggregate record.
+The readiness review originally found no D16-specific orchestration, aggregate
+reporter, or offline test. Existing component tests proved only single
+invocations of the production reader, portable core, and shared reporter.
 
-The readiness review also found that the formal failure aggregate did not yet
-state exact counter timing, equality behavior after failure, or combined
-failure precedence. The user explicitly approved the missing semantics on
-2026-08-02, but they remain outside the formal D16 contract until a separate
-documentation-only clarification is reviewed and merged. Test-only work must
-not start first.
+The review also found that the formal failure aggregate did not yet state exact
+counter timing, equality behavior after failure, or combined failure
+precedence. The user explicitly approved those semantics on 2026-08-02, and the
+separate documentation-only clarification has now written them into the formal
+D16 contract.
 
-The only next task is `D16-AGGREGATE-SEMANTICS-CLARIFICATION`. This review adds
-no test, launcher, procedure, fixture, production behavior, generated bundle,
-Android claim, device evidence, or PASS.
+The subsequent test-only change uses a verification-only orchestration seam to
+prove the clarified aggregate through the existing production reader and
+portable core. It adds no launcher, procedure, fixture, production behavior,
+generated bundle, Android claim, device evidence, or PASS. The only next task is
+`D16-DEVICE-PROCEDURE-PREPARATION`.
 
 ## Authoritative scope
 
@@ -30,20 +29,20 @@ Android claim, device evidence, or PASS.
 - **Approved iteration count:** exactly 10
 - **Grant contract:** one fresh temporary picker grant and no reselection
 - **Review class:** documentation/repository-only readiness review
-- **Formal aggregate status:** user-approved addendum awaits a separate
-  documentation-only clarification
+- **Test-only preparation baseline:** clean live `main` SHA
+  `a4cb2cd3053404d68ae25ed66f3c02ac054073dd`
+- **Formal aggregate status:** user-approved addendum is recorded in the formal
+  contract and covered by integrated offline tests
 
 The canonical approved contract remains in
 [`autojs6-image-reader-device-verification-v1.md`](autojs6-image-reader-device-verification-v1.md).
-This review intentionally does not amend that formal contract. The next
-governed clarification must write the approved addendum there before any test
-coverage is implemented.
+This review did not amend that formal contract. The later clarification did so
+before the test-only coverage was implemented.
 
-## Approved aggregate-semantics addendum awaiting formalization
+## Formal aggregate-semantics contract
 
-The following user-approved semantics are recorded here only as the blocker
-disposition for the next clarification task. This readiness-review PR does not
-make them part of the formal D16 contract.
+The following user-approved semantics are now also recorded in the formal D16
+contract and are exercised by the dedicated offline coverage.
 
 ### Counters
 
@@ -100,12 +99,17 @@ One current complete image-read invocation follows this path:
 
 The shared format launcher selects once but calls `prepareSelectedImage()` only
 once. Its normalizer supports one success/failure record with no iteration
-counters or D16 failure reasons. Repository search found the D16 case ID,
-aggregate counter names, equality flag, and evidence-only failure reasons only
-in documentation; no source, test, launcher, or generated bundle implements
-them.
+counters or D16 failure reasons. At review time, repository search found the
+D16 case ID, aggregate counter names, equality flag, and evidence-only failure
+reasons only in documentation; no source, test, launcher, or generated bundle
+implemented them.
 
-## Required-coverage assessment
+## Pre-coverage assessment
+
+The following table preserves the readiness review's historical finding before
+the separately governed test-only implementation. `Partial` meant that a
+component or one-invocation contract was proved; it did not mean the integrated
+D16 requirement was proved.
 
 | #   | Approved D16 requirement                                                   | Repository finding                                                                                                                        | Readiness |
 | --- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- |
@@ -125,9 +129,6 @@ them.
 | 14  | Test success and all failure shapes/precedence                             | The user approved the exact semantics, but they still await formal clarification and no executable D16 failure or precedence case exists. | Missing   |
 | 15  | Leak no source or uncontrolled value                                       | Reader/core/single-record tests prove local sanitization; no D16 aggregate allowlist or hostile-value case exists.                        | Partial   |
 
-`Partial` means a component or one-invocation contract is proved. It does not
-mean the integrated D16 requirement is proved.
-
 ## Existing offline evidence and limits
 
 | Repository evidence                       | What it proves                                                                                         | Why it does not close D16                                                               |
@@ -144,12 +145,11 @@ real temporary-picker-grant lifetime behavior. A future device procedure still
 needs its own governed preparation and scoped device execution after the
 offline contract is proved.
 
-## Exact test-only contract still required
+## Implemented test-only contract
 
-After the approved addendum is written into the formal contract and that
-clarification is reviewed and merged, a separately governed test-only coverage
-change must prove the following as one D16 verification contract without
-modifying production behavior:
+After the approved addendum was written into the formal contract, the separately
+governed test-only change implemented the following as one D16 verification
+contract without modifying production behavior:
 
 1. Use one injected synthetic source context for exactly 10 calls to the
    existing complete production reader/core path and prove 10 access probes and
@@ -176,21 +176,31 @@ modifying production behavior:
    local to the D16 evidence contract and do not enter the portable public-code
    or reader-classification sets.
 
-If a reusable orchestration seam is required to make these tests meaningful,
-it must be explicitly non-production and verification-only. It must not be a
-device launcher, generated bundle, production reader/core/reporter change, or
-permission implementation.
+The reusable orchestration seam is explicitly non-production and
+verification-only. Repository production source, device launchers, generated
+bundles, permissions, and application architecture do not import or use it.
+
+The dedicated tests exercise the production Android reader and portable core
+with one injected synthetic source context. They cover the exact 10-iteration
+success aggregate; iteration-4 fail-fast for every stable public error and for
+MIME/count mismatch; UI-failure precedence after success, public error, and
+metadata mismatch; one identical frozen allowlisted report; privacy exclusions;
+and absence of the three evidence-only reasons from production classification
+sets. The verification-only seam and coverage are in
+[`../../tests/support/d16-offline-aggregate-harness.js`](../../tests/support/d16-offline-aggregate-harness.js)
+and
+[`../../tests/autojs6-d16-repeated-reads.test.js`](../../tests/autojs6-d16-repeated-reads.test.js).
+This closes the repository's offline aggregate gap only.
 
 ## Governed outcome
 
-- Existing repository coverage does not fully prove the approved offline D16
-  contract.
-- Component tests must not be combined into a false integrated proof.
-- Exact aggregate semantics are user-approved but not yet part of the formal
-  contract; test-only work must wait for a separate documentation-only
-  clarification.
-- Do not create a launcher, procedure, fixture, device result, or PASS in this
-  review.
-- Set the sole active task to `D16-AGGREGATE-SEMANTICS-CLARIFICATION`.
-- Do not advance to device-procedure preparation until the separate test-only
-  change is implemented, verified, committed, and reviewed.
+- The separately governed tests now fully prove the approved offline D16
+  aggregate contract through the existing production reader and portable core.
+- This proof remains fake/injected offline evidence and must not be expanded
+  into Android, AutoJs6, provider, temporary-grant, device, or PASS evidence.
+- No launcher, procedure, fixture, production behavior, generated bundle,
+  permission behavior, device result, or PASS is created by the test-only
+  change.
+- Set the sole active task to `D16-DEVICE-PROCEDURE-PREPARATION`.
+- Device execution remains a later user-assisted task after the preparation is
+  independently reviewed and merged.

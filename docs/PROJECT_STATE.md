@@ -57,8 +57,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 platform; D11 is blocked by unproven classification; the D12 fake-only offline
 contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
-observation; D16's aggregate semantics are clarified and its readiness review
-requires test-only coverage preparation; D17-D26 remain pending.**
+observation; D16's clarified aggregate contract is proved by integrated offline
+tests and requires device-procedure preparation; D17-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -253,25 +253,22 @@ The subsequent governed post-clarification readiness review is summarized
 below. The original review is recorded in
 [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
 
-The D16 post-clarification readiness review then traced the production reader,
+The D16 post-clarification readiness review traced the production reader,
 portable core, shared verification harness/reporter, and related offline tests
-against every approved D16 requirement. The repository proves only
-single-invocation components. It has no integrated 10-iteration orchestration,
-same-source reuse proof, cross-iteration equality, loop fail-fast counters,
-post-failure responsiveness ordering, D16 failure-reason precedence, or frozen
-aggregate reporter test. Existing D08, D13, D15, shared-reporter, and repeated
-zero-length-read evidence cannot be combined into a D16 proof. The review also
-found that exact failure-aggregate counter, equality, and precedence semantics
-were not yet explicit. The user approved the missing addendum on 2026-08-02,
-and this documentation-only clarification now records it in the formal D16
-contract. `attemptedIterations` counts a started complete path, including its
-failing iteration; `successfulIterations` counts only a complete matching JPEG
-success; `allMetadataEqual` follows the approved success, failure, and final UI
-rules; and UI failure has priority over public error and metadata mismatch with
-the approved `errorCode` omission or preservation. The still-required test-only
-coverage preparation is next. This clarification adds no test, launcher,
-procedure, production behavior, device evidence, or PASS. The readiness review
-is recorded in
+against every approved D16 requirement. It found that the prior repository
+proved only single-invocation components and that exact failure-aggregate
+counter, equality, and precedence semantics needed clarification. The user
+approved the missing addendum on 2026-08-02, and the formal contract now records
+it exactly. Dedicated verification-only coverage now exercises the existing
+production reader and portable core for one injected source context across the
+approved 10-iteration loop. It proves ordered access/read execution, success
+metadata equality, fail-fast counters for every stable public error and
+metadata mismatch, final UI precedence, one frozen allowlisted report, and
+absence of the evidence-only failure reasons from production error sets. No
+production source, launcher, generated bundle, permission behavior, device
+procedure, device evidence, or PASS claim is added. This closes only the offline
+aggregate coverage gap; D16 device-procedure preparation is next. The readiness
+review is recorded in
 [`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
@@ -430,15 +427,16 @@ satisfy these requirements.
   test-only PASS, Android claim, or device execution is authorized. The review
   is recorded in
   [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
-- D16 post-clarification readiness review is complete. Existing tests prove
-  only single-invocation reader/core/reporter behavior; no test proves the exact
-  10-iteration same-source loop, equality, fail-fast counters, post-failure
-  responsiveness, evidence-only failure precedence, or one frozen aggregate.
-  The user approved the missing attempted/successful counter rules, equality
-  behavior, and UI/public-error/metadata-mismatch precedence on 2026-08-02; the
-  formal contract now records that addendum exactly. Test-only coverage remains
-  required and is the sole next task. This documentation clarification adds no
-  test, launcher, procedure, production behavior, device evidence, or PASS. The
+- D16 post-clarification readiness review and the separately governed test-only
+  coverage are complete. The user-approved attempted/successful counter rules,
+  equality behavior, and UI/public-error/metadata-mismatch precedence are in the
+  formal contract. Integrated offline tests now prove the exact 10-iteration
+  same-context reader/core loop, equality, fail-fast counters, post-failure UI
+  ordering, evidence-only failure precedence, and one frozen sanitized
+  aggregate. This evidence is offline only and does not prove Android,
+  AutoJs6, provider, temporary-grant lifetime, device behavior, or D16 PASS. No
+  production source, launcher, procedure, generated bundle, or permission
+  behavior changes. Device-procedure preparation is the sole next task. The
   review is recorded in
   [`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md).
 - D17-D26 still require scoped review, preparation, and in several cases
@@ -458,7 +456,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D16-TEST-COVERAGE-PREPARATION`.
+At this snapshot it is `D16-DEVICE-PROCEDURE-PREPARATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
