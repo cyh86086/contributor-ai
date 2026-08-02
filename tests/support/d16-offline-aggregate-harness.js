@@ -44,22 +44,22 @@ export async function runD16OfflineAggregateCheck({
   for (let iteration = 1; iteration <= REQUESTED_ITERATIONS; iteration += 1) {
     attemptedIterations += 1;
 
-    let result;
-    try {
-      result = await prepareImageInput({
-        sourceUri,
-        maxSizeBytes,
-        reader,
-        encodeBase64,
-      });
-    } catch (error) {
-      publicErrorCode = normalizePublicErrorCode(error);
+    const result = await runCompletePath({
+      sourceUri,
+      maxSizeBytes,
+      reader,
+      encodeBase64,
+    });
+    const status = safelyReadProperty(result, "status");
+    if (status === "FAIL") {
+      publicErrorCode = normalizePublicErrorCode(result);
       break;
     }
 
     const mimeType = safelyReadProperty(result, "mimeType");
     const sizeBytes = safelyReadProperty(result, "sizeBytes");
     const matchesRequiredMetadata =
+      status === "PASS" &&
       mimeType === REQUIRED_MIME_TYPE &&
       sizeBytes === independentlyVerifiedByteCount;
     const matchesFirstIteration =
@@ -96,6 +96,32 @@ export async function runD16OfflineAggregateCheck({
 
   reportMetadata(record);
   return record;
+}
+
+async function runCompletePath({
+  sourceUri,
+  maxSizeBytes,
+  reader,
+  encodeBase64,
+}) {
+  try {
+    const result = await prepareImageInput({
+      sourceUri,
+      maxSizeBytes,
+      reader,
+      encodeBase64,
+    });
+    return Object.freeze({
+      status: "PASS",
+      mimeType: safelyReadProperty(result, "mimeType"),
+      sizeBytes: safelyReadProperty(result, "sizeBytes"),
+    });
+  } catch (error) {
+    return Object.freeze({
+      status: "FAIL",
+      errorCode: normalizePublicErrorCode(error),
+    });
+  }
 }
 
 function createAggregateRecord({
@@ -160,7 +186,8 @@ function createAggregateRecord({
 }
 
 function normalizePublicErrorCode(error) {
-  const code = safelyReadProperty(error, "code");
+  const code =
+    safelyReadProperty(error, "code") ?? safelyReadProperty(error, "errorCode");
   return PUBLIC_ERROR_CODES.has(code)
     ? code
     : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED;

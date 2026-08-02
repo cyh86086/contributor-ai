@@ -181,12 +181,13 @@ verification-only. Repository production source, device launchers, generated
 bundles, permissions, and application architecture do not import or use it.
 
 The dedicated tests exercise the production Android reader and portable core
-with one injected synthetic source context. They cover the exact 10-iteration
-success aggregate; iteration-4 fail-fast for every stable public error and for
-MIME/count mismatch; UI-failure precedence after success, public error, and
-metadata mismatch; one identical frozen allowlisted report; privacy exclusions;
-and absence of the three evidence-only reasons from production classification
-sets. The verification-only seam and coverage are in
+with one injected synthetic source context. They require an underlying `PASS`
+plus the approved metadata before counting an iteration as successful and cover
+the exact 10-iteration success aggregate; iteration-4 fail-fast for every stable
+public error and for MIME/count mismatch; UI-failure precedence after success,
+public error, and metadata mismatch; one identical frozen allowlisted report;
+privacy exclusions; and absence of the three evidence-only reasons from
+production classification sets. The verification-only seam and coverage are in
 [`../../tests/support/d16-offline-aggregate-harness.js`](../../tests/support/d16-offline-aggregate-harness.js)
 and
 [`../../tests/autojs6-d16-repeated-reads.test.js`](../../tests/autojs6-d16-repeated-reads.test.js).

@@ -36,7 +36,7 @@ const FAILURE_FIELDS = [
   "failureReason",
 ];
 
-test("D16 repeats the complete production reader and core path exactly 10 times", async () => {
+test("D16 requires 10 PASS results from the complete production reader and core path", async () => {
   const harness = createHarness();
   const record = await runD16OfflineAggregateCheck(harness.options);
 
