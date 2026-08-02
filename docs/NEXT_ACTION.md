@@ -5,82 +5,102 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Task ID:** `D15-EVIDENCE-GAP-REVIEW`
+**Task ID:** `D15-DEVICE-PROCEDURE-PREPARATION`
 
-**Objective:** Review the repository evidence gap for formal verification
-matrix D15, where a controlled source exceeds a deliberately lower recorded
-`readerSafetyLimitBytes` and the expected stable public result is
-`IMAGE_READ_FAILED` with no truncated success.
+**Objective:** Prepare, but do not execute, a minimal reviewed D15 package that
+can demonstrate formal reader safety-ceiling overflow on Vivo X Fold5 while
+retaining only sanitized evidence.
 
-The review must determine whether existing production-reader ordering,
-offline tests, sanitized reporting, and a separately counted controlled source
-are sufficient to prepare a safe Vivo X Fold5 procedure. It must not create or
-execute a D15 launcher.
+Formal D15 uses fixture ID `OVER_READER_CEILING`. Its independently verified
+complete size must be greater than a deliberately lower
+`readerSafetyLimitBytes`, while `maxSizeBytes` remains at or above that source
+size. The expected stable public result is `IMAGE_READ_FAILED` with no
+truncated success.
 
 ## Required work
 
-1. Complete mandatory preflight from live `main`; confirm no open PR, branch,
-   launcher, device evidence, or other implementation already owns D15.
-2. Read the formal D15 matrix row and the production reader's stream loop,
-   accumulated-count ceiling check, failure mapping, stream cleanup, and
-   returned-byte behavior.
-3. Inventory all related offline tests for exact reader-ceiling equality,
-   reader-ceiling overflow, partial reads, cleanup after failure, public error
-   mapping, stable reporter output, privacy, and UI responsiveness.
-4. Determine whether D15 can prove that a source whose independently measured
-   complete size exceeds the configured reader ceiling returns
-   `IMAGE_READ_FAILED` before any truncated content can reach the portable core.
-5. Define how a future procedure would keep D15 separate from D14: D14 requires
-   a higher reader ceiling and portable `IMAGE_TOO_LARGE`; D15 requires a lower
-   reader ceiling and reader-level `IMAGE_READ_FAILED`.
-6. Determine whether one user-approved, non-sensitive controlled image can be
-   privately mapped to `OVER_READER_CEILING`, independently counted outside the
-   launcher and production reader, and selected through a fresh Android system
-   picker grant without retaining source data.
-7. State precisely what existing offline evidence proves and what scoped
-   Android / AutoJs6 evidence remains missing.
-8. Update the evidence-gap record, project state, and sole next task. If a safe
-   procedure is supported, advance only to
-   `D15-DEVICE-PROCEDURE-PREPARATION`; otherwise record the exact governed
-   blocker or separately required test-only task without inventing PASS or a
-   classification.
+1. Complete mandatory preflight from live `main` and confirm no open PR,
+   branch, launcher, private mapping, or device evidence already owns D15.
+2. Privately map `OVER_READER_CEILING` to one user-approved, non-sensitive
+   controlled supported image and independently measure its complete exact
+   count anew with a trusted read-only tool outside the launcher and production
+   reader. Retain only the opaque fixture ID and numeric count.
+3. Choose and statically validate positive safe integers satisfying
+   `readerSafetyLimitBytes < verified source size <= maxSizeBytes`.
+4. Add the smallest D15-only evidence wrapper, immutable manifest entry, source
+   entry, generated AutoJs6 v6.7.0 bundle, and deterministic build wiring needed
+   to delegate to the existing system picker, production reader, portable core,
+   shared reporter, and off-UI-thread path.
+5. Preserve the underlying sanitized result honestly. In particular, an
+   accidental success, permission denial, non-target public failure, malformed
+   result, picker cancellation, or UI failure must not be converted into the
+   target `IMAGE_READ_FAILED` observation.
+6. Add offline tests for D15 static numeric ordering, production-path
+   delegation, no-truncated-success behavior, success and non-target failure
+   preservation, output sanitization, deterministic bundle freshness, and
+   AutoJs6 legacy syntax compatibility. These tests are not Android or device
+   evidence.
+7. Add a Traditional Chinese Vivo X Fold5 execution guide that requires a fresh
+   Android system-picker selection and preserves the private fixture mapping
+   outside Git.
+8. Update project state and set the sole next task to D15 device validation only
+   after the unexecuted package passes review.
 
 ## Acceptance criteria
 
-- The review identifies the exact production order in which
-  `readerSafetyLimitBytes` is checked and confirms whether any truncated byte
-  array can be returned after overflow.
-- D15 is explicitly distinguished from D14 portable overflow, ordinary read
-  failure, permission denial, D11 missing source, D12 null stream, and any
-  private-cache observation.
-- Offline tests are described only as offline evidence and are not expanded
-  into Android, provider, or device claims.
-- No D13 or D14 result is reused, relabeled, or treated as D15 evidence.
+- The retained configuration contains only `OVER_READER_CEILING`, its
+  independently verified positive count, the lower reader ceiling, the
+  portable limit at or above the count, and non-sensitive static launcher
+  metadata.
+- The package delegates to existing production and shared verification layers;
+  no image-reader or portable-core behavior is duplicated or changed.
+- The only device record that a later validation may accept as the expected
+  D15 observation is:
+
+  ```json
+  {
+    "testCaseId": "D15_READER_SAFETY_CEILING_OVERFLOW",
+    "status": "FAIL",
+    "errorCode": "IMAGE_READ_FAILED",
+    "uiResponsive": true
+  }
+  ```
+
+- The package and guide state that this expected application failure must not
+  be rewritten as `status: "PASS"` and does not uniquely identify an internal
+  cause without the reviewed static ordering and fixture provenance.
+- Accidental success or a non-target public failure remains distinguishable
+  from the exact expected D15 observation.
 - No URI, path, filename, source bytes, Base64, image content, exception detail,
   stack, credential, or private fixture mapping is retained.
-- The change is documentation-only and `NEXT_ACTION.md` contains exactly one
-  Task ID.
+- Repository checks, D15 bundle freshness, D15 legacy syntax scan, secret scan,
+  sensitive-value scan, and `git diff --check` pass.
 
 ## Prohibited scope
 
-Do not create or execute a D15 launcher, perform a phone test, change the
-production reader or portable core, or add test coverage during this review.
-Do not manufacture a fake-only PASS or call `IMAGE_READ_FAILED` a PASS.
+Do not execute the phone case, create device evidence, or claim that D15 has
+been observed on Android. Do not reuse D13 or D14 counts or device results,
+relabel portable `IMAGE_TOO_LARGE`, or infer device completion from offline
+tests.
 
-Do not add a permission manager, persistable grant, broad storage permission,
-source-copy architecture, provider, network, queue, Contributor app,
-credential, submission, or unrelated module work.
+Do not add production reader or portable-core behavior, source-copy
+architecture, permission manager, persistable grant, broad storage permission,
+provider, network, queue, Contributor app, credential, submission, or unrelated
+module work.
 
 ## Stop conditions
 
 Stop and report when:
 
-- an open pull request or branch already owns D15;
-- the formal matrix, failure boundary, fixture provenance, or expected public
-  contract is ambiguous;
-- a safe device procedure would require retaining sensitive source data or
-  changing production architecture;
+- an open pull request or branch already owns D15 preparation;
+- no approved controlled source can be independently counted without retaining
+  sensitive data;
+- the required numeric ordering cannot be represented with positive safe
+  integers;
+- the wrapper cannot preserve success and non-target results without
+  manufacturing the target code;
+- the package would require production architecture or permission changes;
+- tests fail outside the preparation scope;
 - repository state conflicts;
-- required checks fail outside the review scope;
 - sensitive data may have appeared;
 - write access is unavailable.
