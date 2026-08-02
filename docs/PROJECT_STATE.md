@@ -56,7 +56,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 **Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
 platform; D11 is blocked by unproven classification; the D12 fake-only offline
 contract is proved; D13 has scoped device validation; D14 has a scoped expected
-application-failure observation; D15-D26 remain pending.**
+application-failure observation; the D15 evidence-gap review is complete;
+D16-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -194,6 +195,23 @@ procedure, and
 [`testing/device-validation/d14-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d14-vivo-x-fold5-autojs6-v6.7.0.md)
 device record.
 
+The D15 evidence-gap review confirmed that the production reader checks
+`sizeBytes + count > readerSafetyLimitBytes` before converting the crossing
+buffer, appending it, advancing the local count, or combining chunks. On
+overflow it throws classified `IMAGE_READ_FAILED`, closes the stream in
+`finally`, and returns no byte array to the portable core. Existing offline
+tests cover exact ceiling equality, overflow, partial reads, cleanup, public
+mapping, sanitized reporting, and privacy sufficiently for procedure
+preparation, but are not Android or device evidence. Because
+`IMAGE_READ_FAILED` is a shared public category, a future procedure must combine
+an independently counted source, a deliberately lower static reader ceiling, a
+portable limit at or above the source count, an unchanged clean launcher, a
+fresh picker grant, and the exact public result. It must preserve accidental
+success and non-target failures rather than coercing them to the target code.
+D15 is ready for governed device-procedure preparation; no launcher, private
+fixture mapping, device result, or PASS claim exists. The review is recorded in
+[`testing/d15-reader-safety-ceiling-overflow-evidence-gap-review.md`](testing/d15-reader-safety-ceiling-overflow-evidence-gap-review.md).
+
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
 
@@ -321,7 +339,17 @@ satisfy these requirements.
   procedure, and
   [`testing/device-validation/d14-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d14-vivo-x-fold5-autojs6-v6.7.0.md)
   device record.
-- D15-D26 still require scoped review, preparation, and in several cases
+- D15 evidence-gap review is complete and found the production
+  reader-ceiling ordering, no-truncated-return behavior, cleanup, public
+  mapping, reporter, and privacy contracts sufficient for device-procedure
+  preparation. `IMAGE_READ_FAILED` is not a unique internal-cause code, so a
+  future D15 record must be scoped to a separately counted
+  `OVER_READER_CEILING` source, a deliberately lower reader ceiling, a portable
+  limit at or above the source count, an unchanged clean launcher, and a fresh
+  picker grant. Accidental success or non-target failure must remain visible.
+  No D15 launcher, device result, or PASS is claimed. The review is recorded in
+  [`testing/d15-reader-safety-ceiling-overflow-evidence-gap-review.md`](testing/d15-reader-safety-ceiling-overflow-evidence-gap-review.md).
+- D16-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -338,7 +366,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D15-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D15-DEVICE-PROCEDURE-PREPARATION`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state

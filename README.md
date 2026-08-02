@@ -89,7 +89,12 @@ configuration: the independently counted 6,406-byte `OVER_PORTABLE` JPEG was
 above the 6,405-byte portable limit and below the separately higher reader
 ceiling, producing `IMAGE_TOO_LARGE` with responsive UI. The public
 `status: "FAIL"` is retained and is not called PASS. The next active task is the
-D15 evidence-gap review; D15-D26 and complete Android Image Input Adapter V1.0
+D15 device-procedure preparation. Its completed documentation-only review found
+that production checks the next chunk against the reader ceiling before
+conversion, append, count advancement, or chunk combination, so overflow
+returns no truncated byte array. Existing offline coverage is sufficient for
+preparation but is not Android evidence. D15 still has no launcher, device
+result, or PASS claim; D16-D26 and complete Android Image Input Adapter V1.0
 migration remain pending.
 
 ## Project layout
