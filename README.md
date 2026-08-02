@@ -68,10 +68,12 @@ the [D02-D05 device-validation record](docs/testing/device-validation/d02-d05-vi
 
 D01-D08 have scoped Vivo X Fold5 / AutoJs6 device evidence. D09 feasibility is
 classified `BLOCKED_PLATFORM`: the scoped platform revocation call returned,
-but access remained available, so no D09 launcher may be implemented and no D09
-PASS or `URI_ACCESS_DENIED` claim is made. The next active task is the formal
-D10 evidence-gap review; D10-D26 and complete Android Image Input Adapter V1.0
-migration remain pending.
+but access remained available, so no D09 launcher may be implemented. The D10
+evidence-gap review found that the same platform limitation prevents formal
+revocation between `canAccess()` and `read()`; D10 is also
+`BLOCKED_PLATFORM`, with no launcher or PASS claim. The next active task is the
+formal D11 evidence-gap review; D11-D26 and complete Android Image Input Adapter
+V1.0 migration remain pending.
 
 ## Project layout
 

@@ -53,8 +53,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: D01-D08 scoped device validation passed; D09 is blocked by the
-platform; D10-D26 remain pending.**
+**Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
+platform; D11-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -109,6 +109,17 @@ read remained available. The repository-external feasibility tool was not a
 repository launcher. D09 has no PASS or `URI_ACCESS_DENIED` claim, and a D09
 launcher must not be implemented. The scoped record is
 [`testing/device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md`](testing/device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md).
+
+The D10 evidence-gap review confirmed that the portable core awaits
+`canAccess()` before calling `read()`, and that the production reader closes the
+probe stream before opening a new stream for the read. The repository contains
+no reviewed hook at that boundary. More importantly, D09 established that the
+available platform revocation call did not invalidate the real temporary picker
+grant in the scoped Vivo X Fold5 environment. Changing the timing of that same
+ineffective operation cannot establish D10. D10 is therefore
+`BLOCKED_PLATFORM`; no launcher, PASS, or `URI_ACCESS_DENIED` device claim is
+authorized. The review is recorded in
+[`testing/d10-permission-revoked-between-access-and-read-evidence-gap-review.md`](testing/d10-permission-revoked-between-access-and-read-evidence-gap-review.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
@@ -182,11 +193,15 @@ satisfy these requirements.
   [`testing/d09-revocation-feasibility-blocker.md`](testing/d09-revocation-feasibility-blocker.md),
   and
   [`testing/device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md`](testing/device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md).
-- D10-D26 still require scoped review, preparation, and in several cases
-  user-assisted Vivo X Fold5 evidence. The D10 evidence-gap review must first
-  determine whether the D09 platform blocker also prevents revocation between
-  `canAccess()` and `read()`. A repository-external private-cache lifecycle
-  exploration is not formal D10 evidence and is not a D10 PASS.
+- D10 evidence-gap review is complete with classification `BLOCKED_PLATFORM`.
+  Existing fake and injected offline tests prove the two-open sequence, error
+  mapping, and sanitization contracts, but not real Android grant invalidation.
+  No D10 launcher may be implemented, and no D10 PASS or `URI_ACCESS_DENIED`
+  device claim is made. A repository-external private-cache lifecycle
+  exploration is not formal D10 evidence. The review is recorded in
+  [`testing/d10-permission-revoked-between-access-and-read-evidence-gap-review.md`](testing/d10-permission-revoked-between-access-and-read-evidence-gap-review.md).
+- D11-D26 still require scoped review, preparation, and in several cases
+  user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
 - Remote provider, network transport, queue, Contributor app integration, and
@@ -203,7 +218,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D10-EVIDENCE-GAP-REVIEW`.
+At this snapshot it is `D11-EVIDENCE-GAP-REVIEW`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
