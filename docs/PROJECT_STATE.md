@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-07-29
+Last updated: 2026-08-02
 
 ## Authority
 
@@ -53,7 +53,8 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 
 ## Current phase
 
-**Phase: D01-D08 scoped device validation passed; D09-D26 remain pending.**
+**Phase: D01-D08 scoped device validation passed; D09 is blocked by the
+platform; D10-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -91,14 +92,23 @@ v6.7.0 `arm64-v8a` against authoritative main SHA
 scoped evidence is recorded in
 [`testing/device-validation/d07-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d07-vivo-x-fold5-autojs6-v6.7.0.md).
 
-The D08 evidence-gap review found that prior successful picker-driven device
-runs imply that usable grants existed, but those records are deliberately
-scoped to D01-D07 and cannot be silently expanded into D08. The repository now
-contains the reviewed case-specific launcher alias, which delegates unchanged
-to the existing fresh system picker, production reader, portable core, and
-sanitized reporter path. No new reader or permission logic was added. Offline
-checks do not establish a D08 device PASS. The review is recorded in
-[`testing/d08-permission-granted-evidence-gap-review.md`](testing/d08-permission-granted-evidence-gap-review.md).
+The D08 case-specific launcher delegates unchanged to the existing fresh system
+picker, production reader, portable core, and sanitized reporter path. D08 has
+a scoped PASS for the recorded Vivo X Fold5 execution and authoritative
+launcher SHA; no new reader or permission logic was added. The review and
+device evidence are recorded in
+[`testing/d08-permission-granted-evidence-gap-review.md`](testing/d08-permission-granted-evidence-gap-review.md)
+and
+[`testing/device-validation/d08-vivo-x-fold5-autojs6-device-validation.md`](testing/device-validation/d08-vivo-x-fold5-autojs6-device-validation.md).
+
+The D09 feasibility task is complete with classification `BLOCKED_PLATFORM`.
+On Vivo X Fold5 with Android 16 and AutoJs6 v6.7.0 `arm64-v8a`, the temporary
+system-picker grant was initially readable. The platform revocation call
+returned normally, but the following permission check was not denied and a new
+read remained available. The repository-external feasibility tool was not a
+repository launcher. D09 has no PASS or `URI_ACCESS_DENIED` claim, and a D09
+launcher must not be implemented. The scoped record is
+[`testing/device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md`](testing/device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
@@ -163,37 +173,37 @@ satisfy these requirements.
   that were not supplied remain explicitly recorded as not supplied. The scoped
   evidence is recorded in
   [`testing/device-validation/d08-vivo-x-fold5-autojs6-device-validation.md`](testing/device-validation/d08-vivo-x-fold5-autojs6-device-validation.md).
-- D09 is defined as temporary permission revoked before `canAccess()`, with
-  required result `URI_ACCESS_DENIED`. Existing injected offline tests prove
-  denial and sanitization contracts but do not prove real Android revocation
-  timing. Launcher preparation is blocked because the repository contains no
-  reviewed Android or AutoJs6 mechanism that can revoke the selected temporary
-  grant and prove completion before `canAccess()` without adding production
-  permission architecture. The evidence-gap review and feasibility blocker are
-  recorded in
-  [`testing/d09-permission-revoked-evidence-gap-review.md`](testing/d09-permission-revoked-evidence-gap-review.md)
+- D09 feasibility is complete with classification `BLOCKED_PLATFORM`. The
+  scoped device observation did not identify a platform-supported way to
+  invalidate the selected temporary grant before `canAccess()`. No D09 launcher
+  may be implemented, and no D09 PASS or `URI_ACCESS_DENIED` claim is made. The
+  evidence-gap review, blocker disposition, and scoped evidence are recorded in
+  [`testing/d09-permission-revoked-evidence-gap-review.md`](testing/d09-permission-revoked-evidence-gap-review.md),
+  [`testing/d09-revocation-feasibility-blocker.md`](testing/d09-revocation-feasibility-blocker.md),
   and
-  [`testing/d09-revocation-feasibility-blocker.md`](testing/d09-revocation-feasibility-blocker.md).
+  [`testing/device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md`](testing/device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md).
 - D10-D26 still require scoped review, preparation, and in several cases
-  user-assisted Vivo X Fold5 evidence.
+  user-assisted Vivo X Fold5 evidence. The D10 evidence-gap review must first
+  determine whether the D09 platform blocker also prevents revocation between
+  `canAccess()` and `read()`. A repository-external private-cache lifecycle
+  exploration is not formal D10 evidence and is not a D10 PASS.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
 - Remote provider, network transport, queue, Contributor app integration, and
   submission behavior remain unimplemented and outside the current milestone.
 - No provider credential strategy has been approved. Secrets must remain
   outside Git.
-- Automation workflow blocker: the current ChatGPT GitHub Connector can read
-  repository metadata, files, commits, and PRs, but branch and Contents writes
-  returned HTTP 403 and the connector reported no installed accounts or
-  installations. This is read-only authorization, not a GitHub disconnection.
-  Automated branch, commit, and PR work through that connector must remain
-  stopped until write authorization is restored or an approved local-repository
-  workflow is used.
+- Repository write access: an approved local GitHub CLI workflow is available.
+  The 2026-08-02 preflight authenticated `gh` as the repository owner, confirmed
+  `ADMIN` repository permission, and completed a dry-run push for the task
+  branch. GitHub Connector pull-request creation then returned HTTP 403, so the
+  Connector remains read-only for that write. The confirmed local CLI workflow
+  was used for branch, push, and pull-request creation.
 
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D09-DEVICE-REVOCATION-FEASIBILITY`.
+At this snapshot it is `D10-EVIDENCE-GAP-REVIEW`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state

@@ -9,9 +9,11 @@ D09 is defined by the authoritative device-verification matrix as:
   harness
 - **Required result:** `URI_ACCESS_DENIED`
 
-The repository does not currently contain a D09 one-click AutoJs6 launcher,
-D09 user guide, generated D09 bundle, or scoped D09 device evidence. Therefore,
-no D09 PASS or FAIL claim is authoritative.
+The repository does not contain a D09 one-click AutoJs6 launcher, D09 user
+guide, or generated D09 bundle. A subsequent scoped feasibility observation is
+classified `BLOCKED_PLATFORM`; it is not D09 execution evidence and creates no
+D09 PASS or `URI_ACCESS_DENIED` claim. See the
+[`D09 feasibility evidence`](device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md).
 
 ## Authoritative scope
 
@@ -43,9 +45,9 @@ These are deterministic offline contracts. They do not prove that revoking a
 real temporary Android picker grant on Vivo X Fold5 produces the same behavior
 through AutoJs6.
 
-## Production evidence gap
+## Production evidence gap disposition
 
-A scoped D09 result still requires all of the following:
+A scoped passing D09 result would have required all of the following:
 
 1. a reviewed evidence-only D09 launcher derived from the existing picker,
    production reader, portable error mapping, and sanitized reporter;
@@ -62,21 +64,23 @@ A scoped D09 result still requires all of the following:
 5. exact device, Android version, AutoJs6 version and ABI, authoritative launcher
    SHA, execution date, and sanitized notes.
 
-If Android or the picker does not expose a deterministic way to revoke the
-temporary grant before `canAccess()`, the result must be recorded as a platform
-or harness blocker. It must not be replaced with a fake-only PASS.
+The completed feasibility observation found that the platform revocation call
+returned normally while the following permission check and a new read remained
+available. Android / AutoJs6 therefore did not provide the deterministic
+invalidation mechanism required for this scoped environment. This gap is now
+classified `BLOCKED_PLATFORM` and must not be replaced with a fake-only PASS.
 
-## Smallest governed next step
+## Governed disposition
 
-Prepare a D09 evidence-only launcher and Traditional Chinese execution guide.
-The implementation must reuse the existing production reader and sanitized
-reporting path. It may add only the minimum controlled hook required to prove
-that revocation occurs before `canAccess()`.
+Do not prepare a D09 launcher or execution guide. Close the D09 feasibility task
+without a PASS claim and move the single active task to
+`D10-EVIDENCE-GAP-REVIEW`.
 
-The launcher-preparation task must include deterministic offline tests,
-build-freshness checks, legacy AutoJs6 syntax checks, privacy checks, repository
-state updates, a commit, and a pull request. Offline checks still will not count
-as D09 Android evidence.
+The D10 review must first assess whether the same platform blocker prevents a
+real temporary picker grant from being revoked between `canAccess()` and
+`read()`. It must not create a launcher before that review or substitute a
+repository-external private-cache lifecycle exploration for formal D10
+evidence.
 
 ## Prohibited scope
 

@@ -2,25 +2,32 @@
 
 ## Status
 
-D09 launcher preparation is blocked before implementation.
+D09 feasibility is complete with classification **BLOCKED_PLATFORM**. D09
+launcher preparation remains blocked and must not be implemented.
 
 The active D09 contract requires a real temporary Android picker grant to be
 revoked before the existing production reader invokes `canAccess()`. The
-repository currently contains no reviewed Android or AutoJs6 mechanism that can
-perform and prove that ordering without introducing new production permission
-architecture.
+scoped Vivo X Fold5 / AutoJs6 observation did not identify a platform-supported
+mechanism that can invalidate the selected grant and prove completion before
+that call.
 
-No D09 launcher, PASS, FAIL, or Android compatibility claim is made by this
-record.
+No D09 launcher, PASS, `URI_ACCESS_DENIED`, or broader Android compatibility
+claim is made by this record.
 
 ## Authoritative preflight scope
 
-- Live `main` SHA at review:
-  `f244474cb1f2e4c1ce3ae0816c004bfe4fded04e`
+- Repository documentation baseline:
+  `cd1e1e0fc49197a90dd9bae8d63091bd33c6d2b0`
 - Case ID: `D09_PERMISSION_REVOKED_BEFORE_ACCESS`
 - Required stable result: `URI_ACCESS_DENIED`
-- Production runtime: Android through AutoJs6
-- Target device for later evidence: Vivo X Fold5
+- Device: Vivo X Fold5
+- Android version: 16
+- Runtime: AutoJs6 v6.7.0, `arm64-v8a`
+- Selection: Android system picker
+- Persistable permission requested: no
+- Broad storage permission added: no
+- Scoped evidence:
+  [`device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md`](device-validation/d09-vivo-x-fold5-autojs6-revocation-feasibility.md)
 
 ## What is already proven
 
@@ -35,37 +42,35 @@ Existing deterministic offline tests prove only that:
 Those contracts do not prove that a real temporary Android picker grant was
 revoked before `canAccess()`.
 
-## Missing prerequisite
+## Completed feasibility observation
 
-Before an evidence-only launcher can be implemented, one controlled device
-procedure must be confirmed that:
+The repository-external feasibility tool produced this sanitized
+classification:
 
-1. obtains a real temporary picker grant;
-2. invalidates that exact grant without broad permission changes;
-3. guarantees invalidation completes before the production reader's
-   `canAccess()` call;
-4. permits the ordering to be evidenced without logging the URI or other
-   sensitive source data;
-5. does not add persistable grants, a general permission manager, a second
-   production reader, or new production permission architecture.
+1. the temporary picker grant was initially readable;
+2. the platform revocation call returned normally;
+3. the following permission check was not denied;
+4. a new read remained available after the call;
+5. the UI remained responsive.
 
-The repository does not currently establish such a procedure.
+The tool was not a repository launcher or production implementation. Its result
+does not satisfy the formal D09 expected result and cannot be converted into a
+PASS claim.
 
-## Smallest next action
+## Governed outcome
 
-Run a user-assisted Vivo X Fold5 / AutoJs6 feasibility check using a
-documentation-only procedure. The check must determine whether Android or
-AutoJs6 exposes a reproducible way to invalidate the selected temporary grant
-before the existing reader begins.
+- Close `D09-DEVICE-REVOCATION-FEASIBILITY` as `BLOCKED_PLATFORM`.
+- Do not implement a D09 launcher or new permission architecture.
+- Retain the existing injected offline tests only as contract coverage.
+- Move the single active task to the formal D10 evidence-gap review.
 
-The result must be one of:
+The D10 review must first determine whether this platform limitation also
+prevents revocation between `canAccess()` and `read()` for a real temporary
+picker grant. A repository-external private-cache lifecycle exploration is not
+formal D10 evidence and cannot replace that review.
 
-- `FEASIBLE`: a reproducible, privacy-safe ordering mechanism is identified;
-- `BLOCKED_PLATFORM`: the platform does not expose a deterministic mechanism;
-- `BLOCKED_UNPROVEN_ORDERING`: invalidation may occur, but ordering before
-  `canAccess()` cannot be proven.
-
-Only a reviewed `FEASIBLE` result may reactivate D09 launcher implementation.
+Only a future reviewed repository decision with new platform evidence may
+reopen D09 launcher feasibility.
 
 ## Prohibited substitutions
 
@@ -79,17 +84,9 @@ The feasibility check must not be replaced by:
 - adding a general permission-management module;
 - treating offline tests as Android evidence.
 
-## Evidence requirements
+## Evidence discipline
 
-Record only:
-
-- exact Vivo device model;
-- Android version;
-- AutoJs6 version and ABI;
-- authoritative repository SHA;
-- feasibility classification;
-- sanitized steps and observations;
-- whether ordering before `canAccess()` was proven.
-
-Do not record a full URI, path, filename, image bytes, Base64, image content,
-exception detail, stack, credentials, or unrelated metadata.
+The scoped evidence retains only its classification, sanitized boolean
+observations, device/runtime scope, repository documentation baseline, and
+known limitations. It contains no source value, source content, diagnostic
+detail, or secret.

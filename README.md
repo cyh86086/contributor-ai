@@ -66,11 +66,12 @@ same Vivo X Fold5 and AutoJs6 runtime using authoritative main SHA
 `ad52d122e239e0431c9fd2d3c2cdedf383f8b0da`. The scoped results are recorded in
 the [D02-D05 device-validation record](docs/testing/device-validation/d02-d05-vivo-x-fold5-autojs6-v6.7.0.md).
 
-D01-D07 have scoped Vivo X Fold5 / AutoJs6 device evidence. D08 now has a
-case-specific launcher that delegates unchanged to the existing fresh system
-picker, production reader, portable core, and sanitized reporter path; D08 still
-requires a separate scoped device execution and has no PASS claim yet. D09-D26
-and complete Android Image Input Adapter V1.0 migration remain pending.
+D01-D08 have scoped Vivo X Fold5 / AutoJs6 device evidence. D09 feasibility is
+classified `BLOCKED_PLATFORM`: the scoped platform revocation call returned,
+but access remained available, so no D09 launcher may be implemented and no D09
+PASS or `URI_ACCESS_DENIED` claim is made. The next active task is the formal
+D10 evidence-gap review; D10-D26 and complete Android Image Input Adapter V1.0
+migration remain pending.
 
 ## Project layout
 
