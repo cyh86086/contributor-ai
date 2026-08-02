@@ -124,6 +124,24 @@ export const D13_EXACT_PORTABLE_LIMIT_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d13-exact-portable-limit-device-check.js",
 });
 
+export const D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE = defineCase({
+  testCaseId: "D14_PORTABLE_SIZE_OVERFLOW",
+  fixtureId: "OVER_PORTABLE",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_405,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6114,
+  verificationMode: "portable-size-overflow",
+  title: "D14 portable size 超限裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選擇私下對應 OVER_PORTABLE、且已重新獨立確認為 6,406 bytes 的非敏感 JPEG。此 evidence-only 案例以 6,405 bytes portable 上限與較高 reader ceiling 執行，只接受 sanitized IMAGE_TOO_LARGE 結果，不得改寫為 PASS。",
+  sourceEntryPath:
+    "autojs6/source/d14-portable-size-overflow-device-check.entry.js",
+  generatedPath: "autojs6/d14-portable-size-overflow-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -134,6 +152,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D07_MIME_FALLBACK_CHECK_CASE,
   D08_PERMISSION_GRANTED_CHECK_CASE,
   D13_EXACT_PORTABLE_LIMIT_CHECK_CASE,
+  D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

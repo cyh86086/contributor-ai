@@ -15,6 +15,30 @@ Existing offline tests cover this composition sufficiently for preparation.
 They are not Android or device evidence, and no D14 launcher, fixture mapping,
 device result, or PASS claim existed or was created by this review.
 
+## Procedure-preparation update
+
+The governed preparation task privately mapped the user-approved,
+non-sensitive controlled JPEG to `OVER_PORTABLE` and independently measured it
+anew with a read-only local tool outside the launcher and production reader.
+The retained repository values are only:
+
+- fixture ID: `OVER_PORTABLE`;
+- verified size: `6406` bytes;
+- `maxSizeBytes`: `6405`;
+- `readerSafetyLimitBytes`: `12582912`.
+
+The measurement did not reuse D13's count or device result. The private mapping,
+source name, source location, and content remain outside Git.
+
+The prepared evidence-only D14 wrapper statically validates
+`6405 < 6406 < 12582912`, delegates to the existing production reader and
+portable core, preserves sanitized non-target failures honestly, and converts
+an accidental or malformed success into `IMAGE_READ_FAILED`. The immutable
+case entry uses the existing fresh system picker, off-UI-thread worker, and
+shared reporter. Only the exact sanitized `IMAGE_TOO_LARGE` record is accepted
+as the expected D14 observation. The generated launcher and procedure remain
+unexecuted and make no Android, AutoJs6, device, or PASS claim.
+
 ## Authoritative scope
 
 - **Review preflight live `main` SHA:**
