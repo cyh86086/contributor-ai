@@ -77,6 +77,10 @@ function normalizeExecution(formatCase, execution) {
     return normalizeRepeatedReadsExecution(formatCase, execution);
   }
 
+  if (formatCase.verificationMode === "stream-cleanup-success") {
+    return normalizeStreamCleanupSuccessExecution(formatCase, execution);
+  }
+
   const uiResponsive = safelyReadProperty(execution, "uiResponsive");
   if (uiResponsive !== true) {
     return failure(
@@ -110,6 +114,72 @@ function normalizeExecution(formatCase, execution) {
     formatCase.testCaseId,
     status === "FAIL"
       ? normalizeFormatCheckErrorCode(result)
+      : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+    true,
+  );
+}
+
+function normalizeStreamCleanupSuccessExecution(formatCase, execution) {
+  const uiResponsive = safelyReadProperty(execution, "uiResponsive");
+  const result = safelyReadProperty(execution, "value");
+
+  if (uiResponsive !== true) {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      errorCode: IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+      closeCount: safelyReadProperty(result, "closeCount") ?? 0,
+      uiResponsive: false,
+    });
+  }
+
+  const status = safelyReadProperty(result, "status");
+  const closeCount = safelyReadProperty(result, "closeCount");
+
+  if (status === "PASS") {
+    const mimeType = safelyReadProperty(result, "mimeType");
+    const sizeBytes = safelyReadProperty(result, "sizeBytes");
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "PASS",
+      mimeType,
+      sizeBytes,
+      closeCount,
+      uiResponsive: true,
+    });
+  }
+
+  const errorCode = safelyReadProperty(result, "errorCode");
+  const failureReason = safelyReadProperty(result, "failureReason");
+
+  if (failureReason === "SIZE_MISMATCH") {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      mimeType: safelyReadProperty(result, "mimeType"),
+      sizeBytes: safelyReadProperty(result, "sizeBytes"),
+      closeCount,
+      failureReason,
+      uiResponsive: true,
+    });
+  }
+
+  if (errorCode === "CLEANUP_FAILED") {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      mimeType: safelyReadProperty(result, "mimeType"),
+      sizeBytes: safelyReadProperty(result, "sizeBytes"),
+      closeCount,
+      errorCode,
+      uiResponsive: true,
+    });
+  }
+
+  return failure(
+    formatCase.testCaseId,
+    status === "FAIL" && PUBLIC_ERROR_CODES.has(errorCode)
+      ? errorCode
       : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
     true,
   );

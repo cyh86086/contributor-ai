@@ -675,6 +675,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     if (formatCase.verificationMode === "repeated-reads") {
       return normalizeRepeatedReadsExecution(formatCase, execution);
     }
+    if (formatCase.verificationMode === "stream-cleanup-success") {
+      return normalizeStreamCleanupSuccessExecution(formatCase, execution);
+    }
     var uiResponsive = safelyReadProperty(execution, "uiResponsive");
     if (uiResponsive !== true) {
       return failure(formatCase.testCaseId, IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED, false);
@@ -693,6 +696,59 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       });
     }
     return failure(formatCase.testCaseId, status === "FAIL" ? normalizeFormatCheckErrorCode(result) : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED, true);
+  }
+  function normalizeStreamCleanupSuccessExecution(formatCase, execution) {
+    var _a;
+    var uiResponsive = safelyReadProperty(execution, "uiResponsive");
+    var result = safelyReadProperty(execution, "value");
+    if (uiResponsive !== true) {
+      return Object.freeze({
+        testCaseId: formatCase.testCaseId,
+        status: "FAIL",
+        errorCode: IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+        closeCount: (_a = safelyReadProperty(result, "closeCount")) != null ? _a : 0,
+        uiResponsive: false
+      });
+    }
+    var status = safelyReadProperty(result, "status");
+    var closeCount = safelyReadProperty(result, "closeCount");
+    if (status === "PASS") {
+      var mimeType = safelyReadProperty(result, "mimeType");
+      var sizeBytes = safelyReadProperty(result, "sizeBytes");
+      return Object.freeze({
+        testCaseId: formatCase.testCaseId,
+        status: "PASS",
+        mimeType: mimeType,
+        sizeBytes: sizeBytes,
+        closeCount: closeCount,
+        uiResponsive: true
+      });
+    }
+    var errorCode = safelyReadProperty(result, "errorCode");
+    var failureReason = safelyReadProperty(result, "failureReason");
+    if (failureReason === "SIZE_MISMATCH") {
+      return Object.freeze({
+        testCaseId: formatCase.testCaseId,
+        status: "FAIL",
+        mimeType: safelyReadProperty(result, "mimeType"),
+        sizeBytes: safelyReadProperty(result, "sizeBytes"),
+        closeCount: closeCount,
+        failureReason: failureReason,
+        uiResponsive: true
+      });
+    }
+    if (errorCode === "CLEANUP_FAILED") {
+      return Object.freeze({
+        testCaseId: formatCase.testCaseId,
+        status: "FAIL",
+        mimeType: safelyReadProperty(result, "mimeType"),
+        sizeBytes: safelyReadProperty(result, "sizeBytes"),
+        closeCount: closeCount,
+        errorCode: errorCode,
+        uiResponsive: true
+      });
+    }
+    return failure(formatCase.testCaseId, status === "FAIL" && PUBLIC_ERROR_CODES.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED, true);
   }
   function normalizeRepeatedReadsExecution(formatCase, execution) {
     var uiResponsive = safelyReadProperty(execution, "uiResponsive");
