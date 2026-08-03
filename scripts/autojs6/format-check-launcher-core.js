@@ -81,6 +81,10 @@ function normalizeExecution(formatCase, execution) {
     return normalizeStreamCleanupSuccessExecution(formatCase, execution);
   }
 
+  if (formatCase.verificationMode === "cleanup-after-failure") {
+    return normalizeCleanupAfterFailureExecution(formatCase, execution);
+  }
+
   const uiResponsive = safelyReadProperty(execution, "uiResponsive");
   if (uiResponsive !== true) {
     return failure(
@@ -172,6 +176,69 @@ function normalizeStreamCleanupSuccessExecution(formatCase, execution) {
       sizeBytes: safelyReadProperty(result, "sizeBytes"),
       closeCount,
       errorCode,
+      uiResponsive: true,
+    });
+  }
+
+  return failure(
+    formatCase.testCaseId,
+    status === "FAIL" && PUBLIC_ERROR_CODES.has(errorCode)
+      ? errorCode
+      : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+    true,
+  );
+}
+
+function normalizeCleanupAfterFailureExecution(formatCase, execution) {
+  const uiResponsive = safelyReadProperty(execution, "uiResponsive");
+  const result = safelyReadProperty(execution, "value");
+
+  if (uiResponsive !== true) {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      errorCode: IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+      closeCount: safelyReadProperty(result, "closeCount") ?? 0,
+      uiResponsive: false,
+    });
+  }
+
+  const status = safelyReadProperty(result, "status");
+  const errorCode = safelyReadProperty(result, "errorCode");
+  const closeCount = safelyReadProperty(result, "closeCount");
+  const failureReason = safelyReadProperty(result, "failureReason");
+
+  if (failureReason === "UNEXPECTED_SUCCESS") {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      failureReason,
+      closeCount,
+      uiResponsive: true,
+    });
+  }
+
+  if (errorCode === "CLEANUP_FAILED") {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      errorCode,
+      closeCount,
+      uiResponsive: true,
+    });
+  }
+
+  if (
+    status === "FAIL" &&
+    PUBLIC_ERROR_CODES.has(errorCode) &&
+    Number.isSafeInteger(closeCount) &&
+    closeCount === 1
+  ) {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      errorCode,
+      closeCount,
       uiResponsive: true,
     });
   }
