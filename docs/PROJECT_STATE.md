@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-08-02
+Last updated: 2026-08-03
 
 ## Authority
 
@@ -259,8 +259,10 @@ procedure. The privately mapped synthetic JPEG was independently remeasured as
 opaque fixture ID, MIME, and verified count are retained. All authoritative
 repository checks pass. This remains preparation and offline evidence only: no
 phone, Android picker, device evidence, temporary-grant lifetime result, or
-D16 PASS exists. Independent review and merge are required before the next
-separately governed task, `D16-DEVICE-VALIDATION`. The readiness review and
+D16 PASS exists. PR #45 must satisfy the repository review gate and merge
+before the next separately governed task, `D16-DEVICE-VALIDATION`. The gate may
+be independent human review or the expressly non-independent solo-project
+exception when all of its strict conditions are met. The readiness review and
 future procedure are recorded in
 [`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md)
 and
@@ -268,6 +270,14 @@ and
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
+
+The repository currently has one eligible human maintainer. Governance now
+defines a last-resort solo-project exception with a fresh isolated review,
+complete exact-SHA diff coverage, full checks, risk/evidence recording, explicit
+`NOT INDEPENDENT HUMAN REVIEW` labeling, and automatic invalidation. It does not
+count as independent approval and cannot establish device or production
+evidence. PR #45 is the bootstrap adoption candidate and must carry a compliant
+exact-head PASS record before merge; otherwise it remains blocked.
 
 ## Current branch and pull request
 
@@ -282,6 +292,9 @@ The repository uses `NEXT_ACTION.md` as the single active-task register and
 - The live `main` SHA is fetched during every mandatory preflight; it is not
   duplicated here as a self-referential current-state invariant.
 - Release status: no production release
+- Open PR #45: `prep/d16-device-procedure-v1` into `main`; D16 preparation plus
+  bootstrap solo-project governance. It is not merged and has no D16 device
+  evidence or D16 PASS claim.
 
 Historical PR detail remains available in Git history and PRs #1-#11. This
 snapshot records current state rather than repeating every completed branch.
@@ -447,11 +460,16 @@ satisfy these requirements.
   confirmed `ADMIN` repository permission. GitHub Connector repository reads
   succeed, but pull-request creation and Ready-for-review writes returned HTTP 403. The Connector remains read-only for those writes, so the confirmed local
   CLI workflow is used for branch, push, pull-request, and merge operations.
+- Independent human review is currently unavailable because the repository has
+  one eligible human maintainer. PR #45 may proceed only through an independent
+  human review or a current PASS record under the solo-project exception. The
+  latter is explicitly non-independent and expires on any candidate change.
 
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D16-DEVICE-PROCEDURE-PREPARATION`.
+At this snapshot it is `D16-DEVICE-VALIDATION`, but its prerequisite remains
+unsatisfied until PR #45 passes the repository review gate and merges to `main`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state

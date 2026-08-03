@@ -7,18 +7,21 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 **Task ID:** `D16-DEVICE-VALIDATION`
 
-**Objective:** After the separately reviewed D16 preparation change is merged,
-execute the approved repeated-read procedure on Vivo X Fold5 and retain only
-scoped, sanitized Android and AutoJs6 evidence.
+**Objective:** After the D16 preparation change passes the repository review
+gate and is merged, execute the approved repeated-read procedure on Vivo X
+Fold5 and retain only scoped, sanitized Android and AutoJs6 evidence.
 
 The reviewed package uses fixture ID `JPEG_REPEAT_VALID`, independently
 verified size `6406`, `maxSizeBytes: 6406`,
 `readerSafetyLimitBytes: 12582912`, and exactly 10 complete reads under one
 fresh temporary system-picker grant without reselection.
 
-This task may begin only after the preparation pull request is independently
-reviewed and merged to `main`. Until then, no phone, Android picker, device
-execution, evidence record, or D16 PASS claim is authorized.
+This task may begin only after the preparation pull request is merged to `main`
+following either independent human review or a current PASS record under the
+strict solo-project exception. A solo exception record is explicitly not
+independent human review and is valid only for its exact base/head SHAs. Until
+then, no phone, Android picker, device execution, evidence record, or D16 PASS
+claim is authorized.
 
 ## Required work
 
@@ -78,8 +81,9 @@ execution, evidence record, or D16 PASS claim is authorized.
 
 ## Prohibited scope
 
-Do not begin this task before the preparation pull request is independently
-reviewed and merged.
+Do not begin this task before the preparation pull request passes the repository
+review gate and merges. Do not treat a solo exception record as independent
+human review or as device evidence.
 
 Do not edit the generated bundle on the device, change any configured count or
 limit, reselect the fixture, reuse a saved URI, request persistable access, add
@@ -98,7 +102,8 @@ Input Adapter migration.
 
 Stop and report when:
 
-- the D16 preparation pull request is not merged or independently reviewed;
+- the D16 preparation pull request is not merged or lacks a current qualifying
+  review-gate record;
 - the execution SHA or generated bundle is not clean and authoritative;
 - repository checks fail;
 - fixture provenance, MIME, or independently verified count is ambiguous;

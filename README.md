@@ -102,9 +102,11 @@ integration, deterministic generated bundle, offline tests, and Traditional
 Chinese future-execution procedure. The fixture mapping and binary remain
 outside Git. All repository checks prove preparation and offline behavior only;
 no phone, Android picker, device evidence, temporary-grant lifetime result, or
-D16 PASS exists. Independent review and merge are required before a separately
-governed user-assisted execution. D17-D26 and complete Android Image Input
-Adapter V1.0 migration remain pending.
+D16 PASS exists. The preparation PR must pass the repository review gate and
+merge before a separately governed user-assisted execution. In a
+single-maintainer repository, the documented solo-project exception is
+explicitly not independent human review and cannot provide device evidence.
+D17-D26 and complete Android Image Input Adapter V1.0 migration remain pending.
 
 ## Project layout
 
