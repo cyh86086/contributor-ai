@@ -289,7 +289,7 @@ exact-head PASS record before merge; otherwise it remains blocked.
 - Governance baseline merge SHA:
   `8eeef1642e33853e75938dd16d7bbbbc1627a9ee`
 - PR #12 source branch `docs/project-governance-repair-v1`: deleted after merge
-- Open pull-request snapshot immediately after PR #46 merge: none
+- Open pull-request snapshot immediately after PR #50 merge: none
 - The live `main` SHA is fetched during every mandatory preflight; it is not
   duplicated here as a self-referential current-state invariant.
 - Release status: no production release
