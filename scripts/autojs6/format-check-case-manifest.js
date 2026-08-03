@@ -160,6 +160,23 @@ export const D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d15-reader-safety-ceiling-overflow-device-check.js",
 });
 
+export const D16_REPEATED_READS_CHECK_CASE = defineCase({
+  testCaseId: "D16_REPEATED_READS",
+  fixtureId: "JPEG_REPEAT_VALID",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6116,
+  verificationMode: "repeated-reads",
+  title: "D16 JPEG 重複讀取裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中只選取一次私下對應 JPEG_REPEAT_VALID、且已獨立確認為 6,406 bytes 的非敏感 JPEG。腳本會在同一 fresh temporary grant 下執行恰好 10 次完整 production reader 與 portable core 路徑；不得重新選圖，且只輸出一筆 sanitized aggregate metadata。",
+  sourceEntryPath: "autojs6/source/d16-repeated-reads-device-check.entry.js",
+  generatedPath: "autojs6/d16-repeated-reads-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -172,6 +189,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D13_EXACT_PORTABLE_LIMIT_CHECK_CASE,
   D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE,
   D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE,
+  D16_REPEATED_READS_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

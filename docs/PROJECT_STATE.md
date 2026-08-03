@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-08-02
+Last updated: 2026-08-03
 
 ## Authority
 
@@ -238,41 +238,46 @@ and
 
 The D16 evidence-gap review confirmed that each production
 `prepareImageInput()` invocation performs a fresh access probe followed by a
-fresh read, closing both streams independently. Existing offline tests prove
-that single-invocation order, cleanup, public mapping, and sanitization, but no
-test repeats the complete production reader, portable core, and reporter path
-for one grant. On 2026-08-02 the user explicitly approved the full D16
-contract: exactly 10 complete reads of the dedicated synthetic
-`JPEG_REPEAT_VALID` fixture through the full path, using one fresh temporary
-picker grant; independent positive byte-count verification; MIME/count
-equality; one loop-level responsiveness result; fail-fast behavior; and one
-frozen sanitized aggregate record. The evidence-only failure reasons do not
-create production errors or project classifications. That initial
-clarification added no launcher, test, PASS, Android claim, or device execution.
-The subsequent governed post-clarification readiness review is summarized
-below. The original review is recorded in
+fresh read, closing both streams independently. On 2026-08-02 the user
+explicitly approved the full D16 contract: exactly 10 complete reads of the
+dedicated synthetic `JPEG_REPEAT_VALID` fixture through the full path, using
+one fresh temporary picker grant; independent positive byte-count
+verification; MIME/count equality; one loop-level responsiveness result;
+fail-fast behavior; and one frozen sanitized aggregate record. The formal
+contract also records the approved attempted/successful counter rules, equality
+behavior, and exact UI/public-error/metadata-mismatch precedence. The original
+review is recorded in
 [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
 
-The D16 post-clarification readiness review traced the production reader,
-portable core, shared verification harness/reporter, and related offline tests
-against every approved D16 requirement. It found that the prior repository
-proved only single-invocation components and that exact failure-aggregate
-counter, equality, and precedence semantics needed clarification. The user
-approved the missing addendum on 2026-08-02, and the formal contract now records
-it exactly. Dedicated verification-only coverage now exercises the existing
-production reader and portable core for one injected source context across the
-approved 10-iteration loop. It proves ordered access/read execution, success
-metadata equality, fail-fast counters for every stable public error and
-metadata mismatch, final UI precedence, one frozen allowlisted report, and
-absence of the evidence-only failure reasons from production error sets. No
-production source, launcher, generated bundle, permission behavior, device
-procedure, device evidence, or PASS claim is added. This closes only the offline
-aggregate coverage gap; D16 device-procedure preparation is next. The readiness
-review is recorded in
-[`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md).
+The post-clarification readiness review and dedicated offline coverage prove
+the approved aggregate semantics through the existing production reader and
+portable core. The preparation package now adds the reviewed D16 manifest,
+verification-only repeated-read wrapper, shared-launcher integration,
+deterministic generated bundle, tests, and Traditional Chinese future-execution
+procedure. The privately mapped synthetic JPEG was independently remeasured as
+6,406 bytes outside Git, the launcher, and the production reader; only its
+opaque fixture ID, MIME, and verified count are retained. All authoritative
+repository checks pass. This remains preparation and offline evidence only: no
+phone, Android picker, device evidence, temporary-grant lifetime result, or
+D16 PASS exists. PR #45 must satisfy the repository review gate and merge
+before the next separately governed task, `D16-DEVICE-VALIDATION`. The gate may
+be independent human review or the expressly non-independent solo-project
+exception when all of its strict conditions are met. The readiness review and
+future procedure are recorded in
+[`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md)
+and
+[`user-guides/autojs6-d16-repeated-reads-check-zh-tw.md`](user-guides/autojs6-d16-repeated-reads-check-zh-tw.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
+
+The repository currently has one eligible human maintainer. Governance now
+defines a last-resort solo-project exception with a fresh isolated review,
+complete exact-SHA diff coverage, full checks, risk/evidence recording, explicit
+`NOT INDEPENDENT HUMAN REVIEW` labeling, and automatic invalidation. It does not
+count as independent approval and cannot establish device or production
+evidence. PR #45 is the bootstrap adoption candidate and must carry a compliant
+exact-head PASS record before merge; otherwise it remains blocked.
 
 ## Current branch and pull request
 
@@ -287,6 +292,9 @@ The repository uses `NEXT_ACTION.md` as the single active-task register and
 - The live `main` SHA is fetched during every mandatory preflight; it is not
   duplicated here as a self-referential current-state invariant.
 - Release status: no production release
+- Open PR #45: `prep/d16-device-procedure-v1` into `main`; D16 preparation plus
+  bootstrap solo-project governance. It is not merged and has no D16 device
+  evidence or D16 PASS claim.
 
 Historical PR detail remains available in Git history and PRs #1-#11. This
 snapshot records current state rather than repeating every completed branch.
@@ -452,11 +460,16 @@ satisfy these requirements.
   confirmed `ADMIN` repository permission. GitHub Connector repository reads
   succeed, but pull-request creation and Ready-for-review writes returned HTTP 403. The Connector remains read-only for those writes, so the confirmed local
   CLI workflow is used for branch, push, pull-request, and merge operations.
+- Independent human review is currently unavailable because the repository has
+  one eligible human maintainer. PR #45 may proceed only through an independent
+  human review or a current PASS record under the solo-project exception. The
+  latter is explicitly non-independent and expires on any candidate change.
 
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D16-DEVICE-PROCEDURE-PREPARATION`.
+At this snapshot it is `D16-DEVICE-VALIDATION`, but its prerequisite remains
+unsatisfied until PR #45 passes the repository review gate and merges to `main`.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state

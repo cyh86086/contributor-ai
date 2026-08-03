@@ -121,3 +121,16 @@ preflight. Governance and active-task files must not require a pull request to
 predict the merge SHA that will introduce those files. Exact SHAs stored in the
 repository identify historical commits or scope evidence; they are not assumed
 to equal the current branch head unless explicitly labeled as live state.
+
+## D-018: Single-maintainer review uses an explicit non-independent exception
+
+**Decision:** Independent human review remains preferred. When there is only one
+eligible human maintainer and no external two-person rule applies, a pull
+request may use the strict process in
+[`SOLO_PROJECT_EXCEPTION.md`](SOLO_PROJECT_EXCEPTION.md). The process requires a
+frozen exact base/head pair, a 24-hour cooling path or a non-inherited isolated
+fresh context, complete diff review, full checks, risk and evidence recording,
+an exact PR banner, and automatic invalidation on change. It is never described
+as independent human review, never uses self-approval as evidence, never
+bypasses branch protection, and cannot establish device or production PASS
+claims. A weakening of the exception requires independent human review.

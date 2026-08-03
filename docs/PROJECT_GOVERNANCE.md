@@ -21,9 +21,11 @@ Before planning or changing anything, the executor must complete every item:
 3. Read `docs/PROJECT_STATE.md`.
 4. Read `docs/DECISIONS.md`.
 5. Read `docs/NEXT_ACTION.md`.
-6. Check all open pull requests and active branches relevant to the task.
-7. Search the repository to prove the proposed work does not already exist.
-8. Confirm blockers, user-intervention requirements, and available write access.
+6. Read `docs/SOLO_PROJECT_EXCEPTION.md` when independent human review may be
+   unavailable.
+7. Check all open pull requests and active branches relevant to the task.
+8. Search the repository to prove the proposed work does not already exist.
+9. Confirm blockers, user-intervention requirements, and available write access.
 
 If any item cannot be completed, or the documents conflict with GitHub state,
 feature development must stop. State reconciliation is the only permitted work.
@@ -68,6 +70,24 @@ A repository task is complete only when all applicable items exist:
 
 Anything missing these conditions is a draft, patch, test artifact, or proposal.
 It must not be reported as a completed project feature.
+
+## Review gate and solo-project exception
+
+Independent human review is the preferred merge gate. When the repository has
+only one eligible human maintainer, the narrowly scoped
+[`SOLO_PROJECT_EXCEPTION.md`](SOLO_PROJECT_EXCEPTION.md) process may substitute
+only if every applicability, isolation, full-diff review, full-check, evidence,
+labeling, and invalidation rule in that document is satisfied.
+
+The substitute is an **isolated solo review**, not independent human review. It
+must never be called independent, must not be represented by the author's own
+GitHub `Approve`, and cannot bypass branch protection or any external
+two-person requirement. Each record applies only to one pull request and one
+exact base/head SHA pair. A changed candidate requires a complete new review.
+
+The exception cannot establish device or production evidence, authorize phone
+or Android picker actions, or create a D16 PASS claim. Its prohibited categories
+and automatic expiry rules are binding stop conditions.
 
 ## Stop conditions
 
