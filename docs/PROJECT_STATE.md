@@ -58,8 +58,8 @@ platform; D11 is blocked by unproven classification; D12 fake-only offline
 contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
 observation; D16 has scoped device validation PASS; D17 has scoped device
-validation PASS; D18 has scoped device validation PASS; D19-D26 remain
-pending.**
+validation PASS; D18 has scoped device validation PASS; D19 preparation
+complete, awaiting device validation; D20-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -472,7 +472,19 @@ satisfy these requirements.
   [`user-guides/autojs6-d18-stream-cleanup-success-check-zh-tw.md`](user-guides/autojs6-d18-stream-cleanup-success-check-zh-tw.md),
   and
   [`testing/device-validation/d18-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d18-vivo-x-fold5-autojs6-v6.7.0.md).
-- D19-D26 still require scoped review, preparation, and in several cases
+- D19 evidence-gap review and device-procedure preparation are complete. The
+  D19 contract instruments ContentResolver `openInputStream()` to count
+  `close()` calls and injects a controlled mid-read failure; expected
+  `IMAGE_READ_FAILED` with `closeCount === 1` (read-stage cleanup only, no
+  canAccess probe). The preparation PR must be reviewed under the
+  solo-project exception and merged to `main` before device validation.
+  Offline tests (252/252 pass) cover PASS, all error paths, sanitization,
+  and input validation. The review and procedure are recorded in
+  [`testing/d19-cleanup-after-failure-evidence-gap-review.md`](testing/d19-cleanup-after-failure-evidence-gap-review.md)
+  and
+  [`user-guides/autojs6-d19-cleanup-after-failure-check-zh-tw.md`](user-guides/autojs6-d19-cleanup-after-failure-check-zh-tw.md).
+  Device validation on Vivo X Fold5 is pending.
+- D20-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -492,9 +504,9 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `None`. D18 device validation completed on 2026-08-03
-against authoritative SHA `6cbb425` with a scoped PASS on Vivo X Fold5 /
-Android 16 / AutoJs6 v6.7.0 `arm64-v8a`.
+At this snapshot it is `D19-DEVICE-VALIDATION`. D19 preparation complete;
+awaiting user-assisted device execution on Vivo X Fold5 / AutoJs6 v6.7.0
+`arm64-v8a`.
 
 No new task has been approved. Any future task requires a new repository
 decision, scoped review, and explicit user authorization before work begins.

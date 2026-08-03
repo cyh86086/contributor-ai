@@ -20,6 +20,7 @@ import { runMultiImageSequentialDeviceCheck } from "./multi-image-sequential-dev
 import { runRepeatedReadsDeviceCheck } from "./repeated-reads-device-check.js";
 import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 import { runStreamCleanupSuccessDeviceCheck } from "./stream-cleanup-success-device-check.js";
+import { runCleanupAfterFailureDeviceCheck } from "./cleanup-after-failure-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 const READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
@@ -400,6 +401,24 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
       expectedSizeBytes: formatCase.expectedSizeBytes,
       maxSizeBytes: formatCase.maxSizeBytes,
       readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
+      context,
+      contentResolver,
+      parseUri,
+      javaBridge,
+      isFileUriApproved: () => false,
+      reportMetadata: () => {},
+    });
+  }
+
+  if (formatCase.verificationMode === "cleanup-after-failure") {
+    return runCleanupAfterFailureDeviceCheck({
+      testCaseId,
+      sourceUri,
+      expectedMimeType: formatCase.expectedMimeType,
+      expectedSizeBytes: formatCase.expectedSizeBytes,
+      maxSizeBytes: formatCase.maxSizeBytes,
+      readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
+      failureAfterBytes: formatCase.failureAfterBytes,
       context,
       contentResolver,
       parseUri,

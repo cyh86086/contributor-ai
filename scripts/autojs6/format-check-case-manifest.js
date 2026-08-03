@@ -214,6 +214,25 @@ export const D18_STREAM_CLEANUP_SUCCESS_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d18-stream-cleanup-success-device-check.js",
 });
 
+export const D19_CLEANUP_AFTER_FAILURE_CHECK_CASE = defineCase({
+  testCaseId: "D19_CLEANUP_AFTER_FAILURE",
+  fixtureId: "JPEG_REPEAT_VALID",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  failureAfterBytes: 3_203,
+  requestCode: 6119,
+  verificationMode: "cleanup-after-failure",
+  title: "D19 讀取失敗後 stream 清理裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選擇私下對應 JPEG_REPEAT_VALID、且已獨立確認為 6,406 bytes 的非敏感 JPEG。此 evidence-only 案例在讀取中途注入受控失敗，確認失敗後 stream 仍被正確清理，並輸出含 closeCount 的 sanitized metadata。",
+  sourceEntryPath:
+    "autojs6/source/d19-cleanup-after-failure-device-check.entry.js",
+  generatedPath: "autojs6/d19-cleanup-after-failure-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -229,6 +248,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D16_REPEATED_READS_CHECK_CASE,
   D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE,
   D18_STREAM_CLEANUP_SUCCESS_CHECK_CASE,
+  D19_CLEANUP_AFTER_FAILURE_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([
