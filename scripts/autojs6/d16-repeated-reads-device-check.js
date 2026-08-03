@@ -244,7 +244,23 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     sourceEntryPath: "autojs6/source/d16-repeated-reads-device-check.entry.js",
     generatedPath: "autojs6/d16-repeated-reads-device-check.js"
   });
-  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE, D13_EXACT_PORTABLE_LIMIT_CHECK_CASE, D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE, D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE, D16_REPEATED_READS_CHECK_CASE]);
+  var D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE = defineCase({
+    testCaseId: "D17_MULTI_IMAGE_SEQUENTIAL",
+    fixtureId: "JPEG_REPEAT_VALID",
+    pickerMimeType: "image/*",
+    expectedMimeType: "image/jpeg",
+    expectedSizeBytes: 6406,
+    maxSizeBytes: 6406,
+    readerSafetyLimitBytes: 12 * 1024 * 1024,
+    requestCode: 6117,
+    verificationMode: "multi-image-sequential",
+    requestedImages: 3,
+    title: "D17 \u591A\u5F35\u5716\u7247\u4F9D\u5E8F\u8B80\u53D6\u88DD\u7F6E\u9A57\u8B49",
+    instructionText: "\u8ACB\u5728 Android \u7CFB\u7D71\u9078\u5716\u5668\u4E2D\u9078\u53D6\u6070\u597D 3 \u5F35\u79C1\u4E0B\u5C0D\u61C9 JPEG_REPEAT_VALID\u3001\u4E14\u5DF2\u7368\u7ACB\u78BA\u8A8D\u70BA 6,406 bytes \u7684\u975E\u654F\u611F JPEG\u3002\u9078\u5716\u5668\u5FC5\u9808\u555F\u7528\u591A\u9078\u6A21\u5F0F\u3002\u8173\u672C\u6703\u5728\u540C\u4E00 fresh temporary grant \u4E0B\u4F9D\u5E8F\u8655\u7406\u6BCF\u5F35 URI\uFF0C\u4E26\u53EA\u8F38\u51FA\u4E00\u7B46 sanitized aggregate metadata\u3002",
+    sourceEntryPath: "autojs6/source/d17-multi-image-sequential-device-check.entry.js",
+    generatedPath: "autojs6/d17-multi-image-sequential-device-check.js"
+  });
+  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE, D13_EXACT_PORTABLE_LIMIT_CHECK_CASE, D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE, D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE, D16_REPEATED_READS_CHECK_CASE, D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE]);
   var D02_D05_FORMAT_CHECK_CASES = Object.freeze([D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE]);
   var IMAGE_INPUT_ERROR_CODES = Object.freeze({
     UNSUPPORTED_MIME_TYPE: "UNSUPPORTED_MIME_TYPE",
@@ -1516,32 +1532,35 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       throw new TypeError("reportMetadata must be a function");
     }
   }
-  var REQUESTED_ITERATIONS = 10;
-  var REQUIRED_MIME_TYPE = "image/jpeg";
   var PUBLIC_ERROR_CODES6 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
-  function runRepeatedReadsDeviceCheck(_a) {
+  function runMultiImageSequentialDeviceCheck(_a) {
     return __async(this, null, _regenerator().m(function _callee14() {
-      var _b, expectedSizeBytes, _b$reportMetadata4, reportMetadata, readerOptions, attemptedIterations, successfulIterations, firstMimeType, firstSizeBytes, publicErrorCode, metadataMismatch, iteration, result, matchesRequiredMetadata, matchesFirstIteration, allMetadataEqual, record;
+      var _b, sourceUris, expectedImages, _b$reportMetadata4, reportMetadata, readerOptions, images, attemptedImages, successfulImages, publicErrorCode, metadataMismatch, uiResponsive, index, sourceUri, result, expected, matchesExpected, record;
       return _regenerator().w(function (_context14) {
         while (1) switch (_context14.n) {
           case 0:
-            _b = _a, expectedSizeBytes = _b.expectedSizeBytes, _b$reportMetadata4 = _b.reportMetadata, reportMetadata = _b$reportMetadata4 === void 0 ? function () {} : _b$reportMetadata4, readerOptions = __objRest(_b, ["expectedSizeBytes", "reportMetadata"]);
+            _b = _a, sourceUris = _b.sourceUris, expectedImages = _b.expectedImages, _b$reportMetadata4 = _b.reportMetadata, reportMetadata = _b$reportMetadata4 === void 0 ? function () {} : _b$reportMetadata4, readerOptions = __objRest(_b, ["sourceUris", "expectedImages", "reportMetadata"]);
             validateInputs({
-              expectedSizeBytes: expectedSizeBytes,
+              sourceUris: sourceUris,
+              expectedImages: expectedImages,
               reportMetadata: reportMetadata
             });
-            attemptedIterations = 0;
-            successfulIterations = 0;
+            images = [];
+            attemptedImages = 0;
+            successfulImages = 0;
             metadataMismatch = false;
-            iteration = 1;
+            uiResponsive = true;
+            index = 0;
           case 1:
-            if (!(iteration <= REQUESTED_ITERATIONS)) {
+            if (!(index < sourceUris.length)) {
               _context14.n = 6;
               break;
             }
-            attemptedIterations += 1;
+            attemptedImages += 1;
+            sourceUri = sourceUris[index];
             _context14.n = 2;
             return runImageReaderDeviceCheck(__spreadProps(__spreadValues({}, readerOptions), {
+              sourceUri: sourceUri,
               reportMetadata: function reportMetadata() {}
             }));
           case 2:
@@ -1551,16 +1570,183 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               break;
             }
             publicErrorCode = normalizePublicErrorCode(result.errorCode);
+            images.push({
+              mimeType: void 0,
+              sizeBytes: void 0,
+              status: "FAIL",
+              errorCode: publicErrorCode
+            });
             return _context14.a(3, 6);
           case 3:
-            matchesRequiredMetadata = result.status === "PASS" && result.mimeType === REQUIRED_MIME_TYPE && result.sizeBytes === expectedSizeBytes;
-            matchesFirstIteration = iteration === 1 || result.mimeType === firstMimeType && result.sizeBytes === firstSizeBytes;
-            if (!(!matchesRequiredMetadata || !matchesFirstIteration)) {
+            expected = expectedImages[index];
+            matchesExpected = result.mimeType === expected.mimeType && result.sizeBytes === expected.sizeBytes;
+            if (matchesExpected) {
               _context14.n = 4;
               break;
             }
             metadataMismatch = true;
+            images.push({
+              mimeType: result.mimeType,
+              sizeBytes: result.sizeBytes,
+              status: "FAIL"
+            });
             return _context14.a(3, 6);
+          case 4:
+            images.push({
+              mimeType: result.mimeType,
+              sizeBytes: result.sizeBytes,
+              status: "PASS"
+            });
+            successfulImages += 1;
+          case 5:
+            index += 1;
+            _context14.n = 1;
+            break;
+          case 6:
+            record = createAggregateRecord({
+              testCaseId: readerOptions.testCaseId,
+              requestedImages: sourceUris.length,
+              attemptedImages: attemptedImages,
+              successfulImages: successfulImages,
+              images: images,
+              publicErrorCode: publicErrorCode,
+              metadataMismatch: metadataMismatch,
+              uiResponsive: uiResponsive
+            });
+            reportMetadata(record);
+            return _context14.a(2, record);
+        }
+      }, _callee14);
+    }));
+  }
+  function createAggregateRecord(_ref14) {
+    var testCaseId = _ref14.testCaseId,
+      requestedImages = _ref14.requestedImages,
+      attemptedImages = _ref14.attemptedImages,
+      successfulImages = _ref14.successfulImages,
+      images = _ref14.images,
+      publicErrorCode = _ref14.publicErrorCode,
+      metadataMismatch = _ref14.metadataMismatch,
+      uiResponsive = _ref14.uiResponsive;
+    var common = {
+      testCaseId: testCaseId,
+      requestedImages: requestedImages,
+      attemptedImages: attemptedImages,
+      successfulImages: successfulImages
+    };
+    if (uiResponsive !== true) {
+      return Object.freeze(__spreadProps(__spreadValues({}, common), {
+        status: "FAIL",
+        images: images,
+        uiResponsive: false,
+        failureReason: "UI_NOT_RESPONSIVE"
+      }));
+    }
+    if (attemptedImages === requestedImages && successfulImages === requestedImages && publicErrorCode === void 0 && metadataMismatch === false) {
+      return Object.freeze(__spreadProps(__spreadValues({}, common), {
+        status: "PASS",
+        images: images,
+        uiResponsive: true
+      }));
+    }
+    if (publicErrorCode !== void 0) {
+      return Object.freeze(__spreadProps(__spreadValues({}, common), {
+        status: "FAIL",
+        images: images,
+        uiResponsive: true,
+        failureReason: "PUBLIC_ERROR",
+        errorCode: publicErrorCode
+      }));
+    }
+    return Object.freeze(__spreadProps(__spreadValues({}, common), {
+      status: "FAIL",
+      images: images,
+      uiResponsive: true,
+      failureReason: "METADATA_MISMATCH"
+    }));
+  }
+  function normalizePublicErrorCode(errorCode) {
+    if (PUBLIC_ERROR_CODES6.has(errorCode)) {
+      return errorCode;
+    }
+    return IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED;
+  }
+  function validateInputs(_ref15) {
+    var sourceUris = _ref15.sourceUris,
+      expectedImages = _ref15.expectedImages,
+      reportMetadata = _ref15.reportMetadata;
+    if (!Array.isArray(sourceUris) || sourceUris.length === 0) {
+      throw new TypeError("sourceUris must be a non-empty array");
+    }
+    if (!Array.isArray(expectedImages)) {
+      throw new TypeError("expectedImages must be an array");
+    }
+    if (expectedImages.length !== sourceUris.length) {
+      throw new TypeError("expectedImages length must match sourceUris length");
+    }
+    var _iterator4 = _createForOfIteratorHelper(expectedImages),
+      _step4;
+    try {
+      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+        var expected = _step4.value;
+        if (!expected || typeof expected.mimeType !== "string" || !Number.isSafeInteger(expected.sizeBytes) || expected.sizeBytes <= 0) {
+          throw new TypeError("each expectedImage must have mimeType and positive sizeBytes");
+        }
+      }
+    } catch (err) {
+      _iterator4.e(err);
+    } finally {
+      _iterator4.f();
+    }
+    if (typeof reportMetadata !== "function") {
+      throw new TypeError("reportMetadata must be a function");
+    }
+  }
+  var REQUESTED_ITERATIONS = 10;
+  var REQUIRED_MIME_TYPE = "image/jpeg";
+  var PUBLIC_ERROR_CODES7 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
+  function runRepeatedReadsDeviceCheck(_a) {
+    return __async(this, null, _regenerator().m(function _callee15() {
+      var _b, expectedSizeBytes, _b$reportMetadata5, reportMetadata, readerOptions, attemptedIterations, successfulIterations, firstMimeType, firstSizeBytes, publicErrorCode, metadataMismatch, iteration, result, matchesRequiredMetadata, matchesFirstIteration, allMetadataEqual, record;
+      return _regenerator().w(function (_context15) {
+        while (1) switch (_context15.n) {
+          case 0:
+            _b = _a, expectedSizeBytes = _b.expectedSizeBytes, _b$reportMetadata5 = _b.reportMetadata, reportMetadata = _b$reportMetadata5 === void 0 ? function () {} : _b$reportMetadata5, readerOptions = __objRest(_b, ["expectedSizeBytes", "reportMetadata"]);
+            validateInputs2({
+              expectedSizeBytes: expectedSizeBytes,
+              reportMetadata: reportMetadata
+            });
+            attemptedIterations = 0;
+            successfulIterations = 0;
+            metadataMismatch = false;
+            iteration = 1;
+          case 1:
+            if (!(iteration <= REQUESTED_ITERATIONS)) {
+              _context15.n = 6;
+              break;
+            }
+            attemptedIterations += 1;
+            _context15.n = 2;
+            return runImageReaderDeviceCheck(__spreadProps(__spreadValues({}, readerOptions), {
+              reportMetadata: function reportMetadata() {}
+            }));
+          case 2:
+            result = _context15.v;
+            if (!(result.status === "FAIL")) {
+              _context15.n = 3;
+              break;
+            }
+            publicErrorCode = normalizePublicErrorCode2(result.errorCode);
+            return _context15.a(3, 6);
+          case 3:
+            matchesRequiredMetadata = result.status === "PASS" && result.mimeType === REQUIRED_MIME_TYPE && result.sizeBytes === expectedSizeBytes;
+            matchesFirstIteration = iteration === 1 || result.mimeType === firstMimeType && result.sizeBytes === firstSizeBytes;
+            if (!(!matchesRequiredMetadata || !matchesFirstIteration)) {
+              _context15.n = 4;
+              break;
+            }
+            metadataMismatch = true;
+            return _context15.a(3, 6);
           case 4:
             if (iteration === 1) {
               firstMimeType = result.mimeType;
@@ -1569,7 +1755,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
             successfulIterations += 1;
           case 5:
             iteration += 1;
-            _context14.n = 1;
+            _context15.n = 1;
             break;
           case 6:
             allMetadataEqual = successfulIterations === REQUESTED_ITERATIONS && publicErrorCode === void 0 && metadataMismatch === false;
@@ -1584,20 +1770,20 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               sizeBytes: firstSizeBytes
             });
             reportMetadata(record);
-            return _context14.a(2, record);
+            return _context15.a(2, record);
         }
-      }, _callee14);
+      }, _callee15);
     }));
   }
-  function createLoopRecord(_ref14) {
-    var testCaseId = _ref14.testCaseId,
-      attemptedIterations = _ref14.attemptedIterations,
-      successfulIterations = _ref14.successfulIterations,
-      allMetadataEqual = _ref14.allMetadataEqual,
-      publicErrorCode = _ref14.publicErrorCode,
-      metadataMismatch = _ref14.metadataMismatch,
-      mimeType = _ref14.mimeType,
-      sizeBytes = _ref14.sizeBytes;
+  function createLoopRecord(_ref16) {
+    var testCaseId = _ref16.testCaseId,
+      attemptedIterations = _ref16.attemptedIterations,
+      successfulIterations = _ref16.successfulIterations,
+      allMetadataEqual = _ref16.allMetadataEqual,
+      publicErrorCode = _ref16.publicErrorCode,
+      metadataMismatch = _ref16.metadataMismatch,
+      mimeType = _ref16.mimeType,
+      sizeBytes = _ref16.sizeBytes;
     var common = {
       testCaseId: testCaseId,
       requestedIterations: REQUESTED_ITERATIONS,
@@ -1626,12 +1812,12 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       failureReason: "METADATA_MISMATCH"
     }));
   }
-  function normalizePublicErrorCode(errorCode) {
-    return PUBLIC_ERROR_CODES6.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED;
+  function normalizePublicErrorCode2(errorCode) {
+    return PUBLIC_ERROR_CODES7.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED;
   }
-  function validateInputs(_ref15) {
-    var expectedSizeBytes = _ref15.expectedSizeBytes,
-      reportMetadata = _ref15.reportMetadata;
+  function validateInputs2(_ref17) {
+    var expectedSizeBytes = _ref17.expectedSizeBytes,
+      reportMetadata = _ref17.reportMetadata;
     if (!Number.isSafeInteger(expectedSizeBytes) || expectedSizeBytes <= 0) {
       throw new TypeError("expectedSizeBytes must be a positive safe integer");
     }
@@ -1639,39 +1825,39 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       throw new TypeError("reportMetadata must be a function");
     }
   }
-  var PUBLIC_ERROR_CODES7 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
+  var PUBLIC_ERROR_CODES8 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
   var SAFE_CASE_ID4 = /^[\x2D0-9A-Z_]{1,40}$/;
   var SAFE_MIME_TYPE2 = /^image\/[\+\x2D\.0-9a-z]+$/;
   function runResolverMimeDeviceCheck(_0) {
-    return __async(this, arguments, function (_ref16) {
-      var testCaseId = _ref16.testCaseId,
-        sourceUri = _ref16.sourceUri,
-        expectedMimeType = _ref16.expectedMimeType,
-        maxSizeBytes = _ref16.maxSizeBytes,
-        readerSafetyLimitBytes = _ref16.readerSafetyLimitBytes,
-        context = _ref16.context,
-        contentResolver = _ref16.contentResolver,
-        parseUri = _ref16.parseUri,
-        javaBridge = _ref16.javaBridge,
-        _ref16$isFileUriAppro = _ref16.isFileUriApproved,
-        isFileUriApproved = _ref16$isFileUriAppro === void 0 ? function () {
+    return __async(this, arguments, function (_ref18) {
+      var testCaseId = _ref18.testCaseId,
+        sourceUri = _ref18.sourceUri,
+        expectedMimeType = _ref18.expectedMimeType,
+        maxSizeBytes = _ref18.maxSizeBytes,
+        readerSafetyLimitBytes = _ref18.readerSafetyLimitBytes,
+        context = _ref18.context,
+        contentResolver = _ref18.contentResolver,
+        parseUri = _ref18.parseUri,
+        javaBridge = _ref18.javaBridge,
+        _ref18$isFileUriAppro = _ref18.isFileUriApproved,
+        isFileUriApproved = _ref18$isFileUriAppro === void 0 ? function () {
           return false;
-        } : _ref16$isFileUriAppro,
-        openFileReadOnly = _ref16.openFileReadOnly,
-        _ref16$reportMetadata = _ref16.reportMetadata,
-        reportMetadata = _ref16$reportMetadata === void 0 ? function () {} : _ref16$reportMetadata;
-      return _regenerator().m(function _callee15() {
+        } : _ref18$isFileUriAppro,
+        openFileReadOnly = _ref18.openFileReadOnly,
+        _ref18$reportMetadata = _ref18.reportMetadata,
+        reportMetadata = _ref18$reportMetadata === void 0 ? function () {} : _ref18$reportMetadata;
+      return _regenerator().m(function _callee16() {
         var record, reader, result, _t15, _t16;
-        return _regenerator().w(function (_context15) {
-          while (1) switch (_context15.p = _context15.n) {
+        return _regenerator().w(function (_context16) {
+          while (1) switch (_context16.p = _context16.n) {
             case 0:
-              validateInputs2({
+              validateInputs3({
                 testCaseId: testCaseId,
                 expectedMimeType: expectedMimeType,
                 maxSizeBytes: maxSizeBytes,
                 reportMetadata: reportMetadata
               });
-              _context15.p = 1;
+              _context16.p = 1;
               reader = createAutoJs6AndroidImageReader({
                 context: context,
                 contentResolver: contentResolver,
@@ -1681,22 +1867,22 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
                 openFileReadOnly: openFileReadOnly,
                 readerSafetyLimitBytes: readerSafetyLimitBytes
               });
-              _context15.n = 2;
+              _context16.n = 2;
               return reader.canAccess(sourceUri);
             case 2:
-              _t15 = _context15.v;
+              _t15 = _context16.v;
               if (!(_t15 !== true)) {
-                _context15.n = 3;
+                _context16.n = 3;
                 break;
               }
               record = failure2(testCaseId, IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED);
-              _context15.n = 5;
+              _context16.n = 5;
               break;
             case 3:
-              _context15.n = 4;
+              _context16.n = 4;
               return reader.read(sourceUri);
             case 4:
-              result = _context15.v;
+              result = _context16.v;
               record = normalizeReaderResult({
                 testCaseId: testCaseId,
                 expectedMimeType: expectedMimeType,
@@ -1704,25 +1890,25 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
                 result: result
               });
             case 5:
-              _context15.n = 7;
+              _context16.n = 7;
               break;
             case 6:
-              _context15.p = 6;
-              _t16 = _context15.v;
+              _context16.p = 6;
+              _t16 = _context16.v;
               record = failure2(testCaseId, normalizeErrorCode(_t16));
             case 7:
               reportMetadata(record);
-              return _context15.a(2, record);
+              return _context16.a(2, record);
           }
-        }, _callee15, null, [[1, 6]]);
+        }, _callee16, null, [[1, 6]]);
       })();
     });
   }
-  function normalizeReaderResult(_ref17) {
-    var testCaseId = _ref17.testCaseId,
-      expectedMimeType = _ref17.expectedMimeType,
-      maxSizeBytes = _ref17.maxSizeBytes,
-      result = _ref17.result;
+  function normalizeReaderResult(_ref19) {
+    var testCaseId = _ref19.testCaseId,
+      expectedMimeType = _ref19.expectedMimeType,
+      maxSizeBytes = _ref19.maxSizeBytes,
+      result = _ref19.result;
     var bytes = safelyReadProperty4(result, "bytes");
     var reportedMimeType = safelyReadProperty4(result, "mimeType");
     if (!(bytes instanceof Uint8Array)) {
@@ -1747,7 +1933,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   }
   function normalizeErrorCode(error) {
     var code = safelyReadProperty4(error, "code");
-    if (PUBLIC_ERROR_CODES7.has(code)) {
+    if (PUBLIC_ERROR_CODES8.has(code)) {
       return code;
     }
     var classification = safelyReadProperty4(error, "classification");
@@ -1760,7 +1946,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     return Object.freeze({
       testCaseId: testCaseId,
       status: "FAIL",
-      errorCode: PUBLIC_ERROR_CODES7.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
+      errorCode: PUBLIC_ERROR_CODES8.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED
     });
   }
   function safelyReadProperty4(value, propertyName) {
@@ -1773,11 +1959,11 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return void 0;
     }
   }
-  function validateInputs2(_ref18) {
-    var testCaseId = _ref18.testCaseId,
-      expectedMimeType = _ref18.expectedMimeType,
-      maxSizeBytes = _ref18.maxSizeBytes,
-      reportMetadata = _ref18.reportMetadata;
+  function validateInputs3(_ref20) {
+    var testCaseId = _ref20.testCaseId,
+      expectedMimeType = _ref20.expectedMimeType,
+      maxSizeBytes = _ref20.maxSizeBytes,
+      reportMetadata = _ref20.reportMetadata;
     if (typeof testCaseId !== "string" || !SAFE_CASE_ID4.test(testCaseId)) {
       throw new TypeError("testCaseId must be an opaque uppercase case ID");
     }
@@ -1797,15 +1983,18 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   var CHECK_TIMEOUT_MILLIS = 2e4;
   function runAutoJs6FormatCheck(formatCase, injectedRuntime) {
     var runtime = injectedRuntime != null ? injectedRuntime : (typeof globalThis === "undefined" ? "undefined" : _typeof(globalThis)) === "object" ? globalThis : Function("return this")();
+    if (formatCase.verificationMode === "multi-image-sequential") {
+      return runAutoJs6MultiImageCheck(formatCase, runtime);
+    }
     return runFormatCheck(formatCase, {
-      showInstructions: function showInstructions(_ref19) {
-        var title = _ref19.title,
-          instructionText = _ref19.instructionText;
+      showInstructions: function showInstructions(_ref21) {
+        var title = _ref21.title,
+          instructionText = _ref21.instructionText;
         return runtime.dialogs.alert(title, instructionText);
       },
-      pickSingleImage: function pickSingleImage(_ref20) {
-        var pickerMimeType = _ref20.pickerMimeType,
-          requestCode = _ref20.requestCode;
+      pickSingleImage: function pickSingleImage(_ref22) {
+        var pickerMimeType = _ref22.pickerMimeType,
+          requestCode = _ref22.requestCode;
         return _pickSingleImage(runtime, pickerMimeType, requestCode);
       },
       executeOffUiThread: function executeOffUiThread(task) {
@@ -1821,7 +2010,80 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }
     });
   }
-  function _pickSingleImage(runtime, pickerMimeType, requestCode) {
+  function runAutoJs6MultiImageCheck(formatCase, runtime) {
+    return __async(this, null, _regenerator().m(function _callee17() {
+      var sourceUris, reportMetadata, record, expectedImages, context, contentResolver, parseUri, javaBridge;
+      return _regenerator().w(function (_context17) {
+        while (1) switch (_context17.n) {
+          case 0:
+            _context17.n = 1;
+            return runtime.dialogs.alert(formatCase.title, formatCase.instructionText);
+          case 1:
+            _context17.n = 2;
+            return pickMultipleImages(runtime, formatCase.pickerMimeType, formatCase.requestCode);
+          case 2:
+            sourceUris = _context17.v;
+            reportMetadata = function reportMetadata(record) {
+              runtime.console.clear();
+              runtime.console.show();
+              runtime.console.info(JSON.stringify(record));
+            };
+            if (!(!Array.isArray(sourceUris) || sourceUris.length === 0)) {
+              _context17.n = 3;
+              break;
+            }
+            record = Object.freeze({
+              testCaseId: formatCase.testCaseId,
+              requestedImages: formatCase.requestedImages,
+              attemptedImages: 0,
+              successfulImages: 0,
+              status: "FAIL",
+              images: [],
+              uiResponsive: true,
+              failureReason: "NO_IMAGES_SELECTED"
+            });
+            reportMetadata(record);
+            return _context17.a(2, record);
+          case 3:
+            expectedImages = sourceUris.map(function () {
+              return {
+                mimeType: formatCase.expectedMimeType,
+                sizeBytes: formatCase.expectedSizeBytes
+              };
+            });
+            context = runtime.context;
+            contentResolver = context.getContentResolver();
+            parseUri = function parseUri(value) {
+              return runtime.android.net.Uri.parse(value);
+            };
+            javaBridge = {
+              createByteArray: function createByteArray(size) {
+                return runtime.util.java.array("byte", size);
+              },
+              classifyError: function classifyError(error) {
+                return _classifyError(runtime, error);
+              }
+            };
+            return _context17.a(2, runMultiImageSequentialDeviceCheck({
+              sourceUris: sourceUris,
+              expectedImages: expectedImages,
+              testCaseId: formatCase.testCaseId,
+              maxSizeBytes: formatCase.maxSizeBytes,
+              readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
+              context: context,
+              contentResolver: contentResolver,
+              parseUri: parseUri,
+              javaBridge: javaBridge,
+              isFileUriApproved: function isFileUriApproved() {
+                return false;
+              },
+              reportMetadata: reportMetadata
+            }));
+        }
+      }, _callee17);
+    }));
+  }
+  function pickMultipleImages(runtime, pickerMimeType, requestCode) {
     return new Promise(function (resolve) {
       var settled = false;
       var _listener = function listener(receivedRequestCode, resultCode, data) {
@@ -1830,6 +2092,51 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         }
         settled = true;
         removeActivityResultListener(runtime, _listener);
+        if (resultCode !== runtime.android.app.Activity.RESULT_OK || data == null || typeof data.getClipData !== "function") {
+          resolve([]);
+          return;
+        }
+        var clipData = data.getClipData();
+        if (clipData == null || typeof clipData.getItemCount !== "function") {
+          resolve([]);
+          return;
+        }
+        var uris = [];
+        var count = clipData.getItemCount();
+        for (var i = 0; i < count; i += 1) {
+          var item = clipData.getItemAt(i);
+          if (item != null && typeof item.getUri === "function") {
+            var uri = item.getUri();
+            if (uri != null) {
+              uris.push(String(uri.toString()));
+            }
+          }
+        }
+        resolve(uris);
+      };
+      runtime.ui.emitter.on("activity_result", _listener);
+      try {
+        var intent = new runtime.android.content.Intent(runtime.android.content.Intent.ACTION_GET_CONTENT);
+        intent.setType(pickerMimeType);
+        intent.addCategory(runtime.android.content.Intent.CATEGORY_OPENABLE);
+        intent.putExtra(runtime.android.content.Intent.EXTRA_ALLOW_MULTIPLE, true);
+        runtime.activity.startActivityForResult(intent, requestCode);
+      } catch (e) {
+        settled = true;
+        removeActivityResultListener(runtime, _listener);
+        resolve([]);
+      }
+    });
+  }
+  function _pickSingleImage(runtime, pickerMimeType, requestCode) {
+    return new Promise(function (resolve) {
+      var settled = false;
+      var _listener2 = function listener(receivedRequestCode, resultCode, data) {
+        if (receivedRequestCode !== requestCode || settled) {
+          return;
+        }
+        settled = true;
+        removeActivityResultListener(runtime, _listener2);
         if (resultCode !== runtime.android.app.Activity.RESULT_OK || data == null || typeof data.getData !== "function") {
           resolve(null);
           return;
@@ -1837,7 +2144,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         var uri = data.getData();
         resolve(uri == null ? null : String(uri.toString()));
       };
-      runtime.ui.emitter.on("activity_result", _listener);
+      runtime.ui.emitter.on("activity_result", _listener2);
       try {
         var intent = new runtime.android.content.Intent(runtime.android.content.Intent.ACTION_GET_CONTENT);
         intent.setType(pickerMimeType);
@@ -1845,7 +2152,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         runtime.activity.startActivityForResult(intent, requestCode);
       } catch (e) {
         settled = true;
-        removeActivityResultListener(runtime, _listener);
+        removeActivityResultListener(runtime, _listener2);
         resolve(null);
       }
     });

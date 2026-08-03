@@ -54,10 +54,11 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 ## Current phase
 
 **Phase: D01-D08 scoped device validation passed; D09-D10 are blocked by the
-platform; D11 is blocked by unproven classification; the D12 fake-only offline
+platform; D11 is blocked by unproven classification; D12 fake-only offline
 contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
-observation; D16 has scoped device validation PASS; D17-D26 remain pending.**
+observation; D16 has scoped device validation PASS; D17 preparation is
+complete; D18-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -287,13 +288,10 @@ exact-head PASS record before merge; otherwise it remains blocked.
 - Governance baseline merge SHA:
   `8eeef1642e33853e75938dd16d7bbbbc1627a9ee`
 - PR #12 source branch `docs/project-governance-repair-v1`: deleted after merge
-- Open pull-request snapshot immediately after PR #12 merge: none
+- Open pull-request snapshot immediately after PR #46 merge: none
 - The live `main` SHA is fetched during every mandatory preflight; it is not
   duplicated here as a self-referential current-state invariant.
 - Release status: no production release
-- Open PR #45: `prep/d16-device-procedure-v1` into `main`; D16 preparation plus
-  bootstrap solo-project governance. It is not merged and has no D16 device
-  evidence or D16 PASS claim.
 
 Historical PR detail remains available in Git history and PRs #1-#11. This
 snapshot records current state rather than repeating every completed branch.
@@ -443,7 +441,29 @@ satisfy these requirements.
   [`user-guides/autojs6-d16-repeated-reads-check-zh-tw.md`](user-guides/autojs6-d16-repeated-reads-check-zh-tw.md),
   and
   [`testing/device-validation/d16-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d16-vivo-x-fold5-autojs6-v6.7.0.md).
-- D17-D26 still require scoped review, preparation, and in several cases
+- D17 evidence-gap review and device-procedure preparation are complete. The
+  reviewed D17 contract requires exactly 3 sequential full-path reads of
+  `JPEG_REPEAT_VALID` through the production reader and portable core under one
+  fresh temporary multi-select picker grant; per-image frozen records; an
+  aggregate frozen sanitized record; fail-fast on any non-success; and
+  independently verified byte count. The preparation adds the reviewed D17
+  manifest entry with `verificationMode: "multi-image-sequential"`, the
+  `multi-image-sequential-device-check.js` wrapper, the
+  `runAutoJs6MultiImageCheck` runtime path with `pickMultipleImages` using
+  `EXTRA_ALLOW_MULTIPLE`, the D17 entry source, deterministic generated bundle,
+  offline tests covering success, six fail-fast error codes, MIME mismatch,
+  size mismatch, sanitization, and input validation, and a Traditional Chinese
+  future-execution procedure. The privately mapped synthetic JPEG was
+  independently remeasured as 6,406 bytes outside Git, the launcher, and the
+  production reader; only its opaque fixture ID, MIME, and verified count are
+  retained. All authoritative repository checks pass (232/232 tests). This
+  remains preparation and offline evidence only: no phone, Android picker,
+  device evidence, temporary-grant lifetime result, or D17 PASS exists. The
+  review and procedure are recorded in
+  [`testing/d17-multi-image-sequential-evidence-gap-review.md`](testing/d17-multi-image-sequential-evidence-gap-review.md)
+  and
+  [`user-guides/autojs6-d17-multi-image-sequential-check-zh-tw.md`](user-guides/autojs6-d17-multi-image-sequential-check-zh-tw.md).
+- D18-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -457,15 +477,14 @@ satisfy these requirements.
   succeed, but pull-request creation and Ready-for-review writes returned HTTP 403. The Connector remains read-only for those writes, so the confirmed local
   CLI workflow is used for branch, push, pull-request, and merge operations.
 - Independent human review is currently unavailable because the repository has
-  one eligible human maintainer. PR #45 may proceed only through an independent
-  human review or a current PASS record under the solo-project exception. The
-  latter is explicitly non-independent and expires on any candidate change.
+  one eligible human maintainer. The solo-project exception process remains
+  available and is explicitly non-independent.
 
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `D16-DEVICE-VALIDATION`, but its prerequisite remains
-unsatisfied until PR #45 passes the repository review gate and merges to `main`.
+At this snapshot the next task is `D17-DEVICE-VALIDATION`, pending a reviewed
+and merged D17 preparation PR.
 
 No queue, provider, network, Contributor app, credential, submission, or other
 unrelated feature work may begin while that task is active. If repository state
