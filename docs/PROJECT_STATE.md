@@ -57,8 +57,7 @@ See [`runtime-matrix.md`](runtime-matrix.md) for detailed boundaries.
 platform; D11 is blocked by unproven classification; the D12 fake-only offline
 contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
-observation; D16's clarified aggregate contract is proved by integrated offline
-tests and requires device-procedure preparation; D17-D26 remain pending.**
+observation; D16 has scoped device validation PASS; D17-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -426,27 +425,24 @@ satisfy these requirements.
   [`user-guides/autojs6-d15-reader-safety-ceiling-overflow-check-zh-tw.md`](user-guides/autojs6-d15-reader-safety-ceiling-overflow-check-zh-tw.md)
   and
   [`testing/device-validation/d15-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d15-vivo-x-fold5-autojs6-v6.7.0.md).
-- D16 evidence-gap review is complete, and the user explicitly approved its
-  full contract on 2026-08-02: 10 full-path reads of `JPEG_REPEAT_VALID` under
-  one fresh temporary grant; independently re-measured byte count; exact
-  MIME/count equality; loop-level responsiveness; fail-fast; and one sanitized
-  aggregate record. The prior contract blocker is closed, but repository
-  readiness is not yet established. No new classification name, launcher,
-  test-only PASS, Android claim, or device execution is authorized. The review
-  is recorded in
-  [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
-- D16 post-clarification readiness review and the separately governed test-only
-  coverage are complete. The user-approved attempted/successful counter rules,
-  equality behavior, and UI/public-error/metadata-mismatch precedence are in the
-  formal contract. Integrated offline tests now prove the exact 10-iteration
-  same-context reader/core loop, equality, fail-fast counters, post-failure UI
-  ordering, evidence-only failure precedence, and one frozen sanitized
-  aggregate. This evidence is offline only and does not prove Android,
-  AutoJs6, provider, temporary-grant lifetime, device behavior, or D16 PASS. No
-  production source, launcher, procedure, generated bundle, or permission
-  behavior changes. Device-procedure preparation is the sole next task. The
-  review is recorded in
-  [`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md).
+- D16 evidence-gap review, post-clarification readiness review, device-procedure
+  preparation, and scoped device validation are complete. The user explicitly
+  approved the full D16 contract on 2026-08-02: 10 full-path reads of
+  `JPEG_REPEAT_VALID` under one fresh temporary grant; independently re-measured
+  byte count; exact MIME/count equality; loop-level responsiveness; fail-fast;
+  and one sanitized aggregate record. The preparation PR was reviewed under the
+  solo-project exception and merged to `main`. The scoped Vivo X Fold5 execution
+  against authoritative SHA
+  `9caf03c3532c2d051f4e8cd85a4c019cb35ce9e5` returned the approved PASS
+  aggregate: `requestedIterations: 10`, `attemptedIterations: 10`,
+  `successfulIterations: 10`, `mimeType: "image/jpeg"`, `sizeBytes: 6406`,
+  `allMetadataEqual: true`, `uiResponsive: true`. The review, procedure, and
+  scoped evidence are recorded in
+  [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md),
+  [`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md),
+  [`user-guides/autojs6-d16-repeated-reads-check-zh-tw.md`](user-guides/autojs6-d16-repeated-reads-check-zh-tw.md),
+  and
+  [`testing/device-validation/d16-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d16-vivo-x-fold5-autojs6-v6.7.0.md).
 - D17-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
