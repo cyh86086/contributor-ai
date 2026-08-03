@@ -16,6 +16,7 @@ import { runImageReaderDeviceCheck } from "./image-reader-device-check.js";
 import { runMimeFallbackDeviceCheck } from "./mime-fallback-device-check.js";
 import { runPortableSizeOverflowDeviceCheck } from "./portable-size-overflow-device-check.js";
 import { runReaderSafetyCeilingOverflowDeviceCheck } from "./reader-safety-ceiling-overflow-device-check.js";
+import { runMultiImageSequentialDeviceCheck } from "./multi-image-sequential-device-check.js";
 import { runRepeatedReadsDeviceCheck } from "./repeated-reads-device-check.js";
 import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 
@@ -28,6 +29,10 @@ export function runAutoJs6FormatCheck(formatCase, injectedRuntime) {
   const runtime =
     injectedRuntime ??
     (typeof globalThis === "object" ? globalThis : Function("return this")());
+
+  if (formatCase.verificationMode === "multi-image-sequential") {
+    return runAutoJs6MultiImageCheck(formatCase, runtime);
+  }
 
   return runFormatCheck(formatCase, {
     showInstructions({ title, instructionText }) {
@@ -47,6 +52,125 @@ export function runAutoJs6FormatCheck(formatCase, injectedRuntime) {
       runtime.console.show();
       runtime.console.info(JSON.stringify(record));
     },
+  });
+}
+
+async function runAutoJs6MultiImageCheck(formatCase, runtime) {
+  await runtime.dialogs.alert(formatCase.title, formatCase.instructionText);
+
+  const sourceUris = await pickMultipleImages(
+    runtime,
+    formatCase.pickerMimeType,
+    formatCase.requestCode,
+  );
+
+  const reportMetadata = (record) => {
+    runtime.console.clear();
+    runtime.console.show();
+    runtime.console.info(JSON.stringify(record));
+  };
+
+  if (!Array.isArray(sourceUris) || sourceUris.length === 0) {
+    const record = Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      requestedImages: formatCase.requestedImages,
+      attemptedImages: 0,
+      successfulImages: 0,
+      status: "FAIL",
+      images: [],
+      uiResponsive: true,
+      failureReason: "NO_IMAGES_SELECTED",
+    });
+    reportMetadata(record);
+    return record;
+  }
+
+  const expectedImages = sourceUris.map(() => ({
+    mimeType: formatCase.expectedMimeType,
+    sizeBytes: formatCase.expectedSizeBytes,
+  }));
+
+  const context = runtime.context;
+  const contentResolver = context.getContentResolver();
+  const parseUri = (value) => runtime.android.net.Uri.parse(value);
+  const javaBridge = {
+    createByteArray: (size) => runtime.util.java.array("byte", size),
+    classifyError: (error) => classifyError(runtime, error),
+  };
+
+  return runMultiImageSequentialDeviceCheck({
+    sourceUris,
+    expectedImages,
+    testCaseId: formatCase.testCaseId,
+    maxSizeBytes: formatCase.maxSizeBytes,
+    readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
+    context,
+    contentResolver,
+    parseUri,
+    javaBridge,
+    isFileUriApproved: () => false,
+    reportMetadata,
+  });
+}
+
+function pickMultipleImages(runtime, pickerMimeType, requestCode) {
+  return new Promise((resolve) => {
+    let settled = false;
+    const listener = (receivedRequestCode, resultCode, data) => {
+      if (receivedRequestCode !== requestCode || settled) {
+        return;
+      }
+
+      settled = true;
+      removeActivityResultListener(runtime, listener);
+
+      if (
+        resultCode !== runtime.android.app.Activity.RESULT_OK ||
+        data == null ||
+        typeof data.getClipData !== "function"
+      ) {
+        resolve([]);
+        return;
+      }
+
+      const clipData = data.getClipData();
+      if (clipData == null || typeof clipData.getItemCount !== "function") {
+        resolve([]);
+        return;
+      }
+
+      const uris = [];
+      const count = clipData.getItemCount();
+      for (let i = 0; i < count; i += 1) {
+        const item = clipData.getItemAt(i);
+        if (item != null && typeof item.getUri === "function") {
+          const uri = item.getUri();
+          if (uri != null) {
+            uris.push(String(uri.toString()));
+          }
+        }
+      }
+      resolve(uris);
+    };
+
+    runtime.ui.emitter.on("activity_result", listener);
+
+    try {
+      const intent = new runtime.android.content.Intent(
+        runtime.android.content.Intent.ACTION_GET_CONTENT,
+      );
+      intent.setType(pickerMimeType);
+      intent.addCategory(runtime.android.content.Intent.CATEGORY_OPENABLE);
+      intent.putExtra(
+        runtime.android.content.Intent.EXTRA_ALLOW_MULTIPLE,
+        true,
+      );
+      runtime.activity.startActivityForResult(intent, requestCode);
+    } catch {
+      settled = true;
+      removeActivityResultListener(runtime, listener);
+      resolve([]);
+    }
   });
 }
 

@@ -177,6 +177,25 @@ export const D16_REPEATED_READS_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d16-repeated-reads-device-check.js",
 });
 
+export const D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE = defineCase({
+  testCaseId: "D17_MULTI_IMAGE_SEQUENTIAL",
+  fixtureId: "JPEG_REPEAT_VALID",
+  pickerMimeType: "image/*",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6117,
+  verificationMode: "multi-image-sequential",
+  requestedImages: 3,
+  title: "D17 多張圖片依序讀取裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選取恰好 3 張私下對應 JPEG_REPEAT_VALID、且已獨立確認為 6,406 bytes 的非敏感 JPEG。選圖器必須啟用多選模式。腳本會在同一 fresh temporary grant 下依序處理每張 URI，並只輸出一筆 sanitized aggregate metadata。",
+  sourceEntryPath:
+    "autojs6/source/d17-multi-image-sequential-device-check.entry.js",
+  generatedPath: "autojs6/d17-multi-image-sequential-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -190,6 +209,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE,
   D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE,
   D16_REPEATED_READS_CHECK_CASE,
+  D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([
