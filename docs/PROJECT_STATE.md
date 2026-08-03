@@ -58,7 +58,8 @@ platform; D11 is blocked by unproven classification; D12 fake-only offline
 contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
 observation; D16 has scoped device validation PASS; D17 has scoped device
-validation PASS; D18-D26 remain pending.**
+validation PASS; D18 preparation complete, awaiting device validation; D19-D26
+remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -457,7 +458,18 @@ satisfy these requirements.
   [`user-guides/autojs6-d17-multi-image-sequential-check-zh-tw.md`](user-guides/autojs6-d17-multi-image-sequential-check-zh-tw.md),
   and
   [`testing/device-validation/d17-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d17-vivo-x-fold5-autojs6-v6.7.0.md).
-- D18-D26 still require scoped review, preparation, and in several cases
+- D18 evidence-gap review and device-procedure preparation are complete. The
+  D18 contract instruments ContentResolver `openInputStream()` to count
+  `close()` calls after a successful read; expected `closeCount === 2`
+  (`canAccess()` probe + `read()`). The preparation PR #49 was reviewed under
+  the solo-project exception and merged to `main` at SHA `b72ccff`. Offline
+  tests (243/243 pass) cover PASS, all error paths, sanitization, and input
+  validation. The review, procedure, and preparation are recorded in
+  [`testing/d18-stream-cleanup-success-evidence-gap-review.md`](testing/d18-stream-cleanup-success-evidence-gap-review.md)
+  and
+  [`user-guides/autojs6-d18-stream-cleanup-success-check-zh-tw.md`](user-guides/autojs6-d18-stream-cleanup-success-check-zh-tw.md).
+  Device validation on Vivo X Fold5 is pending.
+- D19-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
