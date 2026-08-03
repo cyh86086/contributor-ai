@@ -95,21 +95,16 @@ the independently counted 6,406-byte `OVER_READER_CEILING` JPEG was above the
 6,405-byte reader ceiling and equal to the 6,406-byte portable limit, producing
 `IMAGE_READ_FAILED` with responsive UI. This shared public code is not unique
 internal branch telemetry, so the result is scoped to the reviewed static
-ordering and is not called PASS. The D16 evidence-gap review originally found
-the formal contract incomplete. The user explicitly approved the complete
-contract on 2026-08-02: exactly 10 full-path reads of the dedicated synthetic
-`JPEG_REPEAT_VALID` fixture under one fresh temporary picker grant, with
-independent byte-count verification, MIME/count equality, loop-level UI
-assessment, fail-fast handling, and one sanitized aggregate record. A governed
-readiness review found that existing single-invocation component tests did not
-prove D16's integrated 10-iteration orchestration, fail-fast counters,
-responsiveness precedence, or frozen aggregate. The formal contract now records
-the user-approved counter, equality, and precedence semantics exactly, and
-dedicated test-only coverage proves that aggregate contract through the
-existing production reader and portable core with one frozen sanitized report.
-This is offline evidence only, not Android, device, temporary-grant, or D16 PASS
-evidence. The only next task is D16 device-procedure preparation; D17-D26 plus
-complete Android Image Input Adapter V1.0 migration remain pending.
+ordering and is not called PASS. D16 now has its reviewed preparation package:
+the approved 10-read contract, independently remeasured 6,406-byte
+`JPEG_REPEAT_VALID` fixture metadata, repeated-read wrapper, shared-launcher
+integration, deterministic generated bundle, offline tests, and Traditional
+Chinese future-execution procedure. The fixture mapping and binary remain
+outside Git. All repository checks prove preparation and offline behavior only;
+no phone, Android picker, device evidence, temporary-grant lifetime result, or
+D16 PASS exists. Independent review and merge are required before a separately
+governed user-assisted execution. D17-D26 and complete Android Image Input
+Adapter V1.0 migration remain pending.
 
 ## Project layout
 

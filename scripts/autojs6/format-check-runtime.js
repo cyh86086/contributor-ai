@@ -16,6 +16,7 @@ import { runImageReaderDeviceCheck } from "./image-reader-device-check.js";
 import { runMimeFallbackDeviceCheck } from "./mime-fallback-device-check.js";
 import { runPortableSizeOverflowDeviceCheck } from "./portable-size-overflow-device-check.js";
 import { runReaderSafetyCeilingOverflowDeviceCheck } from "./reader-safety-ceiling-overflow-device-check.js";
+import { runRepeatedReadsDeviceCheck } from "./repeated-reads-device-check.js";
 import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
@@ -170,6 +171,22 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
       return classifyError(runtime, error);
     },
   };
+
+  if (formatCase.verificationMode === "repeated-reads") {
+    return runRepeatedReadsDeviceCheck({
+      testCaseId,
+      sourceUri,
+      expectedSizeBytes: formatCase.expectedSizeBytes,
+      maxSizeBytes: formatCase.maxSizeBytes,
+      readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
+      context,
+      contentResolver,
+      parseUri,
+      javaBridge,
+      isFileUriApproved: () => false,
+      reportMetadata: () => {},
+    });
+  }
 
   if (formatCase.verificationMode === "reader-safety-ceiling-overflow") {
     return runReaderSafetyCeilingOverflowDeviceCheck({

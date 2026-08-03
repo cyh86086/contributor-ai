@@ -238,38 +238,33 @@ and
 
 The D16 evidence-gap review confirmed that each production
 `prepareImageInput()` invocation performs a fresh access probe followed by a
-fresh read, closing both streams independently. Existing offline tests prove
-that single-invocation order, cleanup, public mapping, and sanitization, but no
-test repeats the complete production reader, portable core, and reporter path
-for one grant. On 2026-08-02 the user explicitly approved the full D16
-contract: exactly 10 complete reads of the dedicated synthetic
-`JPEG_REPEAT_VALID` fixture through the full path, using one fresh temporary
-picker grant; independent positive byte-count verification; MIME/count
-equality; one loop-level responsiveness result; fail-fast behavior; and one
-frozen sanitized aggregate record. The evidence-only failure reasons do not
-create production errors or project classifications. That initial
-clarification added no launcher, test, PASS, Android claim, or device execution.
-The subsequent governed post-clarification readiness review is summarized
-below. The original review is recorded in
+fresh read, closing both streams independently. On 2026-08-02 the user
+explicitly approved the full D16 contract: exactly 10 complete reads of the
+dedicated synthetic `JPEG_REPEAT_VALID` fixture through the full path, using
+one fresh temporary picker grant; independent positive byte-count
+verification; MIME/count equality; one loop-level responsiveness result;
+fail-fast behavior; and one frozen sanitized aggregate record. The formal
+contract also records the approved attempted/successful counter rules, equality
+behavior, and exact UI/public-error/metadata-mismatch precedence. The original
+review is recorded in
 [`testing/d16-repeated-reads-evidence-gap-review.md`](testing/d16-repeated-reads-evidence-gap-review.md).
 
-The D16 post-clarification readiness review traced the production reader,
-portable core, shared verification harness/reporter, and related offline tests
-against every approved D16 requirement. It found that the prior repository
-proved only single-invocation components and that exact failure-aggregate
-counter, equality, and precedence semantics needed clarification. The user
-approved the missing addendum on 2026-08-02, and the formal contract now records
-it exactly. Dedicated verification-only coverage now exercises the existing
-production reader and portable core for one injected source context across the
-approved 10-iteration loop. It proves ordered access/read execution, success
-metadata equality, fail-fast counters for every stable public error and
-metadata mismatch, final UI precedence, one frozen allowlisted report, and
-absence of the evidence-only failure reasons from production error sets. No
-production source, launcher, generated bundle, permission behavior, device
-procedure, device evidence, or PASS claim is added. This closes only the offline
-aggregate coverage gap; D16 device-procedure preparation is next. The readiness
-review is recorded in
-[`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md).
+The post-clarification readiness review and dedicated offline coverage prove
+the approved aggregate semantics through the existing production reader and
+portable core. The preparation package now adds the reviewed D16 manifest,
+verification-only repeated-read wrapper, shared-launcher integration,
+deterministic generated bundle, tests, and Traditional Chinese future-execution
+procedure. The privately mapped synthetic JPEG was independently remeasured as
+6,406 bytes outside Git, the launcher, and the production reader; only its
+opaque fixture ID, MIME, and verified count are retained. All authoritative
+repository checks pass. This remains preparation and offline evidence only: no
+phone, Android picker, device evidence, temporary-grant lifetime result, or
+D16 PASS exists. Independent review and merge are required before the next
+separately governed task, `D16-DEVICE-VALIDATION`. The readiness review and
+future procedure are recorded in
+[`testing/d16-post-clarification-readiness-review.md`](testing/d16-post-clarification-readiness-review.md)
+and
+[`user-guides/autojs6-d16-repeated-reads-check-zh-tw.md`](user-guides/autojs6-d16-repeated-reads-check-zh-tw.md).
 
 The repository uses `NEXT_ACTION.md` as the single active-task register and
 `PROJECT_GOVERNANCE.md` as the mandatory execution protocol.
