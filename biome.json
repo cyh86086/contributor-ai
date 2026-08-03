@@ -15,7 +15,8 @@
       "!scripts/autojs6/d14-portable-size-overflow-device-check.js",
       "!scripts/autojs6/d15-reader-safety-ceiling-overflow-device-check.js",
       "!scripts/autojs6/d16-repeated-reads-device-check.js",
-      "!scripts/autojs6/d17-multi-image-sequential-device-check.js"
+      "!scripts/autojs6/d17-multi-image-sequential-device-check.js",
+      "!scripts/autojs6/d18-stream-cleanup-success-device-check.js"
     ]
   },
   "formatter": {
