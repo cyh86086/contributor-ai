@@ -85,6 +85,10 @@ function normalizeExecution(formatCase, execution) {
     return normalizeCleanupAfterFailureExecution(formatCase, execution);
   }
 
+  if (formatCase.verificationMode === "memory-behavior") {
+    return normalizeMemoryBehaviorExecution(formatCase, execution);
+  }
+
   const uiResponsive = safelyReadProperty(execution, "uiResponsive");
   if (uiResponsive !== true) {
     return failure(
@@ -287,6 +291,130 @@ function normalizeRepeatedReadsExecution(formatCase, execution) {
     requestedIterations,
     attemptedIterations,
     successfulIterations,
+  };
+
+  if (uiResponsive !== true) {
+    return Object.freeze({
+      ...common,
+      status: "FAIL",
+      allMetadataEqual,
+      uiResponsive: false,
+      failureReason: "UI_NOT_RESPONSIVE",
+    });
+  }
+
+  const status = safelyReadProperty(result, "status");
+  const mimeType = safelyReadProperty(result, "mimeType");
+  const sizeBytes = safelyReadProperty(result, "sizeBytes");
+
+  if (
+    status === "PASS" &&
+    attemptedIterations === requestedIterations &&
+    successfulIterations === requestedIterations &&
+    mimeType === formatCase.expectedMimeType &&
+    sizeBytes === formatCase.expectedSizeBytes &&
+    allMetadataEqual === true
+  ) {
+    return Object.freeze({
+      ...common,
+      status: "PASS",
+      mimeType,
+      sizeBytes,
+      allMetadataEqual,
+      uiResponsive: true,
+    });
+  }
+
+  const failureReason = safelyReadProperty(result, "failureReason");
+  if (status === "FAIL" && failureReason === "PUBLIC_ERROR") {
+    return Object.freeze({
+      ...common,
+      status: "FAIL",
+      allMetadataEqual,
+      uiResponsive: true,
+      failureReason,
+      errorCode: normalizeFormatCheckErrorCode(result),
+    });
+  }
+
+  return Object.freeze({
+    ...common,
+    status: "FAIL",
+    allMetadataEqual,
+    uiResponsive: true,
+    failureReason: "METADATA_MISMATCH",
+  });
+}
+
+function normalizeMemoryBehaviorExecution(formatCase, execution) {
+  const uiResponsive = safelyReadProperty(execution, "uiResponsive");
+  const result = safelyReadProperty(execution, "value");
+
+  const requestedIterations = safelyReadProperty(result, "requestedIterations");
+  const attemptedIterations = safelyReadProperty(result, "attemptedIterations");
+  const successfulIterations = safelyReadProperty(
+    result,
+    "successfulIterations",
+  );
+  const allMetadataEqual = safelyReadProperty(result, "allMetadataEqual");
+
+  const validCounters =
+    requestedIterations === 10 &&
+    Number.isSafeInteger(attemptedIterations) &&
+    attemptedIterations >= 1 &&
+    attemptedIterations <= requestedIterations &&
+    Number.isSafeInteger(successfulIterations) &&
+    successfulIterations >= 0 &&
+    successfulIterations <= attemptedIterations &&
+    typeof allMetadataEqual === "boolean";
+
+  if (!validCounters) {
+    return failure(
+      formatCase.testCaseId,
+      IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+      uiResponsive === true,
+    );
+  }
+
+  const memoryBefore = safelyReadProperty(result, "memoryBefore");
+  const memoryAfterEach = safelyReadProperty(result, "memoryAfterEach");
+  const memoryAfterStabilization = safelyReadProperty(
+    result,
+    "memoryAfterStabilization",
+  );
+  const peakMemory = safelyReadProperty(result, "peakMemory");
+  const memoryGrowth = safelyReadProperty(result, "memoryGrowth");
+
+  const validMemoryMetrics =
+    Number.isSafeInteger(memoryBefore) &&
+    memoryBefore > 0 &&
+    Array.isArray(memoryAfterEach) &&
+    memoryAfterEach.length === requestedIterations &&
+    memoryAfterEach.every((m) => Number.isSafeInteger(m) && m > 0) &&
+    Number.isSafeInteger(memoryAfterStabilization) &&
+    memoryAfterStabilization > 0 &&
+    Number.isSafeInteger(peakMemory) &&
+    peakMemory > 0 &&
+    Number.isSafeInteger(memoryGrowth);
+
+  if (!validMemoryMetrics) {
+    return failure(
+      formatCase.testCaseId,
+      IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+      uiResponsive === true,
+    );
+  }
+
+  const common = {
+    testCaseId: formatCase.testCaseId,
+    requestedIterations,
+    attemptedIterations,
+    successfulIterations,
+    memoryBefore,
+    memoryAfterEach: Object.freeze([...memoryAfterEach]),
+    memoryAfterStabilization,
+    peakMemory,
+    memoryGrowth,
   };
 
   if (uiResponsive !== true) {

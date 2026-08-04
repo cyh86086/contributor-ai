@@ -59,7 +59,8 @@ contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
 observation; D16 has scoped device validation PASS; D17 has scoped device
 validation PASS; D18 has scoped device validation PASS; D19 has scoped device
-validation PASS; D20-D26 remain pending.**
+validation PASS; D20 preparation complete, awaiting device validation;
+D21-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -483,7 +484,17 @@ satisfy these requirements.
   [`user-guides/autojs6-d19-cleanup-after-failure-check-zh-tw.md`](user-guides/autojs6-d19-cleanup-after-failure-check-zh-tw.md),
   and
   [`testing/device-validation/d19-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d19-vivo-x-fold5-autojs6-v6.7.0.md).
-- D20-D26 still require scoped review, preparation, and in several cases
+- D20 evidence-gap review and device-procedure preparation are complete. The
+  D20 contract extends D16 with coarse heap memory monitoring before, during,
+  and after 10 repeated complete production-reader invocations, with a 500ms
+  stabilization interval. Offline tests (261/261 pass) cover PASS, all error
+  paths, sanitization, and input validation. The review and procedure are
+  recorded in
+  [`testing/d20-memory-behavior-evidence-gap-review.md`](testing/d20-memory-behavior-evidence-gap-review.md)
+  and
+  [`user-guides/autojs6-d20-memory-behavior-check-zh-tw.md`](user-guides/autojs6-d20-memory-behavior-check-zh-tw.md).
+  Device validation on Vivo X Fold5 is pending.
+- D21-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -503,9 +514,9 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `None`. D19 device validation completed on 2026-08-04
-against authoritative SHA `ad0e0d4` with a scoped PASS on Vivo X Fold5 /
-Android 16 / AutoJs6 v6.7.0 `arm64-v8a`.
+At this snapshot it is `D20-DEVICE-VALIDATION`. D20 preparation complete;
+awaiting user-assisted device execution on Vivo X Fold5 / AutoJs6 v6.7.0
+`arm64-v8a`.
 
 No new task has been approved. Any future task requires a new repository
 decision, scoped review, and explicit user authorization before work begins.

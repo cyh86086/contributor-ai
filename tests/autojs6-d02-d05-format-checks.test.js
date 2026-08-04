@@ -50,6 +50,7 @@ test("format-check manifest is static, immutable, and complete", () => {
       ["D17_MULTI_IMAGE_SEQUENTIAL", "image/*", "image/jpeg", 6117],
       ["D18_STREAM_CLEANUP_SUCCESS", "image/jpeg", "image/jpeg", 6118],
       ["D19_CLEANUP_AFTER_FAILURE", "image/jpeg", "image/jpeg", 6119],
+      ["D20_MEMORY_BEHAVIOR", "image/jpeg", "image/jpeg", 6120],
     ],
   );
   assert.equal(Object.isFrozen(FORMAT_CHECK_CASES), true);

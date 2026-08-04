@@ -21,6 +21,7 @@ import { runRepeatedReadsDeviceCheck } from "./repeated-reads-device-check.js";
 import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 import { runStreamCleanupSuccessDeviceCheck } from "./stream-cleanup-success-device-check.js";
 import { runCleanupAfterFailureDeviceCheck } from "./cleanup-after-failure-device-check.js";
+import { runMemoryBehaviorDeviceCheck } from "./memory-behavior-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 const READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
@@ -419,6 +420,22 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
       maxSizeBytes: formatCase.maxSizeBytes,
       readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
       failureAfterBytes: formatCase.failureAfterBytes,
+      context,
+      contentResolver,
+      parseUri,
+      javaBridge,
+      isFileUriApproved: () => false,
+      reportMetadata: () => {},
+    });
+  }
+
+  if (formatCase.verificationMode === "memory-behavior") {
+    return runMemoryBehaviorDeviceCheck({
+      testCaseId,
+      sourceUri,
+      expectedSizeBytes: formatCase.expectedSizeBytes,
+      maxSizeBytes: formatCase.maxSizeBytes,
+      readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
       context,
       contentResolver,
       parseUri,
