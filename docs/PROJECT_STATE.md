@@ -59,8 +59,8 @@ contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
 observation; D16 has scoped device validation PASS; D17 has scoped device
 validation PASS; D18 has scoped device validation PASS; D19 has scoped device
-validation PASS; D19 has scoped device validation PASS; D20 has scoped device
-validation PASS; D21-D26 remain pending.**
+validation PASS; D20 has scoped device validation PASS; D21 preparation
+complete, awaiting device validation; D22-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
