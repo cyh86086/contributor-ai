@@ -5,10 +5,8 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**None.** D20-DEVICE-VALIDATION completed on 2026-08-04 against authoritative
-SHA `8e90c6e` with a scoped PASS on Vivo X Fold5 / Android 16 / AutoJs6 v6.7.0
-`arm64-v8a`. The evidence is recorded in
-[`testing/device-validation/d20-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d20-vivo-x-fold5-autojs6-v6.7.0.md).
-
-No new task has been approved. Any future task requires a new repository
-decision, scoped review, and explicit user authorization before work begins.
+**D21-PREPARATION.** D21 (UI responsiveness and blocking) preparation in
+progress. The evidence-gap review, device-procedure preparation, offline
+tests, and user guide will follow the D20 template with D21-specific
+adaptations for UI interaction during repeated reads. Device validation on
+Vivo X Fold5 / AutoJs6 v6.7.0 `arm64-v8a` is pending.

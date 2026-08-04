@@ -19,6 +19,7 @@
       "!scripts/autojs6/d18-stream-cleanup-success-device-check.js",
       "!scripts/autojs6/d19-cleanup-after-failure-device-check.js",
       "!scripts/autojs6/d20-memory-behavior-device-check.js",
+      "!scripts/autojs6/d21-ui-responsiveness-device-check.js",
       "!scripts/autojs6/autojs6-remote-downloader.js"
     ]
   },

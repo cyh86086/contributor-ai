@@ -89,6 +89,10 @@ function normalizeExecution(formatCase, execution) {
     return normalizeMemoryBehaviorExecution(formatCase, execution);
   }
 
+  if (formatCase.verificationMode === "ui-responsiveness") {
+    return normalizeUiResponsivenessExecution(formatCase, execution);
+  }
+
   const uiResponsive = safelyReadProperty(execution, "uiResponsive");
   if (uiResponsive !== true) {
     return failure(
@@ -415,6 +419,101 @@ function normalizeMemoryBehaviorExecution(formatCase, execution) {
     memoryAfterStabilization,
     peakMemory,
     memoryGrowth,
+  };
+
+  if (uiResponsive !== true) {
+    return Object.freeze({
+      ...common,
+      status: "FAIL",
+      allMetadataEqual,
+      uiResponsive: false,
+      failureReason: "UI_NOT_RESPONSIVE",
+    });
+  }
+
+  const status = safelyReadProperty(result, "status");
+  const mimeType = safelyReadProperty(result, "mimeType");
+  const sizeBytes = safelyReadProperty(result, "sizeBytes");
+
+  if (
+    status === "PASS" &&
+    attemptedIterations === requestedIterations &&
+    successfulIterations === requestedIterations &&
+    mimeType === formatCase.expectedMimeType &&
+    sizeBytes === formatCase.expectedSizeBytes &&
+    allMetadataEqual === true
+  ) {
+    return Object.freeze({
+      ...common,
+      status: "PASS",
+      mimeType,
+      sizeBytes,
+      allMetadataEqual,
+      uiResponsive: true,
+    });
+  }
+
+  const failureReason = safelyReadProperty(result, "failureReason");
+  if (status === "FAIL" && failureReason === "PUBLIC_ERROR") {
+    return Object.freeze({
+      ...common,
+      status: "FAIL",
+      allMetadataEqual,
+      uiResponsive: true,
+      failureReason,
+      errorCode: normalizeFormatCheckErrorCode(result),
+    });
+  }
+
+  return Object.freeze({
+    ...common,
+    status: "FAIL",
+    allMetadataEqual,
+    uiResponsive: true,
+    failureReason: "METADATA_MISMATCH",
+  });
+}
+
+function normalizeUiResponsivenessExecution(formatCase, execution) {
+  const uiResponsive = safelyReadProperty(execution, "uiResponsive");
+  const result = safelyReadProperty(execution, "value");
+
+  const requestedIterations = safelyReadProperty(result, "requestedIterations");
+  const attemptedIterations = safelyReadProperty(result, "attemptedIterations");
+  const successfulIterations = safelyReadProperty(
+    result,
+    "successfulIterations",
+  );
+  const allMetadataEqual = safelyReadProperty(result, "allMetadataEqual");
+  const heartbeatCount = safelyReadProperty(result, "heartbeatCount");
+
+  const validCounters =
+    requestedIterations === 10 &&
+    Number.isSafeInteger(attemptedIterations) &&
+    attemptedIterations >= 1 &&
+    attemptedIterations <= requestedIterations &&
+    Number.isSafeInteger(successfulIterations) &&
+    successfulIterations >= 0 &&
+    successfulIterations <= attemptedIterations &&
+    typeof allMetadataEqual === "boolean" &&
+    Number.isSafeInteger(heartbeatCount) &&
+    heartbeatCount >= 0 &&
+    heartbeatCount <= requestedIterations - 1;
+
+  if (!validCounters) {
+    return failure(
+      formatCase.testCaseId,
+      IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+      uiResponsive === true,
+    );
+  }
+
+  const common = {
+    testCaseId: formatCase.testCaseId,
+    requestedIterations,
+    attemptedIterations,
+    successfulIterations,
+    heartbeatCount,
   };
 
   if (uiResponsive !== true) {

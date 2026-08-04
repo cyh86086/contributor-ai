@@ -22,6 +22,7 @@ import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 import { runStreamCleanupSuccessDeviceCheck } from "./stream-cleanup-success-device-check.js";
 import { runCleanupAfterFailureDeviceCheck } from "./cleanup-after-failure-device-check.js";
 import { runMemoryBehaviorDeviceCheck } from "./memory-behavior-device-check.js";
+import { runUiResponsivenessDeviceCheck } from "./ui-responsiveness-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 const READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
@@ -442,6 +443,48 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
       javaBridge,
       isFileUriApproved: () => false,
       reportMetadata: () => {},
+    });
+  }
+
+  if (formatCase.verificationMode === "ui-responsiveness") {
+    return runUiResponsivenessDeviceCheck({
+      testCaseId,
+      sourceUri,
+      expectedSizeBytes: formatCase.expectedSizeBytes,
+      maxSizeBytes: formatCase.maxSizeBytes,
+      readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
+      context,
+      contentResolver,
+      parseUri,
+      javaBridge,
+      isFileUriApproved: () => false,
+      reportMetadata: () => {},
+      uiHeartbeat: () => {
+        return new Promise((resolve) => {
+          try {
+            const handler = new runtime.android.os.Handler(
+              runtime.android.os.Looper.getMainLooper(),
+            );
+            const completed =
+              new runtime.java.util.concurrent.atomic.AtomicBoolean(false);
+            let responded = false;
+
+            handler.post(() => {
+              responded = true;
+              completed.set(true);
+            });
+
+            const deadline = Date.now() + 100;
+            while (!completed.get() && Date.now() < deadline) {
+              runtime.java.lang.Thread.sleep(5);
+            }
+
+            resolve(responded);
+          } catch {
+            resolve(false);
+          }
+        });
+      },
     });
   }
 
