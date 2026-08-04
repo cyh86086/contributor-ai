@@ -17,7 +17,9 @@
       "!scripts/autojs6/d16-repeated-reads-device-check.js",
       "!scripts/autojs6/d17-multi-image-sequential-device-check.js",
       "!scripts/autojs6/d18-stream-cleanup-success-device-check.js",
-      "!scripts/autojs6/d19-cleanup-after-failure-device-check.js"
+      "!scripts/autojs6/d19-cleanup-after-failure-device-check.js",
+      "!scripts/autojs6/d20-memory-behavior-device-check.js",
+      "!scripts/autojs6/autojs6-remote-downloader.js"
     ]
   },
   "formatter": {

@@ -1,6 +1,10 @@
 "ui";
 /* GENERATED: non-production AutoJs6 D05_HEIF device-verification support only. */
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _regenerator() { var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
@@ -291,7 +295,22 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     sourceEntryPath: "autojs6/source/d19-cleanup-after-failure-device-check.entry.js",
     generatedPath: "autojs6/d19-cleanup-after-failure-device-check.js"
   });
-  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE, D13_EXACT_PORTABLE_LIMIT_CHECK_CASE, D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE, D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE, D16_REPEATED_READS_CHECK_CASE, D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE, D18_STREAM_CLEANUP_SUCCESS_CHECK_CASE, D19_CLEANUP_AFTER_FAILURE_CHECK_CASE]);
+  var D20_MEMORY_BEHAVIOR_CHECK_CASE = defineCase({
+    testCaseId: "D20_MEMORY_BEHAVIOR",
+    fixtureId: "JPEG_REPEAT_VALID",
+    pickerMimeType: "image/jpeg",
+    expectedMimeType: "image/jpeg",
+    expectedSizeBytes: 6406,
+    maxSizeBytes: 6406,
+    readerSafetyLimitBytes: 12 * 1024 * 1024,
+    requestCode: 6120,
+    verificationMode: "memory-behavior",
+    title: "D20 \u91CD\u8907\u8B80\u53D6\u8A18\u61B6\u9AD4\u884C\u70BA\u88DD\u7F6E\u9A57\u8B49",
+    instructionText: "\u8ACB\u5728 Android \u7CFB\u7D71\u9078\u5716\u5668\u4E2D\u9078\u64C7\u79C1\u4E0B\u5C0D\u61C9 JPEG_REPEAT_VALID\u3001\u4E14\u5DF2\u7368\u7ACB\u78BA\u8A8D\u70BA 6,406 bytes \u7684\u975E\u654F\u611F JPEG\u3002\u6B64 evidence-only \u6848\u4F8B\u57F7\u884C 10 \u6B21\u5B8C\u6574\u8B80\u53D6\uFF0C\u76E3\u63A7\u7C97\u7C92\u5EA6 heap \u8A18\u61B6\u9AD4\u8B8A\u5316\uFF0C\u78BA\u8A8D\u7121\u4E0D\u5B89\u5168\u6301\u7E8C\u6210\u9577\uFF0C\u4E26\u8F38\u51FA\u542B\u8A18\u61B6\u9AD4\u6307\u6A19\u7684 sanitized metadata\u3002",
+    sourceEntryPath: "autojs6/source/d20-memory-behavior-device-check.entry.js",
+    generatedPath: "autojs6/d20-memory-behavior-device-check.js"
+  });
+  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE, D13_EXACT_PORTABLE_LIMIT_CHECK_CASE, D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE, D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE, D16_REPEATED_READS_CHECK_CASE, D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE, D18_STREAM_CLEANUP_SUCCESS_CHECK_CASE, D19_CLEANUP_AFTER_FAILURE_CHECK_CASE, D20_MEMORY_BEHAVIOR_CHECK_CASE]);
   var D02_D05_FORMAT_CHECK_CASES = Object.freeze([D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE]);
   var IMAGE_INPUT_ERROR_CODES = Object.freeze({
     UNSUPPORTED_MIME_TYPE: "UNSUPPORTED_MIME_TYPE",
@@ -697,6 +716,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     if (formatCase.verificationMode === "cleanup-after-failure") {
       return normalizeCleanupAfterFailureExecution(formatCase, execution);
     }
+    if (formatCase.verificationMode === "memory-behavior") {
+      return normalizeMemoryBehaviorExecution(formatCase, execution);
+    }
     var uiResponsive = safelyReadProperty(execution, "uiResponsive");
     if (uiResponsive !== true) {
       return failure(formatCase.testCaseId, IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED, false);
@@ -831,6 +853,76 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       requestedIterations: requestedIterations,
       attemptedIterations: attemptedIterations,
       successfulIterations: successfulIterations
+    };
+    if (uiResponsive !== true) {
+      return Object.freeze(__spreadProps(__spreadValues({}, common), {
+        status: "FAIL",
+        allMetadataEqual: allMetadataEqual,
+        uiResponsive: false,
+        failureReason: "UI_NOT_RESPONSIVE"
+      }));
+    }
+    var status = safelyReadProperty(result, "status");
+    var mimeType = safelyReadProperty(result, "mimeType");
+    var sizeBytes = safelyReadProperty(result, "sizeBytes");
+    if (status === "PASS" && attemptedIterations === requestedIterations && successfulIterations === requestedIterations && mimeType === formatCase.expectedMimeType && sizeBytes === formatCase.expectedSizeBytes && allMetadataEqual === true) {
+      return Object.freeze(__spreadProps(__spreadValues({}, common), {
+        status: "PASS",
+        mimeType: mimeType,
+        sizeBytes: sizeBytes,
+        allMetadataEqual: allMetadataEqual,
+        uiResponsive: true
+      }));
+    }
+    var failureReason = safelyReadProperty(result, "failureReason");
+    if (status === "FAIL" && failureReason === "PUBLIC_ERROR") {
+      return Object.freeze(__spreadProps(__spreadValues({}, common), {
+        status: "FAIL",
+        allMetadataEqual: allMetadataEqual,
+        uiResponsive: true,
+        failureReason: failureReason,
+        errorCode: normalizeFormatCheckErrorCode(result)
+      }));
+    }
+    return Object.freeze(__spreadProps(__spreadValues({}, common), {
+      status: "FAIL",
+      allMetadataEqual: allMetadataEqual,
+      uiResponsive: true,
+      failureReason: "METADATA_MISMATCH"
+    }));
+  }
+  function normalizeMemoryBehaviorExecution(formatCase, execution) {
+    var uiResponsive = safelyReadProperty(execution, "uiResponsive");
+    var result = safelyReadProperty(execution, "value");
+    var requestedIterations = safelyReadProperty(result, "requestedIterations");
+    var attemptedIterations = safelyReadProperty(result, "attemptedIterations");
+    var successfulIterations = safelyReadProperty(result, "successfulIterations");
+    var allMetadataEqual = safelyReadProperty(result, "allMetadataEqual");
+    var validCounters = requestedIterations === 10 && Number.isSafeInteger(attemptedIterations) && attemptedIterations >= 1 && attemptedIterations <= requestedIterations && Number.isSafeInteger(successfulIterations) && successfulIterations >= 0 && successfulIterations <= attemptedIterations && typeof allMetadataEqual === "boolean";
+    if (!validCounters) {
+      return failure(formatCase.testCaseId, IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED, uiResponsive === true);
+    }
+    var memoryBefore = safelyReadProperty(result, "memoryBefore");
+    var memoryAfterEach = safelyReadProperty(result, "memoryAfterEach");
+    var memoryAfterStabilization = safelyReadProperty(result, "memoryAfterStabilization");
+    var peakMemory = safelyReadProperty(result, "peakMemory");
+    var memoryGrowth = safelyReadProperty(result, "memoryGrowth");
+    var validMemoryMetrics = Number.isSafeInteger(memoryBefore) && memoryBefore > 0 && Array.isArray(memoryAfterEach) && memoryAfterEach.length === requestedIterations && memoryAfterEach.every(function (m) {
+      return Number.isSafeInteger(m) && m > 0;
+    }) && Number.isSafeInteger(memoryAfterStabilization) && memoryAfterStabilization > 0 && Number.isSafeInteger(peakMemory) && peakMemory > 0 && Number.isSafeInteger(memoryGrowth);
+    if (!validMemoryMetrics) {
+      return failure(formatCase.testCaseId, IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED, uiResponsive === true);
+    }
+    var common = {
+      testCaseId: formatCase.testCaseId,
+      requestedIterations: requestedIterations,
+      attemptedIterations: attemptedIterations,
+      successfulIterations: successfulIterations,
+      memoryBefore: memoryBefore,
+      memoryAfterEach: Object.freeze(_toConsumableArray(memoryAfterEach)),
+      memoryAfterStabilization: memoryAfterStabilization,
+      peakMemory: peakMemory,
+      memoryGrowth: memoryGrowth
     };
     if (uiResponsive !== true) {
       return Object.freeze(__spreadProps(__spreadValues({}, common), {
@@ -2505,6 +2597,167 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       throw new TypeError("reportMetadata must be a function");
     }
   }
+  var REQUESTED_ITERATIONS2 = 10;
+  var REQUIRED_MIME_TYPE2 = "image/jpeg";
+  var STABILIZATION_INTERVAL_MS = 500;
+  var PUBLIC_ERROR_CODES11 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
+  function runMemoryBehaviorDeviceCheck(_a) {
+    return __async(this, null, _regenerator().m(function _callee19() {
+      var _b, expectedSizeBytes, _b$reportMetadata6, reportMetadata, readerOptions, memoryBefore, peakMemory, attemptedIterations, successfulIterations, firstMimeType, firstSizeBytes, publicErrorCode, metadataMismatch, memoryAfterEach, iteration, result, currentMemory, matchesRequiredMetadata, matchesFirstIteration, memoryAfterStabilization, memoryGrowth, allMetadataEqual, record;
+      return _regenerator().w(function (_context19) {
+        while (1) switch (_context19.n) {
+          case 0:
+            _b = _a, expectedSizeBytes = _b.expectedSizeBytes, _b$reportMetadata6 = _b.reportMetadata, reportMetadata = _b$reportMetadata6 === void 0 ? function () {} : _b$reportMetadata6, readerOptions = __objRest(_b, ["expectedSizeBytes", "reportMetadata"]);
+            validateInputs6({
+              expectedSizeBytes: expectedSizeBytes,
+              reportMetadata: reportMetadata
+            });
+            memoryBefore = getUsedHeapBytes();
+            peakMemory = memoryBefore;
+            attemptedIterations = 0;
+            successfulIterations = 0;
+            metadataMismatch = false;
+            memoryAfterEach = [];
+            iteration = 1;
+          case 1:
+            if (!(iteration <= REQUESTED_ITERATIONS2)) {
+              _context19.n = 6;
+              break;
+            }
+            attemptedIterations += 1;
+            _context19.n = 2;
+            return runImageReaderDeviceCheck(__spreadProps(__spreadValues({}, readerOptions), {
+              reportMetadata: function reportMetadata() {}
+            }));
+          case 2:
+            result = _context19.v;
+            currentMemory = getUsedHeapBytes();
+            memoryAfterEach.push(currentMemory);
+            if (currentMemory > peakMemory) {
+              peakMemory = currentMemory;
+            }
+            if (!(result.status === "FAIL")) {
+              _context19.n = 3;
+              break;
+            }
+            publicErrorCode = normalizePublicErrorCode3(result.errorCode);
+            return _context19.a(3, 6);
+          case 3:
+            matchesRequiredMetadata = result.status === "PASS" && result.mimeType === REQUIRED_MIME_TYPE2 && result.sizeBytes === expectedSizeBytes;
+            matchesFirstIteration = iteration === 1 || result.mimeType === firstMimeType && result.sizeBytes === firstSizeBytes;
+            if (!(!matchesRequiredMetadata || !matchesFirstIteration)) {
+              _context19.n = 4;
+              break;
+            }
+            metadataMismatch = true;
+            return _context19.a(3, 6);
+          case 4:
+            if (iteration === 1) {
+              firstMimeType = result.mimeType;
+              firstSizeBytes = result.sizeBytes;
+            }
+            successfulIterations += 1;
+          case 5:
+            iteration += 1;
+            _context19.n = 1;
+            break;
+          case 6:
+            _context19.n = 7;
+            return new Promise(function (resolve) {
+              return setTimeout(resolve, STABILIZATION_INTERVAL_MS);
+            });
+          case 7:
+            memoryAfterStabilization = getUsedHeapBytes();
+            if (memoryAfterStabilization > peakMemory) {
+              peakMemory = memoryAfterStabilization;
+            }
+            memoryGrowth = memoryAfterStabilization - memoryBefore;
+            allMetadataEqual = successfulIterations === REQUESTED_ITERATIONS2 && publicErrorCode === void 0 && metadataMismatch === false;
+            record = createLoopRecord2({
+              testCaseId: readerOptions.testCaseId,
+              attemptedIterations: attemptedIterations,
+              successfulIterations: successfulIterations,
+              allMetadataEqual: allMetadataEqual,
+              publicErrorCode: publicErrorCode,
+              metadataMismatch: metadataMismatch,
+              mimeType: firstMimeType,
+              sizeBytes: firstSizeBytes,
+              memoryBefore: memoryBefore,
+              memoryAfterEach: memoryAfterEach,
+              memoryAfterStabilization: memoryAfterStabilization,
+              peakMemory: peakMemory,
+              memoryGrowth: memoryGrowth
+            });
+            reportMetadata(record);
+            return _context19.a(2, record);
+        }
+      }, _callee19);
+    }));
+  }
+  function getUsedHeapBytes() {
+    var runtime = java.lang.Runtime.getRuntime();
+    return runtime.totalMemory() - runtime.freeMemory();
+  }
+  function createLoopRecord2(_ref28) {
+    var testCaseId = _ref28.testCaseId,
+      attemptedIterations = _ref28.attemptedIterations,
+      successfulIterations = _ref28.successfulIterations,
+      allMetadataEqual = _ref28.allMetadataEqual,
+      publicErrorCode = _ref28.publicErrorCode,
+      metadataMismatch = _ref28.metadataMismatch,
+      mimeType = _ref28.mimeType,
+      sizeBytes = _ref28.sizeBytes,
+      memoryBefore = _ref28.memoryBefore,
+      memoryAfterEach = _ref28.memoryAfterEach,
+      memoryAfterStabilization = _ref28.memoryAfterStabilization,
+      peakMemory = _ref28.peakMemory,
+      memoryGrowth = _ref28.memoryGrowth;
+    var common = {
+      testCaseId: testCaseId,
+      requestedIterations: REQUESTED_ITERATIONS2,
+      attemptedIterations: attemptedIterations,
+      successfulIterations: successfulIterations,
+      memoryBefore: memoryBefore,
+      memoryAfterEach: Object.freeze(_toConsumableArray(memoryAfterEach)),
+      memoryAfterStabilization: memoryAfterStabilization,
+      peakMemory: peakMemory,
+      memoryGrowth: memoryGrowth
+    };
+    if (successfulIterations === REQUESTED_ITERATIONS2 && publicErrorCode === void 0 && metadataMismatch === false) {
+      return Object.freeze(__spreadProps(__spreadValues({}, common), {
+        status: "PASS",
+        mimeType: mimeType,
+        sizeBytes: sizeBytes,
+        allMetadataEqual: allMetadataEqual
+      }));
+    }
+    if (publicErrorCode !== void 0) {
+      return Object.freeze(__spreadProps(__spreadValues({}, common), {
+        status: "FAIL",
+        allMetadataEqual: allMetadataEqual,
+        failureReason: "PUBLIC_ERROR",
+        errorCode: publicErrorCode
+      }));
+    }
+    return Object.freeze(__spreadProps(__spreadValues({}, common), {
+      status: "FAIL",
+      allMetadataEqual: allMetadataEqual,
+      failureReason: "METADATA_MISMATCH"
+    }));
+  }
+  function normalizePublicErrorCode3(errorCode) {
+    return PUBLIC_ERROR_CODES11.has(errorCode) ? errorCode : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED;
+  }
+  function validateInputs6(_ref29) {
+    var expectedSizeBytes = _ref29.expectedSizeBytes,
+      reportMetadata = _ref29.reportMetadata;
+    if (!Number.isSafeInteger(expectedSizeBytes) || expectedSizeBytes <= 0) {
+      throw new TypeError("expectedSizeBytes must be a positive safe integer");
+    }
+    if (typeof reportMetadata !== "function") {
+      throw new TypeError("reportMetadata must be a function");
+    }
+  }
   var MAX_SIZE_BYTES = 10 * 1024 * 1024;
   var READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
   var UI_HEARTBEAT_TIMEOUT_MILLIS = 1e3;
@@ -2515,14 +2768,14 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return runAutoJs6MultiImageCheck(formatCase, runtime);
     }
     return runFormatCheck(formatCase, {
-      showInstructions: function showInstructions(_ref28) {
-        var title = _ref28.title,
-          instructionText = _ref28.instructionText;
+      showInstructions: function showInstructions(_ref30) {
+        var title = _ref30.title,
+          instructionText = _ref30.instructionText;
         return runtime.dialogs.alert(title, instructionText);
       },
-      pickSingleImage: function pickSingleImage(_ref29) {
-        var pickerMimeType = _ref29.pickerMimeType,
-          requestCode = _ref29.requestCode;
+      pickSingleImage: function pickSingleImage(_ref31) {
+        var pickerMimeType = _ref31.pickerMimeType,
+          requestCode = _ref31.requestCode;
         return _pickSingleImage(runtime, pickerMimeType, requestCode);
       },
       executeOffUiThread: function executeOffUiThread(task) {
@@ -2539,25 +2792,25 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     });
   }
   function runAutoJs6MultiImageCheck(formatCase, runtime) {
-    return __async(this, null, _regenerator().m(function _callee19() {
+    return __async(this, null, _regenerator().m(function _callee20() {
       var sourceUris, reportMetadata, record, expectedImages, context, contentResolver, parseUri, javaBridge;
-      return _regenerator().w(function (_context19) {
-        while (1) switch (_context19.n) {
+      return _regenerator().w(function (_context20) {
+        while (1) switch (_context20.n) {
           case 0:
-            _context19.n = 1;
+            _context20.n = 1;
             return runtime.dialogs.alert(formatCase.title, formatCase.instructionText);
           case 1:
-            _context19.n = 2;
+            _context20.n = 2;
             return pickMultipleImages(runtime, formatCase.pickerMimeType, formatCase.requestCode);
           case 2:
-            sourceUris = _context19.v;
+            sourceUris = _context20.v;
             reportMetadata = function reportMetadata(record) {
               runtime.console.clear();
               runtime.console.show();
               runtime.console.info(JSON.stringify(record));
             };
             if (!(!Array.isArray(sourceUris) || sourceUris.length === 0)) {
-              _context19.n = 3;
+              _context20.n = 3;
               break;
             }
             record = Object.freeze({
@@ -2571,7 +2824,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               failureReason: "NO_IMAGES_SELECTED"
             });
             reportMetadata(record);
-            return _context19.a(2, record);
+            return _context20.a(2, record);
           case 3:
             expectedImages = sourceUris.map(function () {
               return {
@@ -2592,7 +2845,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
                 return _classifyError(runtime, error);
               }
             };
-            return _context19.a(2, runMultiImageSequentialDeviceCheck({
+            return _context20.a(2, runMultiImageSequentialDeviceCheck({
               sourceUris: sourceUris,
               expectedImages: expectedImages,
               testCaseId: formatCase.testCaseId,
@@ -2608,7 +2861,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               reportMetadata: reportMetadata
             }));
         }
-      }, _callee19);
+      }, _callee20);
     }));
   }
   function pickMultipleImages(runtime, pickerMimeType, requestCode) {
@@ -2904,6 +3157,23 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         maxSizeBytes: formatCase.maxSizeBytes,
         readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
         failureAfterBytes: formatCase.failureAfterBytes,
+        context: context,
+        contentResolver: contentResolver,
+        parseUri: parseUri,
+        javaBridge: javaBridge,
+        isFileUriApproved: function isFileUriApproved() {
+          return false;
+        },
+        reportMetadata: function reportMetadata() {}
+      });
+    }
+    if (formatCase.verificationMode === "memory-behavior") {
+      return runMemoryBehaviorDeviceCheck({
+        testCaseId: testCaseId,
+        sourceUri: sourceUri,
+        expectedSizeBytes: formatCase.expectedSizeBytes,
+        maxSizeBytes: formatCase.maxSizeBytes,
+        readerSafetyLimitBytes: formatCase.readerSafetyLimitBytes,
         context: context,
         contentResolver: contentResolver,
         parseUri: parseUri,
