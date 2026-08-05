@@ -27,7 +27,7 @@ import { runNoPersistenceDeviceCheck } from "./no-persistence-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 const READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
-const UI_HEARTBEAT_TIMEOUT_MILLIS = 1_000;
+const UI_HEARTBEAT_TIMEOUT_MILLIS = 3_000;
 const CHECK_TIMEOUT_MILLIS = 20_000;
 
 export function runAutoJs6FormatCheck(formatCase, injectedRuntime) {

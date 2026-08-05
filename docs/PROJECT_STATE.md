@@ -59,7 +59,7 @@ contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
 observation; D16 has scoped device validation PASS; D17 has scoped device
 validation PASS; D18 has scoped device validation PASS; D19 has scoped device
-validation PASS; D20 has scoped device validation PASS; D21 has scoped device validation PASS; D22-D26 remain pending.**
+validation PASS; D20 has scoped device validation PASS; D21 has scoped device validation PASS; D22 preparation complete, awaiting device validation; D23-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -495,7 +495,8 @@ satisfy these requirements.
   and
   [`testing/device-validation/d20-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d20-vivo-x-fold5-autojs6-v6.7.0.md).
 - D21 evidence-gap review, device-procedure preparation, and scoped device validation are complete. The D21 contract extends D16 with UI heartbeat monitoring during 10 repeated complete production-reader invocations, posting a heartbeat to the UI thread between iterations using `android.os.Handler` + `android.os.Looper.getMainLooper()` with a 100ms timeout; observed `heartbeatCount: 9` with `uiResponsive: true`. Offline tests (270/270 pass) cover PASS, all error paths, sanitization, and input validation. The review, procedure, and device evidence are recorded in [`testing/d21-ui-responsiveness-evidence-gap-review.md`](testing/d21-ui-responsiveness-evidence-gap-review.md), [`user-guides/autojs6-d21-ui-responsiveness-check-zh-tw.md`](user-guides/autojs6-d21-ui-responsiveness-check-zh-tw.md), and [`testing/device-validation/d21-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d21-vivo-x-fold5-autojs6-v6.7.0.md).
-- D22-D26 still require scoped review, preparation, and in several cases
+- D22 evidence-gap review and device-procedure preparation are complete. The D22 contract verifies that after successful and failed image-read cases, no image bytes, Base64 strings, or source URIs are persisted in output. The wrapper runs both success and failure paths, inspects the sanitized output for prohibited patterns, and reports `successOutputClean` and `failureOutputClean` flags. Offline tests (279/279 pass) cover PASS, PERSISTENCE_VIOLATION, METADATA_MISMATCH, and input validation. The review and procedure are recorded in [`testing/d22-no-persistence-evidence-gap-review.md`](testing/d22-no-persistence-evidence-gap-review.md) and [`user-guides/autojs6-d22-no-persistence-check-zh-tw.md`](user-guides/autojs6-d22-no-persistence-check-zh-tw.md).
+- D23-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.

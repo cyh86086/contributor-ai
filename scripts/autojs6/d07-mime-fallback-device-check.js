@@ -3192,7 +3192,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   }
   var MAX_SIZE_BYTES = 10 * 1024 * 1024;
   var READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
-  var UI_HEARTBEAT_TIMEOUT_MILLIS = 1e3;
+  var UI_HEARTBEAT_TIMEOUT_MILLIS = 3e3;
   var CHECK_TIMEOUT_MILLIS = 2e4;
   function runAutoJs6FormatCheck(formatCase, injectedRuntime) {
     var runtime = injectedRuntime != null ? injectedRuntime : (typeof globalThis === "undefined" ? "undefined" : _typeof(globalThis)) === "object" ? globalThis : Function("return this")();
