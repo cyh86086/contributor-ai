@@ -25,20 +25,27 @@ export async function runNoPersistenceDeviceCheck({
   }
 
   // Success path
-  let successRecord;
   let successOutputClean = false;
+  let successStatus;
+  let successMimeType;
+  let successSizeBytes;
   try {
-    successRecord = await prepareSelectedImage();
+    const successRecord = await prepareSelectedImage();
     successOutputClean = inspectOutputForPersistence(successRecord);
+    successStatus = safelyReadProperty(successRecord, "status");
+    successMimeType = safelyReadProperty(successRecord, "mimeType");
+    successSizeBytes = safelyReadProperty(successRecord, "sizeBytes");
   } catch {
     successOutputClean = true;
   }
 
-  // Failure path
-  let failureRecord;
+  // Failure path — successRecord intentionally not retained to avoid
+  // holding both paths' Java resources (ContentResolver streams, byte
+  // arrays) simultaneously and triggering OOM on memory-constrained
+  // AutoJs6 hosts.
   let failureOutputClean = false;
   try {
-    failureRecord = await prepareSelectedImage(invalidUri);
+    const failureRecord = await prepareSelectedImage(invalidUri);
     failureOutputClean = inspectOutputForPersistence(failureRecord);
   } catch {
     failureOutputClean = true;
@@ -59,20 +66,16 @@ export async function runNoPersistenceDeviceCheck({
     return record;
   }
 
-  const status = safelyReadProperty(successRecord, "status");
-  const mimeType = safelyReadProperty(successRecord, "mimeType");
-  const sizeBytes = safelyReadProperty(successRecord, "sizeBytes");
-
   if (
-    status === "PASS" &&
-    mimeType === "image/jpeg" &&
-    sizeBytes === expectedSizeBytes
+    successStatus === "PASS" &&
+    successMimeType === "image/jpeg" &&
+    successSizeBytes === expectedSizeBytes
   ) {
     const record = Object.freeze({
       testCaseId: "D22_NO_PERSISTENCE",
       status: "PASS",
-      mimeType,
-      sizeBytes,
+      mimeType: successMimeType,
+      sizeBytes: successSizeBytes,
       uiResponsive,
       successOutputClean,
       failureOutputClean,
