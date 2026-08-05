@@ -3064,7 +3064,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         _ref32$invalidUri = _ref32.invalidUri,
         invalidUri = _ref32$invalidUri === void 0 ? "content://invalid/uri" : _ref32$invalidUri;
       return _regenerator().m(function _callee21() {
-        var successOutputClean, successStatus, successMimeType, successSizeBytes, successRecord, failureOutputClean, failureRecord, uiResponsive, record2, _record, record, _t20, _t21;
+        var _a, _b, successOutputClean, successStatus, successMimeType, successSizeBytes, successRecord, failureOutputClean, failureRecord, uiResponsive, record2, _record, record, _t20, _t21;
         return _regenerator().w(function (_context21) {
           while (1) switch (_context21.p = _context21.n) {
             case 0:
@@ -3097,6 +3097,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               _t20 = _context21.v;
               successOutputClean = true;
             case 6:
+              if (typeof java !== "undefined" && ((_b = (_a = java == null ? void 0 : java.lang) == null ? void 0 : _a.System) == null ? void 0 : _b.gc)) {
+                java.lang.System.gc();
+              }
               failureOutputClean = false;
               _context21.p = 7;
               _context21.n = 8;

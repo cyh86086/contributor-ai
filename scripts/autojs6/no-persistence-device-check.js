@@ -39,10 +39,16 @@ export async function runNoPersistenceDeviceCheck({
     successOutputClean = true;
   }
 
-  // Failure path — successRecord intentionally not retained to avoid
-  // holding both paths' Java resources (ContentResolver streams, byte
-  // arrays) simultaneously and triggering OOM on memory-constrained
-  // AutoJs6 hosts.
+  // Explicitly release success-path Java resources (ContentResolver
+  // streams, byte arrays) before the failure path. On memory-constrained
+  // AutoJs6 hosts (512 MB heap), retaining both paths' Java objects
+  // simultaneously triggers OOM. Block-scoped `const` is insufficient
+  // because Rhino GC may not run before the next await.
+  if (typeof java !== "undefined" && java?.lang?.System?.gc) {
+    java.lang.System.gc();
+  }
+
+  // Failure path
   let failureOutputClean = false;
   try {
     const failureRecord = await prepareSelectedImage(invalidUri);
