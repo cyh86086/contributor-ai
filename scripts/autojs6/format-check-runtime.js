@@ -23,6 +23,7 @@ import { runStreamCleanupSuccessDeviceCheck } from "./stream-cleanup-success-dev
 import { runCleanupAfterFailureDeviceCheck } from "./cleanup-after-failure-device-check.js";
 import { runMemoryBehaviorDeviceCheck } from "./memory-behavior-device-check.js";
 import { runUiResponsivenessDeviceCheck } from "./ui-responsiveness-device-check.js";
+import { runNoPersistenceDeviceCheck } from "./no-persistence-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 const READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
@@ -484,6 +485,21 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
             resolve(false);
           }
         });
+      },
+    });
+  }
+
+  if (formatCase.verificationMode === "no-persistence") {
+    return runNoPersistenceDeviceCheck({
+      expectedSizeBytes: formatCase.expectedSizeBytes,
+      reportMetadata: () => {},
+      prepareSelectedImage: (invalidUri) => {
+        return prepareSelectedImage(
+          runtime,
+          invalidUri ?? sourceUri,
+          testCaseId,
+          formatCase,
+        );
       },
     });
   }

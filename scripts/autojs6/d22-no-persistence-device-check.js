@@ -1,5 +1,5 @@
 "ui";
-/* GENERATED: non-production AutoJs6 D05_HEIF device-verification support only. */
+/* GENERATED: non-production AutoJs6 D22_NO_PERSISTENCE device-verification support only. */
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -3686,5 +3686,5 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED;
     }
   }
-  void runAutoJs6FormatCheck(D05_FORMAT_CHECK_CASE);
+  void runAutoJs6FormatCheck(D22_NO_PERSISTENCE_CHECK_CASE);
 })();

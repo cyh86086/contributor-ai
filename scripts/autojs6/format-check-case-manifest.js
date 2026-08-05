@@ -267,6 +267,23 @@ export const D21_UI_RESPONSIVENESS_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d21-ui-responsiveness-device-check.js",
 });
 
+export const D22_NO_PERSISTENCE_CHECK_CASE = defineCase({
+  testCaseId: "D22_NO_PERSISTENCE",
+  fixtureId: "JPEG_REPEAT_VALID",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6122,
+  verificationMode: "no-persistence",
+  title: "D22 無影像持久化裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選擇私下對應 JPEG_REPEAT_VALID、且已獨立確認為 6,406 bytes 的非敏感 JPEG。此 evidence-only 案例執行成功與失敗兩種路徑，檢查輸出中是否含有 Base64、bytes 或 URI，確認無影像資料持久化，並輸出含 successOutputClean 與 failureOutputClean 的 sanitized metadata。",
+  sourceEntryPath: "autojs6/source/d22-no-persistence-device-check.entry.js",
+  generatedPath: "autojs6/d22-no-persistence-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -285,6 +302,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D19_CLEANUP_AFTER_FAILURE_CHECK_CASE,
   D20_MEMORY_BEHAVIOR_CHECK_CASE,
   D21_UI_RESPONSIVENESS_CHECK_CASE,
+  D22_NO_PERSISTENCE_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

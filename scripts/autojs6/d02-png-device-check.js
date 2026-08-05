@@ -325,7 +325,22 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     sourceEntryPath: "autojs6/source/d21-ui-responsiveness-device-check.entry.js",
     generatedPath: "autojs6/d21-ui-responsiveness-device-check.js"
   });
-  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE, D13_EXACT_PORTABLE_LIMIT_CHECK_CASE, D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE, D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE, D16_REPEATED_READS_CHECK_CASE, D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE, D18_STREAM_CLEANUP_SUCCESS_CHECK_CASE, D19_CLEANUP_AFTER_FAILURE_CHECK_CASE, D20_MEMORY_BEHAVIOR_CHECK_CASE, D21_UI_RESPONSIVENESS_CHECK_CASE]);
+  var D22_NO_PERSISTENCE_CHECK_CASE = defineCase({
+    testCaseId: "D22_NO_PERSISTENCE",
+    fixtureId: "JPEG_REPEAT_VALID",
+    pickerMimeType: "image/jpeg",
+    expectedMimeType: "image/jpeg",
+    expectedSizeBytes: 6406,
+    maxSizeBytes: 6406,
+    readerSafetyLimitBytes: 12 * 1024 * 1024,
+    requestCode: 6122,
+    verificationMode: "no-persistence",
+    title: "D22 \u7121\u5F71\u50CF\u6301\u4E45\u5316\u88DD\u7F6E\u9A57\u8B49",
+    instructionText: "\u8ACB\u5728 Android \u7CFB\u7D71\u9078\u5716\u5668\u4E2D\u9078\u64C7\u79C1\u4E0B\u5C0D\u61C9 JPEG_REPEAT_VALID\u3001\u4E14\u5DF2\u7368\u7ACB\u78BA\u8A8D\u70BA 6,406 bytes \u7684\u975E\u654F\u611F JPEG\u3002\u6B64 evidence-only \u6848\u4F8B\u57F7\u884C\u6210\u529F\u8207\u5931\u6557\u5169\u7A2E\u8DEF\u5F91\uFF0C\u6AA2\u67E5\u8F38\u51FA\u4E2D\u662F\u5426\u542B\u6709 Base64\u3001bytes \u6216 URI\uFF0C\u78BA\u8A8D\u7121\u5F71\u50CF\u8CC7\u6599\u6301\u4E45\u5316\uFF0C\u4E26\u8F38\u51FA\u542B successOutputClean \u8207 failureOutputClean \u7684 sanitized metadata\u3002",
+    sourceEntryPath: "autojs6/source/d22-no-persistence-device-check.entry.js",
+    generatedPath: "autojs6/d22-no-persistence-device-check.js"
+  });
+  var FORMAT_CHECK_CASES = Object.freeze([D01_FORMAT_CHECK_CASE, D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE, D06_RESOLVER_MIME_CHECK_CASE, D07_MIME_FALLBACK_CHECK_CASE, D08_PERMISSION_GRANTED_CHECK_CASE, D13_EXACT_PORTABLE_LIMIT_CHECK_CASE, D14_PORTABLE_SIZE_OVERFLOW_CHECK_CASE, D15_READER_SAFETY_CEILING_OVERFLOW_CHECK_CASE, D16_REPEATED_READS_CHECK_CASE, D17_MULTI_IMAGE_SEQUENTIAL_CHECK_CASE, D18_STREAM_CLEANUP_SUCCESS_CHECK_CASE, D19_CLEANUP_AFTER_FAILURE_CHECK_CASE, D20_MEMORY_BEHAVIOR_CHECK_CASE, D21_UI_RESPONSIVENESS_CHECK_CASE, D22_NO_PERSISTENCE_CHECK_CASE]);
   var D02_D05_FORMAT_CHECK_CASES = Object.freeze([D02_FORMAT_CHECK_CASE, D03_FORMAT_CHECK_CASE, D04_FORMAT_CHECK_CASE, D05_FORMAT_CHECK_CASE]);
   var IMAGE_INPUT_ERROR_CODES = Object.freeze({
     UNSUPPORTED_MIME_TYPE: "UNSUPPORTED_MIME_TYPE",
@@ -737,6 +752,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     if (formatCase.verificationMode === "ui-responsiveness") {
       return normalizeUiResponsivenessExecution(formatCase, execution);
     }
+    if (formatCase.verificationMode === "no-persistence") {
+      return normalizeNoPersistenceExecution(formatCase, execution);
+    }
     var uiResponsive = safelyReadProperty(execution, "uiResponsive");
     if (uiResponsive !== true) {
       return failure(formatCase.testCaseId, IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED, false);
@@ -1034,6 +1052,46 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       uiResponsive: true,
       failureReason: "METADATA_MISMATCH"
     }));
+  }
+  function normalizeNoPersistenceExecution(formatCase, execution) {
+    var uiResponsive = safelyReadProperty(execution, "uiResponsive");
+    var result = safelyReadProperty(execution, "value");
+    if (uiResponsive !== true) {
+      return Object.freeze({
+        testCaseId: formatCase.testCaseId,
+        status: "FAIL",
+        failureReason: "UI_NOT_RESPONSIVE",
+        uiResponsive: false
+      });
+    }
+    var status = safelyReadProperty(result, "status");
+    var failureReason = safelyReadProperty(result, "failureReason");
+    var successOutputClean = safelyReadProperty(result, "successOutputClean");
+    var failureOutputClean = safelyReadProperty(result, "failureOutputClean");
+    if (failureReason === "PERSISTENCE_VIOLATION") {
+      return Object.freeze({
+        testCaseId: formatCase.testCaseId,
+        status: "FAIL",
+        failureReason: failureReason,
+        successOutputClean: successOutputClean,
+        failureOutputClean: failureOutputClean,
+        uiResponsive: true
+      });
+    }
+    var mimeType = safelyReadProperty(result, "mimeType");
+    var sizeBytes = safelyReadProperty(result, "sizeBytes");
+    if (status === "PASS" && mimeType === formatCase.expectedMimeType && sizeBytes === formatCase.expectedSizeBytes && successOutputClean === true && failureOutputClean === true) {
+      return Object.freeze({
+        testCaseId: formatCase.testCaseId,
+        status: "PASS",
+        mimeType: mimeType,
+        sizeBytes: sizeBytes,
+        successOutputClean: successOutputClean,
+        failureOutputClean: failureOutputClean,
+        uiResponsive: true
+      });
+    }
+    return failure(formatCase.testCaseId, status === "FAIL" && PUBLIC_ERROR_CODES.has(failureReason) ? failureReason : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED, true);
   }
   function failure(testCaseId, errorCode, uiResponsive) {
     return Object.freeze({
@@ -2994,6 +3052,144 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       throw new TypeError("uiHeartbeat must be a function");
     }
   }
+  var BASE64_PATTERN = /[\+\/-9A-Za-z]{20,}={0,2}/;
+  var CONTENT_URI_PATTERN = /content:\/\/(?:[\0-\x08\x0E-\x1F!#-&\(-\|~-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+/;
+  var BYTE_ARRAY_PATTERN = /\[[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*(?:[0-9]+[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*,[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*){5,}[0-9]+[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*\]/;
+  function runNoPersistenceDeviceCheck(_0) {
+    return __async(this, arguments, function (_ref32) {
+      var expectedSizeBytes = _ref32.expectedSizeBytes,
+        _ref32$reportMetadata = _ref32.reportMetadata,
+        reportMetadata = _ref32$reportMetadata === void 0 ? function () {} : _ref32$reportMetadata,
+        prepareSelectedImage2 = _ref32.prepareSelectedImage,
+        _ref32$invalidUri = _ref32.invalidUri,
+        invalidUri = _ref32$invalidUri === void 0 ? "content://invalid/uri" : _ref32$invalidUri;
+      return _regenerator().m(function _callee21() {
+        var successRecord, successOutputClean, failureRecord, failureOutputClean, uiResponsive, record2, status, mimeType, sizeBytes, _record, record, _t20, _t21;
+        return _regenerator().w(function (_context21) {
+          while (1) switch (_context21.p = _context21.n) {
+            case 0:
+              if (!(!Number.isSafeInteger(expectedSizeBytes) || expectedSizeBytes <= 0)) {
+                _context21.n = 1;
+                break;
+              }
+              throw new TypeError("expectedSizeBytes must be a positive safe integer");
+            case 1:
+              if (!(typeof prepareSelectedImage2 !== "function")) {
+                _context21.n = 2;
+                break;
+              }
+              throw new TypeError("prepareSelectedImage must be a function");
+            case 2:
+              successOutputClean = false;
+              _context21.p = 3;
+              _context21.n = 4;
+              return prepareSelectedImage2();
+            case 4:
+              successRecord = _context21.v;
+              successOutputClean = inspectOutputForPersistence(successRecord);
+              _context21.n = 6;
+              break;
+            case 5:
+              _context21.p = 5;
+              _t20 = _context21.v;
+              successOutputClean = true;
+            case 6:
+              failureOutputClean = false;
+              _context21.p = 7;
+              _context21.n = 8;
+              return prepareSelectedImage2(invalidUri);
+            case 8:
+              failureRecord = _context21.v;
+              failureOutputClean = inspectOutputForPersistence(failureRecord);
+              _context21.n = 10;
+              break;
+            case 9:
+              _context21.p = 9;
+              _t21 = _context21.v;
+              failureOutputClean = true;
+            case 10:
+              uiResponsive = true;
+              if (!(!successOutputClean || !failureOutputClean)) {
+                _context21.n = 11;
+                break;
+              }
+              record2 = Object.freeze({
+                testCaseId: "D22_NO_PERSISTENCE",
+                status: "FAIL",
+                failureReason: "PERSISTENCE_VIOLATION",
+                successOutputClean: successOutputClean,
+                failureOutputClean: failureOutputClean,
+                uiResponsive: uiResponsive
+              });
+              reportMetadata(record2);
+              return _context21.a(2, record2);
+            case 11:
+              status = safelyReadProperty7(successRecord, "status");
+              mimeType = safelyReadProperty7(successRecord, "mimeType");
+              sizeBytes = safelyReadProperty7(successRecord, "sizeBytes");
+              if (!(status === "PASS" && mimeType === "image/jpeg" && sizeBytes === expectedSizeBytes)) {
+                _context21.n = 12;
+                break;
+              }
+              _record = Object.freeze({
+                testCaseId: "D22_NO_PERSISTENCE",
+                status: "PASS",
+                mimeType: mimeType,
+                sizeBytes: sizeBytes,
+                uiResponsive: uiResponsive,
+                successOutputClean: successOutputClean,
+                failureOutputClean: failureOutputClean
+              });
+              reportMetadata(_record);
+              return _context21.a(2, _record);
+            case 12:
+              record = Object.freeze({
+                testCaseId: "D22_NO_PERSISTENCE",
+                status: "FAIL",
+                failureReason: "METADATA_MISMATCH",
+                uiResponsive: uiResponsive,
+                successOutputClean: successOutputClean,
+                failureOutputClean: failureOutputClean
+              });
+              reportMetadata(record);
+              return _context21.a(2, record);
+          }
+        }, _callee21, null, [[7, 9], [3, 5]]);
+      })();
+    });
+  }
+  function inspectOutputForPersistence(record) {
+    if (record == null) {
+      return true;
+    }
+    var serialized = JSON.stringify(record);
+    if (BASE64_PATTERN.test(serialized)) {
+      return false;
+    }
+    if (CONTENT_URI_PATTERN.test(serialized)) {
+      return false;
+    }
+    if (BYTE_ARRAY_PATTERN.test(serialized)) {
+      return false;
+    }
+    if (serialized.includes("imageBase64")) {
+      return false;
+    }
+    if (serialized.includes("sourceUri")) {
+      return false;
+    }
+    return true;
+  }
+  function safelyReadProperty7(value, propertyName) {
+    if (value === null || _typeof(value) !== "object" && typeof value !== "function") {
+      return void 0;
+    }
+    try {
+      return value[propertyName];
+    } catch (e) {
+      return void 0;
+    }
+  }
   var MAX_SIZE_BYTES = 10 * 1024 * 1024;
   var READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
   var UI_HEARTBEAT_TIMEOUT_MILLIS = 1e3;
@@ -3004,14 +3200,14 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return runAutoJs6MultiImageCheck(formatCase, runtime);
     }
     return runFormatCheck(formatCase, {
-      showInstructions: function showInstructions(_ref32) {
-        var title = _ref32.title,
-          instructionText = _ref32.instructionText;
+      showInstructions: function showInstructions(_ref33) {
+        var title = _ref33.title,
+          instructionText = _ref33.instructionText;
         return runtime.dialogs.alert(title, instructionText);
       },
-      pickSingleImage: function pickSingleImage(_ref33) {
-        var pickerMimeType = _ref33.pickerMimeType,
-          requestCode = _ref33.requestCode;
+      pickSingleImage: function pickSingleImage(_ref34) {
+        var pickerMimeType = _ref34.pickerMimeType,
+          requestCode = _ref34.requestCode;
         return _pickSingleImage(runtime, pickerMimeType, requestCode);
       },
       executeOffUiThread: function executeOffUiThread(task) {
@@ -3028,25 +3224,25 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     });
   }
   function runAutoJs6MultiImageCheck(formatCase, runtime) {
-    return __async(this, null, _regenerator().m(function _callee21() {
+    return __async(this, null, _regenerator().m(function _callee22() {
       var sourceUris, reportMetadata, record, expectedImages, context, contentResolver, parseUri, javaBridge;
-      return _regenerator().w(function (_context21) {
-        while (1) switch (_context21.n) {
+      return _regenerator().w(function (_context22) {
+        while (1) switch (_context22.n) {
           case 0:
-            _context21.n = 1;
+            _context22.n = 1;
             return runtime.dialogs.alert(formatCase.title, formatCase.instructionText);
           case 1:
-            _context21.n = 2;
+            _context22.n = 2;
             return pickMultipleImages(runtime, formatCase.pickerMimeType, formatCase.requestCode);
           case 2:
-            sourceUris = _context21.v;
+            sourceUris = _context22.v;
             reportMetadata = function reportMetadata(record) {
               runtime.console.clear();
               runtime.console.show();
               runtime.console.info(JSON.stringify(record));
             };
             if (!(!Array.isArray(sourceUris) || sourceUris.length === 0)) {
-              _context21.n = 3;
+              _context22.n = 3;
               break;
             }
             record = Object.freeze({
@@ -3060,7 +3256,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               failureReason: "NO_IMAGES_SELECTED"
             });
             reportMetadata(record);
-            return _context21.a(2, record);
+            return _context22.a(2, record);
           case 3:
             expectedImages = sourceUris.map(function () {
               return {
@@ -3081,7 +3277,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
                 return _classifyError(runtime, error);
               }
             };
-            return _context21.a(2, runMultiImageSequentialDeviceCheck({
+            return _context22.a(2, runMultiImageSequentialDeviceCheck({
               sourceUris: sourceUris,
               expectedImages: expectedImages,
               testCaseId: formatCase.testCaseId,
@@ -3097,7 +3293,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               reportMetadata: reportMetadata
             }));
         }
-      }, _callee21);
+      }, _callee22);
     }));
   }
   function pickMultipleImages(runtime, pickerMimeType, requestCode) {
@@ -3454,6 +3650,15 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               resolve(false);
             }
           });
+        }
+      });
+    }
+    if (formatCase.verificationMode === "no-persistence") {
+      return runNoPersistenceDeviceCheck({
+        expectedSizeBytes: formatCase.expectedSizeBytes,
+        reportMetadata: function reportMetadata() {},
+        prepareSelectedImage: function prepareSelectedImage(invalidUri) {
+          return _prepareSelectedImage(runtime, invalidUri != null ? invalidUri : sourceUri, testCaseId, formatCase);
         }
       });
     }

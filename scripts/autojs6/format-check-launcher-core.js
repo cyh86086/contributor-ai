@@ -93,6 +93,10 @@ function normalizeExecution(formatCase, execution) {
     return normalizeUiResponsivenessExecution(formatCase, execution);
   }
 
+  if (formatCase.verificationMode === "no-persistence") {
+    return normalizeNoPersistenceExecution(formatCase, execution);
+  }
+
   const uiResponsive = safelyReadProperty(execution, "uiResponsive");
   if (uiResponsive !== true) {
     return failure(
@@ -567,6 +571,65 @@ function normalizeUiResponsivenessExecution(formatCase, execution) {
     uiResponsive: true,
     failureReason: "METADATA_MISMATCH",
   });
+}
+
+function normalizeNoPersistenceExecution(formatCase, execution) {
+  const uiResponsive = safelyReadProperty(execution, "uiResponsive");
+  const result = safelyReadProperty(execution, "value");
+
+  if (uiResponsive !== true) {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      failureReason: "UI_NOT_RESPONSIVE",
+      uiResponsive: false,
+    });
+  }
+
+  const status = safelyReadProperty(result, "status");
+  const failureReason = safelyReadProperty(result, "failureReason");
+  const successOutputClean = safelyReadProperty(result, "successOutputClean");
+  const failureOutputClean = safelyReadProperty(result, "failureOutputClean");
+
+  if (failureReason === "PERSISTENCE_VIOLATION") {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      failureReason,
+      successOutputClean,
+      failureOutputClean,
+      uiResponsive: true,
+    });
+  }
+
+  const mimeType = safelyReadProperty(result, "mimeType");
+  const sizeBytes = safelyReadProperty(result, "sizeBytes");
+
+  if (
+    status === "PASS" &&
+    mimeType === formatCase.expectedMimeType &&
+    sizeBytes === formatCase.expectedSizeBytes &&
+    successOutputClean === true &&
+    failureOutputClean === true
+  ) {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "PASS",
+      mimeType,
+      sizeBytes,
+      successOutputClean,
+      failureOutputClean,
+      uiResponsive: true,
+    });
+  }
+
+  return failure(
+    formatCase.testCaseId,
+    status === "FAIL" && PUBLIC_ERROR_CODES.has(failureReason)
+      ? failureReason
+      : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+    true,
+  );
 }
 
 function failure(testCaseId, errorCode, uiResponsive) {
