@@ -54,6 +54,16 @@ export async function runFormatCheck(formatCase, dependencies) {
         IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED,
         true,
       );
+    } else if (formatCase.directExecution === true) {
+      // Direct execution: bypass executeOffUiThread to avoid worker thread
+      // + UI post overhead. Used by D22 (dual-path persistence check) where
+      // the combined memory of executeOffUiThread + two prepareImageInput
+      // calls exceeds AutoJs6's 512MB heap limit.
+      const execution = await prepareSelectedImage(
+        sourceUri,
+        formatCase.testCaseId,
+      );
+      record = normalizeExecution(formatCase, execution);
     } else {
       const execution = await executeOffUiThread(() =>
         prepareSelectedImage(sourceUri, formatCase.testCaseId),

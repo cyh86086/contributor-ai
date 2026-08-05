@@ -277,6 +277,7 @@ export const D22_NO_PERSISTENCE_CHECK_CASE = defineCase({
   readerSafetyLimitBytes: 12 * 1024 * 1024,
   requestCode: 6122,
   verificationMode: "no-persistence",
+  directExecution: true,
   title: "D22 無影像持久化裝置驗證",
   instructionText:
     "請在 Android 系統選圖器中選擇私下對應 JPEG_REPEAT_VALID、且已獨立確認為 6,406 bytes 的非敏感 JPEG。此 evidence-only 案例執行成功與失敗兩種路徑，檢查輸出中是否含有 Base64、bytes 或 URI，確認無影像資料持久化，並輸出含 successOutputClean 與 failureOutputClean 的 sanitized metadata。",

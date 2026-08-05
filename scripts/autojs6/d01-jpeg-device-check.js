@@ -335,6 +335,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     readerSafetyLimitBytes: 12 * 1024 * 1024,
     requestCode: 6122,
     verificationMode: "no-persistence",
+    directExecution: true,
     title: "D22 \u7121\u5F71\u50CF\u6301\u4E45\u5316\u88DD\u7F6E\u9A57\u8B49",
     instructionText: "\u8ACB\u5728 Android \u7CFB\u7D71\u9078\u5716\u5668\u4E2D\u9078\u64C7\u79C1\u4E0B\u5C0D\u61C9 JPEG_REPEAT_VALID\u3001\u4E14\u5DF2\u7368\u7ACB\u78BA\u8A8D\u70BA 6,406 bytes \u7684\u975E\u654F\u611F JPEG\u3002\u6B64 evidence-only \u6848\u4F8B\u57F7\u884C\u6210\u529F\u8207\u5931\u6557\u5169\u7A2E\u8DEF\u5F91\uFF0C\u6AA2\u67E5\u8F38\u51FA\u4E2D\u662F\u5426\u542B\u6709 Base64\u3001bytes \u6216 URI\uFF0C\u78BA\u8A8D\u7121\u5F71\u50CF\u8CC7\u6599\u6301\u4E45\u5316\uFF0C\u4E26\u8F38\u51FA\u542B successOutputClean \u8207 failureOutputClean \u7684 sanitized metadata\u3002",
     sourceEntryPath: "autojs6/source/d22-no-persistence-device-check.entry.js",
@@ -686,7 +687,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   }
   function runFormatCheck(formatCase, dependencies) {
     return __async(this, null, _regenerator().m(function _callee5() {
-      var showInstructions, pickSingleImage2, executeOffUiThread2, prepareSelectedImage2, reportMetadata, record, sourceUri, execution, _t7;
+      var showInstructions, pickSingleImage2, executeOffUiThread2, prepareSelectedImage2, reportMetadata, record, sourceUri, execution, _execution, _t7;
       return _regenerator().w(function (_context5) {
         while (1) switch (_context5.p = _context5.n) {
           case 0:
@@ -712,28 +713,40 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               break;
             }
             record = failure(formatCase.testCaseId, IMAGE_INPUT_ERROR_CODES.URI_ACCESS_DENIED, true);
-            _context5.n = 6;
+            _context5.n = 8;
             break;
           case 4:
+            if (!(formatCase.directExecution === true)) {
+              _context5.n = 6;
+              break;
+            }
             _context5.n = 5;
-            return executeOffUiThread2(function () {
-              return prepareSelectedImage2(sourceUri, formatCase.testCaseId);
-            });
+            return prepareSelectedImage2(sourceUri, formatCase.testCaseId);
           case 5:
             execution = _context5.v;
             record = normalizeExecution(formatCase, execution);
-          case 6:
             _context5.n = 8;
             break;
+          case 6:
+            _context5.n = 7;
+            return executeOffUiThread2(function () {
+              return prepareSelectedImage2(sourceUri, formatCase.testCaseId);
+            });
           case 7:
-            _context5.p = 7;
+            _execution = _context5.v;
+            record = normalizeExecution(formatCase, _execution);
+          case 8:
+            _context5.n = 10;
+            break;
+          case 9:
+            _context5.p = 9;
             _t7 = _context5.v;
             record = failure(formatCase.testCaseId, normalizeFormatCheckErrorCode(_t7), false);
-          case 8:
+          case 10:
             reportMetadata(record);
             return _context5.a(2, record);
         }
-      }, _callee5, null, [[1, 7]]);
+      }, _callee5, null, [[1, 9]]);
     }));
   }
   function normalizeExecution(formatCase, execution) {
