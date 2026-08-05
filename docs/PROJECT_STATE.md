@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-08-03
+Last updated: 2026-08-05
 
 ## Authority
 
@@ -59,8 +59,7 @@ contract is proved; D13 has scoped device validation; D14 has a scoped expected
 application-failure observation; D15 has a scoped expected application-failure
 observation; D16 has scoped device validation PASS; D17 has scoped device
 validation PASS; D18 has scoped device validation PASS; D19 has scoped device
-validation PASS; D20 has scoped device validation PASS; D21 preparation
-complete, awaiting device validation; D22-D26 remain pending.**
+validation PASS; D20 has scoped device validation PASS; D21 has scoped device validation PASS; D22-D26 remain pending.**
 
 PR #11 merged the deterministic D02 PNG, D03 WebP, D04 HEIC, and D05 HEIF
 verification launchers as authoritative main SHA
@@ -495,7 +494,8 @@ satisfy these requirements.
   [`user-guides/autojs6-d20-memory-behavior-check-zh-tw.md`](user-guides/autojs6-d20-memory-behavior-check-zh-tw.md),
   and
   [`testing/device-validation/d20-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d20-vivo-x-fold5-autojs6-v6.7.0.md).
-- D21-D26 still require scoped review, preparation, and in several cases
+- D21 evidence-gap review, device-procedure preparation, and scoped device validation are complete. The D21 contract extends D16 with UI heartbeat monitoring during 10 repeated complete production-reader invocations, posting a heartbeat to the UI thread between iterations using `android.os.Handler` + `android.os.Looper.getMainLooper()` with a 100ms timeout; observed `heartbeatCount: 9` with `uiResponsive: true`. Offline tests (270/270 pass) cover PASS, all error paths, sanitization, and input validation. The review, procedure, and device evidence are recorded in [`testing/d21-ui-responsiveness-evidence-gap-review.md`](testing/d21-ui-responsiveness-evidence-gap-review.md), [`user-guides/autojs6-d21-ui-responsiveness-check-zh-tw.md`](user-guides/autojs6-d21-ui-responsiveness-check-zh-tw.md), and [`testing/device-validation/d21-vivo-x-fold5-autojs6-v6.7.0.md`](testing/device-validation/d21-vivo-x-fold5-autojs6-v6.7.0.md).
+- D22-D26 still require scoped review, preparation, and in several cases
   user-assisted Vivo X Fold5 evidence.
 - Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until every
   repository migration and device-verification criterion is satisfied.
@@ -515,9 +515,7 @@ satisfy these requirements.
 ## Next planned actions
 
 The only active task is defined in [`NEXT_ACTION.md`](NEXT_ACTION.md).
-At this snapshot it is `None`. D20 device validation completed on 2026-08-04
-against authoritative SHA `8e90c6e` with a scoped PASS on Vivo X Fold5 /
-Android 16 / AutoJs6 v6.7.0 `arm64-v8a`.
+At this snapshot it is `None`. D21 device validation completed on 2026-08-05 against authoritative SHA `dbc19af` with a scoped PASS on Vivo X Fold5 / Android 16 / AutoJs6 v6.7.0 `arm64-v8a`.
 
 No new task has been approved. Any future task requires a new repository
 decision, scoped review, and explicit user authorization before work begins.
