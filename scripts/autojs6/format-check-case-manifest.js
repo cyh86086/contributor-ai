@@ -321,6 +321,25 @@ export const D24_EMPTY_IMAGE_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d24-empty-image-device-check.js",
 });
 
+export const D25_UNSUPPORTED_MIME_TYPE_CHECK_CASE = defineCase({
+  testCaseId: "D25_UNSUPPORTED_MIME_TYPE",
+  fixtureId: "UNSUPPORTED_CONTROLLED",
+  pickerMimeType: "*/*",
+  expectedMimeType: "text/plain",
+  expectedSizeBytes: 0,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6125,
+  verificationMode: "unsupported-mime-type",
+  directExecution: true,
+  title: "D25 不支援的 MIME 類型裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選擇私下對應 UNSUPPORTED_CONTROLLED 的非圖片檔案（如 .txt，若選圖器允許）。此 evidence-only 案例預期 production reader 回傳 UNSUPPORTED_MIME_TYPE 錯誤碼，並輸出 sanitized metadata。若選圖器不允許選擇非圖片檔案，此案例保留為 controlled-fake offline contract。",
+  sourceEntryPath:
+    "autojs6/source/d25-unsupported-mime-type-device-check.entry.js",
+  generatedPath: "autojs6/d25-unsupported-mime-type-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -342,6 +361,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D22_NO_PERSISTENCE_CHECK_CASE,
   D23_SENSITIVE_LOGGING_CHECK_CASE,
   D24_EMPTY_IMAGE_CHECK_CASE,
+  D25_UNSUPPORTED_MIME_TYPE_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([
