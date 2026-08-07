@@ -22,3 +22,4 @@ export {
   executeHttpRequest,
   classifyHttpResponse,
 } from "./http-adapter.js";
+export { processImageWithAI } from "./ai-engine.js";
