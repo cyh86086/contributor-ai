@@ -55,6 +55,8 @@
     "build:autojs6:d22": "node scripts/build-autojs6-format-checks.mjs --cases=D22_NO_PERSISTENCE",
     "build:autojs6:d22:check": "node scripts/build-autojs6-format-checks.mjs --check --cases=D22_NO_PERSISTENCE",
     "scan:autojs6:d22": "node scripts/check-autojs6-format-syntax.mjs --cases=D22_NO_PERSISTENCE",
+    "build:autojs6:production": "node scripts/build-autojs6-production.mjs",
+    "build:autojs6:production:check": "node scripts/build-autojs6-production.mjs --check",
     "build:autojs6:format-checks": "node scripts/build-autojs6-format-checks.mjs",
     "build:autojs6:format-checks:check": "node scripts/build-autojs6-format-checks.mjs --check",
     "scan:autojs6:format-checks": "node scripts/check-autojs6-format-syntax.mjs",
