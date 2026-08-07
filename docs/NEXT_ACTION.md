@@ -5,12 +5,16 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**D26-DEVICE-VALIDATION.** D26 preparation complete. The next step is
-user-assisted device execution on Vivo X Fold5 / AutoJs6 v6.7.0 `arm64-v8a`
-following the procedure in the D26 user guide.
+**D01-D26 DEVICE VALIDATION COMPLETE.** All 26 device verification cases have
+completed scoped device validation on Vivo X Fold5 / Android 16 / AutoJs6 v6.7.0
+`arm64-v8a`. D24, D25, and D26 recorded platform-specific behavior observations
+(`URI_ACCESS_DENIED` / `IMAGE_READ_FAILED`) and are classified as controlled-fake
+offline contracts.
 
-The evidence-gap review is in
-[`testing/d26-controlled-encoding-failure-evidence-gap-review.md`](testing/d26-controlled-encoding-failure-evidence-gap-review.md).
+## Next phase
 
-Note: D26 is a controlled-fake test that simulates encoding failure after a
-valid read. No special file selection is required.
+The next planned phase is **Android Image Input Adapter V1.0 migration**. This
+requires every repository migration and device-verification criterion to be
+satisfied before migration begins. No new task has been approved yet. Any future
+task requires a new repository decision, scoped review, and explicit user
+authorization before work begins.
