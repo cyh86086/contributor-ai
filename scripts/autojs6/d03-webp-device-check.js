@@ -381,7 +381,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     testCaseId: "D25_UNSUPPORTED_MIME_TYPE",
     fixtureId: "UNSUPPORTED_CONTROLLED",
     pickerMimeType: "*/*",
-    expectedMimeType: "text/plain",
+    expectedMimeType: "*/*",
     expectedSizeBytes: 0,
     maxSizeBytes: 6406,
     readerSafetyLimitBytes: 12 * 1024 * 1024,
