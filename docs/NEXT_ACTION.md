@@ -5,10 +5,13 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**D25-PREPARATION.** D24 device validation complete with platform observation
-(`URI_ACCESS_DENIED` for empty sources on Vivo X Fold5 / Android 16). The next
-step is D25 (Unsupported non-image source → `UNSUPPORTED_MIME_TYPE`) preparation.
+**D25-DEVICE-VALIDATION.** D25 preparation complete. The next step is
+user-assisted device execution on Vivo X Fold5 / AutoJs6 v6.7.0 `arm64-v8a`
+following the procedure in the D25 user guide.
 
-D25 verifies that when the production reader encounters a non-image source
-(e.g., a text file), the portable core returns the stable public error code
-`UNSUPPORTED_MIME_TYPE` with a frozen, sanitized failure record.
+The evidence-gap review is in
+[`testing/d25-unsupported-mime-type-evidence-gap-review.md`](testing/d25-unsupported-mime-type-evidence-gap-review.md).
+
+Note: D25 requires selecting a non-image file (e.g., `.txt`) from the Android
+system picker. If the picker rejects non-image files, D25 becomes a
+controlled-fake offline contract only (similar to D12, D24).
