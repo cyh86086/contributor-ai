@@ -299,7 +299,7 @@ snapshot records current state rather than repeating every completed branch.
 
 ## Historical target module status
 
-Seven historical target modules are **MIGRATED**; the remaining two are
+Eight historical target modules are **MIGRATED**; the remaining one is
 **NOT YET MIGRATED**:
 
 | Historical target module                                                      | Status           |
@@ -309,7 +309,7 @@ Seven historical target modules are **MIGRATED**; the remaining two are
 | AI Engine V1.0                                                                | **MIGRATED**     |
 | Queue-AI Orchestrator V1.0                                                    | **MIGRATED**     |
 | Contributor Engine V1.0                                                       | **MIGRATED**     |
-| Mock UI Adapter                                                               | NOT YET MIGRATED |
+| Mock UI Adapter                                                               | **MIGRATED**     |
 | Vision Provider Interface V1.0                                                | **MIGRATED**     |
 | AutoJs6 HTTP Adapter                                                          | **MIGRATED**     |
 | [Android Image Input Adapter V1.0](modules/android-image-input-adapter-v1.md) | **MIGRATED**     |
@@ -533,6 +533,11 @@ satisfy these requirements.
   in
   [`modules/contributor-engine-v1-integration.md`](modules/contributor-engine-v1-integration.md).
   Device verification is deferred until production adapter implementation.
+- Mock UI Adapter is **MIGRATED**. The test utility source
+  (`src/core/mock-ui-adapter.js`), offline tests (8/8 pass), and integration
+  documentation are complete. The integration contract is recorded in
+  [`modules/mock-ui-adapter-v1-integration.md`](modules/mock-ui-adapter-v1-integration.md).
+  Device verification is not applicable (test-only module).
   (`src/core/image-input.js`), production reader
   (`src/autojs6/android-image-reader.js`), offline tests, integration
   documentation, and D01-D26 device verification are all complete. The

@@ -30,3 +30,4 @@ export {
   ContributorEngineError,
   enterContributorMetadata,
 } from "./contributor-engine.js";
+export { createMockUIAdapter } from "./mock-ui-adapter.js";
