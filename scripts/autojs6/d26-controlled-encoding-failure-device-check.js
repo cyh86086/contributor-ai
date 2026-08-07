@@ -741,6 +741,15 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   function imageInputError(code) {
     return new ImageInputError(code);
   }
+  var VISION_PROVIDER_ERROR_CODES = Object.freeze({
+    PROVIDER_RESPONSE_INVALID: "PROVIDER_RESPONSE_INVALID",
+    PROVIDER_REQUEST_FAILED: "PROVIDER_REQUEST_FAILED",
+    PROVIDER_AUTH_FAILED: "PROVIDER_AUTH_FAILED",
+    PROVIDER_RATE_LIMITED: "PROVIDER_RATE_LIMITED",
+    PROVIDER_UNAVAILABLE: "PROVIDER_UNAVAILABLE",
+    IMAGE_TOO_LARGE_FOR_PROVIDER: "IMAGE_TOO_LARGE_FOR_PROVIDER"
+  });
+  var ERROR_MESSAGES2 = Object.freeze(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty({}, VISION_PROVIDER_ERROR_CODES.PROVIDER_RESPONSE_INVALID, "The provider response does not match the required contract."), VISION_PROVIDER_ERROR_CODES.PROVIDER_REQUEST_FAILED, "The provider request failed."), VISION_PROVIDER_ERROR_CODES.PROVIDER_AUTH_FAILED, "The provider authentication failed."), VISION_PROVIDER_ERROR_CODES.PROVIDER_RATE_LIMITED, "The provider rate limit was exceeded."), VISION_PROVIDER_ERROR_CODES.PROVIDER_UNAVAILABLE, "The provider service is unavailable."), VISION_PROVIDER_ERROR_CODES.IMAGE_TOO_LARGE_FOR_PROVIDER, "The image exceeds the provider maximum size limit."));
   var DEFAULT_CHUNK_SIZE_BYTES = 64 * 1024;
   var DEFAULT_MAX_ZERO_LENGTH_READS = 3;
   var CONTENT_SCHEME = "content";

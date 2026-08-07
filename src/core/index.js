@@ -10,3 +10,9 @@ export {
   prepareImageInput,
 } from "./image-input.js";
 export { validateVisionMetadata } from "./metadata.js";
+export {
+  VISION_PROVIDER_ERROR_CODES,
+  VisionProviderError,
+  callVisionProvider,
+  normalizeProviderResponse,
+} from "./vision-provider.js";
