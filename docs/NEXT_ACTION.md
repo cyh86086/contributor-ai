@@ -5,19 +5,15 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**Mock UI Adapter MIGRATION COMPLETE.** The test utility source
-(`src/core/mock-ui-adapter.js`), offline tests (8/8 pass), specification, and
+**Launcher V1.3 MIGRATION COMPLETE.** The portable core
+(`src/core/launcher.js`), offline tests (9/9 pass), specification, and
 integration documentation are complete. The integration contract is recorded in
-[`modules/mock-ui-adapter-v1-integration.md`](modules/mock-ui-adapter-v1-integration.md).
-Device verification is not applicable (test-only module).
+[`modules/launcher-v1-integration.md`](modules/launcher-v1-integration.md).
+Device verification is deferred until production adapter implementation.
 
 ## Next phase
 
-One historical module remains **NOT YET MIGRATED**:
-
-| Module        | Status           |
-| ------------- | ---------------- |
-| Launcher V1.3 | NOT YET MIGRATED |
+All nine historical target modules are **MIGRATED**. No modules remain.
 
 No new task has been approved. Any future task requires a new repository
 decision, scoped review, and explicit user authorization before work begins.

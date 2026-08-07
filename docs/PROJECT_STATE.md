@@ -299,20 +299,19 @@ snapshot records current state rather than repeating every completed branch.
 
 ## Historical target module status
 
-Eight historical target modules are **MIGRATED**; the remaining one is
-**NOT YET MIGRATED**:
+All nine historical target modules are **MIGRATED**:
 
-| Historical target module                                                      | Status           |
-| ----------------------------------------------------------------------------- | ---------------- |
-| Launcher V1.3                                                                 | NOT YET MIGRATED |
-| Queue Engine V1.0                                                             | **MIGRATED**     |
-| AI Engine V1.0                                                                | **MIGRATED**     |
-| Queue-AI Orchestrator V1.0                                                    | **MIGRATED**     |
-| Contributor Engine V1.0                                                       | **MIGRATED**     |
-| Mock UI Adapter                                                               | **MIGRATED**     |
-| Vision Provider Interface V1.0                                                | **MIGRATED**     |
-| AutoJs6 HTTP Adapter                                                          | **MIGRATED**     |
-| [Android Image Input Adapter V1.0](modules/android-image-input-adapter-v1.md) | **MIGRATED**     |
+| Historical target module                                                      | Status       |
+| ----------------------------------------------------------------------------- | ------------ |
+| Launcher V1.3                                                                 | **MIGRATED** |
+| Queue Engine V1.0                                                             | **MIGRATED** |
+| AI Engine V1.0                                                                | **MIGRATED** |
+| Queue-AI Orchestrator V1.0                                                    | **MIGRATED** |
+| Contributor Engine V1.0                                                       | **MIGRATED** |
+| Mock UI Adapter                                                               | **MIGRATED** |
+| Vision Provider Interface V1.0                                                | **MIGRATED** |
+| AutoJs6 HTTP Adapter                                                          | **MIGRATED** |
+| [Android Image Input Adapter V1.0](modules/android-image-input-adapter-v1.md) | **MIGRATED** |
 
 No historical module may be marked complete unless all of the following exist
 in GitHub:
@@ -538,6 +537,11 @@ satisfy these requirements.
   documentation are complete. The integration contract is recorded in
   [`modules/mock-ui-adapter-v1-integration.md`](modules/mock-ui-adapter-v1-integration.md).
   Device verification is not applicable (test-only module).
+- Launcher V1.3 is **MIGRATED**. The portable core
+  (`src/core/launcher.js`), offline tests (9/9 pass), and integration
+  documentation are complete. The integration contract is recorded in
+  [`modules/launcher-v1-integration.md`](modules/launcher-v1-integration.md).
+  Device verification is deferred until production adapter implementation.
   (`src/core/image-input.js`), production reader
   (`src/autojs6/android-image-reader.js`), offline tests, integration
   documentation, and D01-D26 device verification are all complete. The

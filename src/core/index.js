@@ -31,3 +31,4 @@ export {
   enterContributorMetadata,
 } from "./contributor-engine.js";
 export { createMockUIAdapter } from "./mock-ui-adapter.js";
+export { createLauncher } from "./launcher.js";
