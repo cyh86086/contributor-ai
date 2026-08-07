@@ -542,15 +542,39 @@ satisfy these requirements.
   documentation are complete. The integration contract is recorded in
   [`modules/launcher-v1-integration.md`](modules/launcher-v1-integration.md).
   Device verification is deferred until production adapter implementation.
+- AutoJs6 HTTP Caller V1.0 is implemented. The production adapter
+  (`src/autojs6/http-caller.js`), offline tests (15/15 pass), and integration
+  documentation are complete. The adapter bridges the portable core's
+  `executeHttpRequest()` to AutoJs6's `http.request()` API. The integration
+  contract is recorded in
+  [`modules/autojs6-http-caller-v1-integration.md`](modules/autojs6-http-caller-v1-integration.md).
+- OpenAI Vision Caller V1.0 is implemented. The production adapter
+  (`src/autojs6/openai-vision-caller.js`), offline tests (16/16 pass), and
+  integration documentation are complete. The adapter bridges the portable
+  core's `callVisionProvider()` to the OpenAI Chat Completions API. The
+  integration contract is recorded in
+  [`modules/openai-vision-caller-v1-integration.md`](modules/openai-vision-caller-v1-integration.md).
+- Gemini Vision Caller V1.0 is implemented. The production adapter
+  (`src/autojs6/gemini-vision-caller.js`), offline tests (16/16 pass), and
+  integration documentation are complete. The adapter bridges the portable
+  core's `callVisionProvider()` to the Google Gemini API. The integration
+  contract is recorded in
+  [`modules/gemini-vision-caller-v1-integration.md`](modules/gemini-vision-caller-v1-integration.md).
+- Contributor UI Adapter V1.0 is implemented. The production adapter
+  (`src/autojs6/contributor-ui-adapter.js`), offline tests (14/14 pass), and
+  integration documentation are complete. The adapter bridges the portable
+  core's `enterContributorMetadata()` to the Contributor Android app through
+  AutoJs6 UI automation. The integration contract is recorded in
+  [`modules/contributor-ui-adapter-v1-integration.md`](modules/contributor-ui-adapter-v1-integration.md).
+- Android Image Input Adapter V1.0 is **MIGRATED**. The portable core
   (`src/core/image-input.js`), production reader
   (`src/autojs6/android-image-reader.js`), offline tests, integration
   documentation, and D01-D26 device verification are all complete. The
   integration contract is recorded in
   [`modules/android-image-input-adapter-v1-integration.md`](modules/android-image-input-adapter-v1-integration.md).
-- Remote provider, network transport, queue, Contributor app integration, and
-  submission behavior remain unimplemented and outside the current milestone.
 - No provider credential strategy has been approved. Secrets must remain
-  outside Git.
+  outside Git. Credentials are supplied through injected `getApiKey()` functions
+  at runtime.
 - Repository write access: an approved local GitHub CLI workflow is available.
   The 2026-08-02 preflight authenticated `gh` as the repository owner and
   confirmed `ADMIN` repository permission. GitHub Connector repository reads
