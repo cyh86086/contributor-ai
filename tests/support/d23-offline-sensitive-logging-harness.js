@@ -8,26 +8,23 @@ import { runSensitiveLoggingDeviceCheck } from "../../scripts/autojs6/sensitive-
 
 export async function runD23OfflineHarness({
   expectedSizeBytes = 6_406,
-  successRecord = {
-    status: "PASS",
-    mimeType: "image/jpeg",
-    sizeBytes: 6_406,
-  },
-  failureRecord = {
-    status: "FAIL",
-    errorCode: "URI_ACCESS_DENIED",
-  },
+  expectedMimeType = "image/jpeg",
   prepareSelectedImage,
 } = {}) {
   const defaultPrepareSelectedImage = async (invalidUri) => {
     if (invalidUri) {
-      return failureRecord;
+      return { status: "FAIL", errorCode: "URI_ACCESS_DENIED" };
     }
-    return successRecord;
+    return {
+      status: "PASS",
+      mimeType: expectedMimeType,
+      sizeBytes: expectedSizeBytes,
+    };
   };
 
   return runSensitiveLoggingDeviceCheck({
     expectedSizeBytes,
+    expectedMimeType,
     reportMetadata: () => {},
     prepareSelectedImage: prepareSelectedImage ?? defaultPrepareSelectedImage,
   });

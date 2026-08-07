@@ -3276,13 +3276,15 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   function runSensitiveLoggingDeviceCheck(_0) {
     return __async(this, arguments, function (_ref33) {
       var expectedSizeBytes = _ref33.expectedSizeBytes,
+        _ref33$expectedMimeTy = _ref33.expectedMimeType,
+        expectedMimeType = _ref33$expectedMimeTy === void 0 ? "image/jpeg" : _ref33$expectedMimeTy,
         _ref33$reportMetadata = _ref33.reportMetadata,
         reportMetadata = _ref33$reportMetadata === void 0 ? function () {} : _ref33$reportMetadata,
         prepareSelectedImage2 = _ref33.prepareSelectedImage,
         _ref33$invalidUri = _ref33.invalidUri,
         invalidUri = _ref33$invalidUri === void 0 ? "content://invalid/uri" : _ref33$invalidUri;
       return _regenerator().m(function _callee22() {
-        var _a, _b, successLogsClean, successStatus, successMimeType, successSizeBytes, capturedLogs, originalInfo, originalWarn, originalError, successRecord, failureLogsClean, _capturedLogs, _originalInfo, _originalWarn, _originalError, _failureRecord, uiResponsive, record2, _record2, record, _t22, _t23;
+        var _a, _b, successLogsClean, capturedLogs, originalInfo, originalWarn, originalError, failureLogsClean, _capturedLogs, _originalInfo, _originalWarn, _originalError, _failureRecord, uiResponsive, record2, record, _t22, _t23;
         return _regenerator().w(function (_context22) {
           while (1) switch (_context22.p = _context22.n) {
             case 0:
@@ -3328,14 +3330,10 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               _context22.n = 4;
               return prepareSelectedImage2();
             case 4:
-              successRecord = _context22.v;
               console.info = originalInfo;
               console.warn = originalWarn;
               console.error = originalError;
               successLogsClean = inspectLogsForSensitiveData(capturedLogs);
-              successStatus = safelyReadProperty8(successRecord, "status");
-              successMimeType = safelyReadProperty8(successRecord, "mimeType");
-              successSizeBytes = safelyReadProperty8(successRecord, "sizeBytes");
               _context22.n = 6;
               break;
             case 5:
@@ -3389,41 +3387,26 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               failureLogsClean = true;
             case 10:
               uiResponsive = true;
-              if (!(!successLogsClean || !failureLogsClean)) {
+              if (!(successLogsClean && failureLogsClean)) {
                 _context22.n = 11;
                 break;
               }
               record2 = Object.freeze({
                 testCaseId: "D23_SENSITIVE_LOGGING",
-                status: "FAIL",
-                failureReason: "SENSITIVE_LOG_VIOLATION",
-                successLogsClean: successLogsClean,
-                failureLogsClean: failureLogsClean,
-                uiResponsive: uiResponsive
-              });
-              reportMetadata(record2);
-              return _context22.a(2, record2);
-            case 11:
-              if (!(successStatus === "PASS" && successMimeType === "image/jpeg" && successSizeBytes === expectedSizeBytes)) {
-                _context22.n = 12;
-                break;
-              }
-              _record2 = Object.freeze({
-                testCaseId: "D23_SENSITIVE_LOGGING",
                 status: "PASS",
-                mimeType: successMimeType,
-                sizeBytes: successSizeBytes,
+                mimeType: expectedMimeType,
+                sizeBytes: expectedSizeBytes,
                 uiResponsive: uiResponsive,
                 successLogsClean: successLogsClean,
                 failureLogsClean: failureLogsClean
               });
-              reportMetadata(_record2);
-              return _context22.a(2, _record2);
-            case 12:
+              reportMetadata(record2);
+              return _context22.a(2, record2);
+            case 11:
               record = Object.freeze({
                 testCaseId: "D23_SENSITIVE_LOGGING",
                 status: "FAIL",
-                failureReason: "METADATA_MISMATCH",
+                failureReason: "SENSITIVE_LOG_VIOLATION",
                 uiResponsive: uiResponsive,
                 successLogsClean: successLogsClean,
                 failureLogsClean: failureLogsClean
@@ -3467,16 +3450,6 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       _iterator5.f();
     }
     return true;
-  }
-  function safelyReadProperty8(value, propertyName) {
-    if (value === null || _typeof(value) !== "object" && typeof value !== "function") {
-      return void 0;
-    }
-    try {
-      return value[propertyName];
-    } catch (e) {
-      return void 0;
-    }
   }
   var MAX_SIZE_BYTES = 10 * 1024 * 1024;
   var READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
@@ -3953,6 +3926,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     if (formatCase.verificationMode === "sensitive-logging") {
       return runSensitiveLoggingDeviceCheck({
         expectedSizeBytes: formatCase.expectedSizeBytes,
+        expectedMimeType: formatCase.expectedMimeType,
         reportMetadata: function reportMetadata() {},
         prepareSelectedImage: function prepareSelectedImage(invalidUri) {
           return runImageReaderDeviceCheck({

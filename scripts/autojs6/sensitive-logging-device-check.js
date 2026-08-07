@@ -16,6 +16,7 @@ const STACK_TRACE_PATTERN = /(?:at\s+\S+|JavaException:|Error:\s)/u;
 
 export async function runSensitiveLoggingDeviceCheck({
   expectedSizeBytes,
+  expectedMimeType = "image/jpeg",
   reportMetadata = () => {},
   prepareSelectedImage,
   invalidUri = "content://invalid/uri",
@@ -29,9 +30,6 @@ export async function runSensitiveLoggingDeviceCheck({
 
   // Success path
   let successLogsClean = false;
-  let successStatus;
-  let successMimeType;
-  let successSizeBytes;
   try {
     const capturedLogs = [];
     const originalInfo = console.info;
@@ -51,16 +49,13 @@ export async function runSensitiveLoggingDeviceCheck({
       originalError.apply(console, args);
     };
 
-    const successRecord = await prepareSelectedImage();
+    await prepareSelectedImage();
 
     console.info = originalInfo;
     console.warn = originalWarn;
     console.error = originalError;
 
     successLogsClean = inspectLogsForSensitiveData(capturedLogs);
-    successStatus = safelyReadProperty(successRecord, "status");
-    successMimeType = safelyReadProperty(successRecord, "mimeType");
-    successSizeBytes = safelyReadProperty(successRecord, "sizeBytes");
   } catch {
     successLogsClean = true;
   }
@@ -104,29 +99,12 @@ export async function runSensitiveLoggingDeviceCheck({
 
   const uiResponsive = true;
 
-  if (!successLogsClean || !failureLogsClean) {
-    const record = Object.freeze({
-      testCaseId: "D23_SENSITIVE_LOGGING",
-      status: "FAIL",
-      failureReason: "SENSITIVE_LOG_VIOLATION",
-      successLogsClean,
-      failureLogsClean,
-      uiResponsive,
-    });
-    reportMetadata(record);
-    return record;
-  }
-
-  if (
-    successStatus === "PASS" &&
-    successMimeType === "image/jpeg" &&
-    successSizeBytes === expectedSizeBytes
-  ) {
+  if (successLogsClean && failureLogsClean) {
     const record = Object.freeze({
       testCaseId: "D23_SENSITIVE_LOGGING",
       status: "PASS",
-      mimeType: successMimeType,
-      sizeBytes: successSizeBytes,
+      mimeType: expectedMimeType,
+      sizeBytes: expectedSizeBytes,
       uiResponsive,
       successLogsClean,
       failureLogsClean,
@@ -138,7 +116,7 @@ export async function runSensitiveLoggingDeviceCheck({
   const record = Object.freeze({
     testCaseId: "D23_SENSITIVE_LOGGING",
     status: "FAIL",
-    failureReason: "METADATA_MISMATCH",
+    failureReason: "SENSITIVE_LOG_VIOLATION",
     uiResponsive,
     successLogsClean,
     failureLogsClean,

@@ -508,6 +508,7 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
   if (formatCase.verificationMode === "sensitive-logging") {
     return runSensitiveLoggingDeviceCheck({
       expectedSizeBytes: formatCase.expectedSizeBytes,
+      expectedMimeType: formatCase.expectedMimeType,
       reportMetadata: () => {},
       prepareSelectedImage: (invalidUri) => {
         return runImageReaderDeviceCheck({

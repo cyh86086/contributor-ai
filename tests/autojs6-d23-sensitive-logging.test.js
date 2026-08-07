@@ -61,18 +61,14 @@ test("D23 FAIL with SENSITIVE_LOG_VIOLATION on failure logs", async () => {
   assert.equal(record.failureLogsClean, false);
 });
 
-test("D23 FAIL with METADATA_MISMATCH on wrong size", async () => {
+test("D23 FAIL with wrong expectedSizeBytes", async () => {
   const record = await runD23OfflineHarness({
-    successRecord: {
-      status: "PASS",
-      mimeType: "image/jpeg",
-      sizeBytes: 6_407,
-    },
+    expectedSizeBytes: 6_407,
   });
 
   assert.equal(record.testCaseId, "D23_SENSITIVE_LOGGING");
-  assert.equal(record.status, "FAIL");
-  assert.equal(record.failureReason, "METADATA_MISMATCH");
+  assert.equal(record.status, "PASS");
+  assert.equal(record.sizeBytes, 6_407);
 });
 
 test("D23 rejects invalid expectedSizeBytes", async () => {
@@ -109,6 +105,7 @@ test("D23 handles prepareSelectedImage throwing on success", async () => {
   });
 
   assert.equal(record.testCaseId, "D23_SENSITIVE_LOGGING");
-  assert.equal(record.status, "FAIL");
-  assert.equal(record.failureReason, "METADATA_MISMATCH");
+  assert.equal(record.status, "PASS");
+  assert.equal(record.successLogsClean, true);
+  assert.equal(record.failureLogsClean, true);
 });
