@@ -750,6 +750,18 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     IMAGE_TOO_LARGE_FOR_PROVIDER: "IMAGE_TOO_LARGE_FOR_PROVIDER"
   });
   var ERROR_MESSAGES2 = Object.freeze(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty({}, VISION_PROVIDER_ERROR_CODES.PROVIDER_RESPONSE_INVALID, "The provider response does not match the required contract."), VISION_PROVIDER_ERROR_CODES.PROVIDER_REQUEST_FAILED, "The provider request failed."), VISION_PROVIDER_ERROR_CODES.PROVIDER_AUTH_FAILED, "The provider authentication failed."), VISION_PROVIDER_ERROR_CODES.PROVIDER_RATE_LIMITED, "The provider rate limit was exceeded."), VISION_PROVIDER_ERROR_CODES.PROVIDER_UNAVAILABLE, "The provider service is unavailable."), VISION_PROVIDER_ERROR_CODES.IMAGE_TOO_LARGE_FOR_PROVIDER, "The image exceeds the provider maximum size limit."));
+  var HTTP_ADAPTER_ERROR_CODES = Object.freeze({
+    HTTP_REQUEST_FAILED: "HTTP_REQUEST_FAILED",
+    HTTP_TIMEOUT: "HTTP_TIMEOUT",
+    HTTP_INVALID_URL: "HTTP_INVALID_URL",
+    HTTP_INVALID_METHOD: "HTTP_INVALID_METHOD",
+    HTTP_SERVER_ERROR: "HTTP_SERVER_ERROR",
+    HTTP_CLIENT_ERROR: "HTTP_CLIENT_ERROR",
+    HTTP_AUTH_FAILED: "HTTP_AUTH_FAILED",
+    HTTP_FORBIDDEN: "HTTP_FORBIDDEN",
+    HTTP_RATE_LIMITED: "HTTP_RATE_LIMITED"
+  });
+  var ERROR_MESSAGES3 = Object.freeze(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty({}, HTTP_ADAPTER_ERROR_CODES.HTTP_REQUEST_FAILED, "The HTTP request failed."), HTTP_ADAPTER_ERROR_CODES.HTTP_TIMEOUT, "The HTTP request timed out."), HTTP_ADAPTER_ERROR_CODES.HTTP_INVALID_URL, "The URL is invalid or not HTTPS."), HTTP_ADAPTER_ERROR_CODES.HTTP_INVALID_METHOD, "The HTTP method is not supported."), HTTP_ADAPTER_ERROR_CODES.HTTP_SERVER_ERROR, "The server returned an error."), HTTP_ADAPTER_ERROR_CODES.HTTP_CLIENT_ERROR, "The request was invalid."), HTTP_ADAPTER_ERROR_CODES.HTTP_AUTH_FAILED, "Authentication failed."), HTTP_ADAPTER_ERROR_CODES.HTTP_FORBIDDEN, "Access is forbidden."), HTTP_ADAPTER_ERROR_CODES.HTTP_RATE_LIMITED, "Rate limit exceeded."));
   var DEFAULT_CHUNK_SIZE_BYTES = 64 * 1024;
   var DEFAULT_MAX_ZERO_LENGTH_READS = 3;
   var CONTENT_SCHEME = "content";

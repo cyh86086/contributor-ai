@@ -16,3 +16,9 @@ export {
   callVisionProvider,
   normalizeProviderResponse,
 } from "./vision-provider.js";
+export {
+  HTTP_ADAPTER_ERROR_CODES,
+  HttpAdapterError,
+  executeHttpRequest,
+  classifyHttpResponse,
+} from "./http-adapter.js";
