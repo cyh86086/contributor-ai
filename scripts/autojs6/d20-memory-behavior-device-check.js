@@ -762,6 +762,11 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     HTTP_RATE_LIMITED: "HTTP_RATE_LIMITED"
   });
   var ERROR_MESSAGES3 = Object.freeze(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty({}, HTTP_ADAPTER_ERROR_CODES.HTTP_REQUEST_FAILED, "The HTTP request failed."), HTTP_ADAPTER_ERROR_CODES.HTTP_TIMEOUT, "The HTTP request timed out."), HTTP_ADAPTER_ERROR_CODES.HTTP_INVALID_URL, "The URL is invalid or not HTTPS."), HTTP_ADAPTER_ERROR_CODES.HTTP_INVALID_METHOD, "The HTTP method is not supported."), HTTP_ADAPTER_ERROR_CODES.HTTP_SERVER_ERROR, "The server returned an error."), HTTP_ADAPTER_ERROR_CODES.HTTP_CLIENT_ERROR, "The request was invalid."), HTTP_ADAPTER_ERROR_CODES.HTTP_AUTH_FAILED, "Authentication failed."), HTTP_ADAPTER_ERROR_CODES.HTTP_FORBIDDEN, "Access is forbidden."), HTTP_ADAPTER_ERROR_CODES.HTTP_RATE_LIMITED, "Rate limit exceeded."));
+  var CONTRIBUTOR_ENGINE_ERROR_CODES = Object.freeze({
+    FIELD_ENTRY_FAILED: "FIELD_ENTRY_FAILED",
+    METADATA_INVALID: "METADATA_INVALID"
+  });
+  var ERROR_MESSAGES4 = Object.freeze(_defineProperty(_defineProperty({}, CONTRIBUTOR_ENGINE_ERROR_CODES.FIELD_ENTRY_FAILED, "The UI adapter could not populate the Contributor app fields."), CONTRIBUTOR_ENGINE_ERROR_CODES.METADATA_INVALID, "The metadata does not pass validation."));
   var DEFAULT_CHUNK_SIZE_BYTES = 64 * 1024;
   var DEFAULT_MAX_ZERO_LENGTH_READS = 3;
   var CONTENT_SCHEME = "content";

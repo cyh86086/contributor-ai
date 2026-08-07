@@ -299,7 +299,7 @@ snapshot records current state rather than repeating every completed branch.
 
 ## Historical target module status
 
-Six historical target modules are **MIGRATED**; the remaining three are
+Seven historical target modules are **MIGRATED**; the remaining two are
 **NOT YET MIGRATED**:
 
 | Historical target module                                                      | Status           |
@@ -308,7 +308,7 @@ Six historical target modules are **MIGRATED**; the remaining three are
 | Queue Engine V1.0                                                             | **MIGRATED**     |
 | AI Engine V1.0                                                                | **MIGRATED**     |
 | Queue-AI Orchestrator V1.0                                                    | **MIGRATED**     |
-| Contributor Engine V1.0                                                       | NOT YET MIGRATED |
+| Contributor Engine V1.0                                                       | **MIGRATED**     |
 | Mock UI Adapter                                                               | NOT YET MIGRATED |
 | Vision Provider Interface V1.0                                                | **MIGRATED**     |
 | AutoJs6 HTTP Adapter                                                          | **MIGRATED**     |
@@ -526,6 +526,12 @@ satisfy these requirements.
   integration documentation are complete. The integration contract is recorded
   in
   [`modules/queue-ai-orchestrator-v1-integration.md`](modules/queue-ai-orchestrator-v1-integration.md).
+  Device verification is deferred until production adapter implementation.
+- Contributor Engine V1.0 is **MIGRATED**. The portable core
+  (`src/core/contributor-engine.js`), offline tests (9/9 pass), and
+  integration documentation are complete. The integration contract is recorded
+  in
+  [`modules/contributor-engine-v1-integration.md`](modules/contributor-engine-v1-integration.md).
   Device verification is deferred until production adapter implementation.
   (`src/core/image-input.js`), production reader
   (`src/autojs6/android-image-reader.js`), offline tests, integration

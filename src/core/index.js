@@ -25,3 +25,8 @@ export {
 export { processImageWithAI } from "./ai-engine.js";
 export { processQueue } from "./queue-engine.js";
 export { orchestrateBatchAI } from "./queue-ai-orchestrator.js";
+export {
+  CONTRIBUTOR_ENGINE_ERROR_CODES,
+  ContributorEngineError,
+  enterContributorMetadata,
+} from "./contributor-engine.js";
