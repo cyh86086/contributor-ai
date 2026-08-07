@@ -3,11 +3,12 @@
 ## Status
 
 - Specification status: authoritative; specification PR #4 merged
-- Implementation status: merged in PR #6; device verification pending
+- Implementation status: merged in PR #6; device verification complete (D01-D26)
 - Production source: `src/autojs6/android-image-reader.js`
 - Production runtime: Android with AutoJs6
 - Current known runtime target: AutoJs6 v6.7.0, `arm64-v8a`
-- Device compatibility status: unverified; requires later device testing
+- Device compatibility status: verified on Vivo X Fold5 / Android 16 /
+  AutoJs6 v6.7.0 `arm64-v8a` (D01-D26)
 
 This document specifies the production reader injected into
 `prepareImageInput()` from `src/core/image-input.js`. It does not include or
@@ -350,5 +351,5 @@ until all of the following are true:
 7. Android and AutoJs6 device verification is completed with user
    participation.
 
-Criteria 1 through 6 are satisfied after PR #6. Criterion 7 remains
-outstanding, so Android Image Input Adapter V1.0 remains **NOT YET MIGRATED**.
+Criteria 1 through 8 are satisfied. Android Image Input Adapter V1.0 is
+**MIGRATED**.

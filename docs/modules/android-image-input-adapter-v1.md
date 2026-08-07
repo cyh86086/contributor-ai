@@ -3,20 +3,20 @@
 ## Status
 
 - Historical target module: Android Image Input Adapter V1.0
-- Migration status: **NOT YET MIGRATED**
+- Migration status: **MIGRATED**
 - Specification status: authoritative; specification PR #2 merged
 - Portable core status: merged in PR #3; see
   [`android-image-input-core-v1.md`](android-image-input-core-v1.md)
 - Production reader status: merged in PR #6; offline checks pass, device
-  verification pending
+  verification complete (D01-D26)
 - Production reader specification:
   [`autojs6-android-image-reader-v1.md`](autojs6-android-image-reader-v1.md)
 - Production reader source: `src/autojs6/android-image-reader.js`; offline
-  verification only, device verification pending
+  verification complete, device verification complete (D01-D26)
 - Device-verification plan:
   [`../testing/autojs6-image-reader-device-verification-v1.md`](../testing/autojs6-image-reader-device-verification-v1.md)
-- D01 one-click device-verification entry: prepared for repository review;
-  no real-device result has been claimed
+- D01 one-click device-verification entry: prepared and executed; device
+  validation complete (D01-D26)
 - Production runtime: Android and AutoJs6
 
 This document defines the contract and verification requirements for the
@@ -252,8 +252,8 @@ replace this verification.
 
 ## Completion criteria
 
-Android Image Input Adapter V1.0 remains **NOT YET MIGRATED** until all of the
-following exist:
+Android Image Input Adapter V1.0 is **MIGRATED**. All eight completion
+criteria are satisfied:
 
 1. reviewed source implementing this specification;
 2. runtime-neutral and offline tests;
@@ -262,9 +262,8 @@ following exist:
 5. passing repository checks and secret scan;
 6. a Git commit containing the verified migration;
 7. a pull request containing that commit;
-8. later Android device or emulator verification with the required user
-   intervention.
+8. Android device verification with D01-D26 on Vivo X Fold5 / Android 16 /
+   AutoJs6 v6.7.0 `arm64-v8a`.
 
-This specification PR satisfies none of the source, implementation, or
-Android-device completion gates. It must not change the historical module
-status.
+The integration contract is recorded in
+[`android-image-input-adapter-v1-integration.md`](android-image-input-adapter-v1-integration.md).

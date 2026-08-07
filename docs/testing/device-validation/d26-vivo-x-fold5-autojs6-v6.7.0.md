@@ -29,6 +29,7 @@
 ## Platform behavior observation
 
 D26 requires "injecting a failing encoder after a valid read". The current implementation calls `runImageReaderDeviceCheck` directly, which fails at the URI access stage because no real image was selected. To properly validate D26 on device, the test would need to:
+
 1. First perform a valid read (user selects a real image)
 2. Then inject an encoding failure
 

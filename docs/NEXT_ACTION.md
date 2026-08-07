@@ -5,16 +5,25 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**D01-D26 DEVICE VALIDATION COMPLETE.** All 26 device verification cases have
-completed scoped device validation on Vivo X Fold5 / Android 16 / AutoJs6 v6.7.0
-`arm64-v8a`. D24, D25, and D26 recorded platform-specific behavior observations
-(`URI_ACCESS_DENIED` / `IMAGE_READ_FAILED`) and are classified as controlled-fake
-offline contracts.
+**Android Image Input Adapter V1.0 MIGRATION COMPLETE.** The portable core,
+production reader, offline tests, integration documentation, and D01-D26 device
+verification are all complete. The integration contract is recorded in
+[`modules/android-image-input-adapter-v1-integration.md`](modules/android-image-input-adapter-v1-integration.md).
 
 ## Next phase
 
-The next planned phase is **Android Image Input Adapter V1.0 migration**. This
-requires every repository migration and device-verification criterion to be
-satisfied before migration begins. No new task has been approved yet. Any future
-task requires a new repository decision, scoped review, and explicit user
-authorization before work begins.
+Eight historical modules remain **NOT YET MIGRATED**:
+
+| Module | Status |
+|---|---|
+| Launcher V1.3 | NOT YET MIGRATED |
+| Queue Engine V1.0 | NOT YET MIGRATED |
+| AI Engine V1.0 | NOT YET MIGRATED |
+| Queue-AI Orchestrator V1.0 | NOT YET MIGRATED |
+| Contributor Engine V1.0 | NOT YET MIGRATED |
+| Mock UI Adapter | NOT YET MIGRATED |
+| Vision Provider Interface V1.0 | NOT YET MIGRATED |
+| AutoJs6 HTTP Adapter | NOT YET MIGRATED |
+
+No new task has been approved. Any future task requires a new repository
+decision, scoped review, and explicit user authorization before work begins.

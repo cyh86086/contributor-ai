@@ -57,6 +57,7 @@ Console 會輸出 sanitized JSON 記錄。記錄以下內容：
 ```
 
 **預期結果：**
+
 - `errorCode: "ENCODING_FAILED"` ✓
 - `uiResponsive: true` ✓
 
@@ -73,6 +74,7 @@ Console 會輸出 sanitized JSON 記錄。記錄以下內容：
 **原因：** 可能是 bundle 解析錯誤或相容性問題
 
 **解決方案：**
+
 1. 強制停止 AutoJs6
 2. 清除快取
 3. 重新啟動
