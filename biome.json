@@ -22,6 +22,7 @@
       "!scripts/autojs6/d21-ui-responsiveness-device-check.js",
       "!scripts/autojs6/d22-no-persistence-device-check.js",
       "!scripts/autojs6/d23-sensitive-logging-device-check.js",
+      "!scripts/autojs6/d24-empty-image-device-check.js",
       "!scripts/autojs6/autojs6-remote-downloader.js"
     ]
   },

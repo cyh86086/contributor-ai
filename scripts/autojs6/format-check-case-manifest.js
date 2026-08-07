@@ -303,6 +303,24 @@ export const D23_SENSITIVE_LOGGING_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d23-sensitive-logging-device-check.js",
 });
 
+export const D24_EMPTY_IMAGE_CHECK_CASE = defineCase({
+  testCaseId: "D24_EMPTY_IMAGE",
+  fixtureId: "EMPTY_CONTROLLED",
+  pickerMimeType: "image/*",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 0,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6124,
+  verificationMode: "empty-image",
+  directExecution: true,
+  title: "D24 空檔案裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選擇私下對應 EMPTY_CONTROLLED 的 0-byte 檔案（若選圖器允許）。此 evidence-only 案例預期 production reader 回傳 EMPTY_IMAGE 錯誤碼，並輸出 sanitized metadata。若選圖器不允許選擇空檔案，此案例保留為 controlled-fake offline contract。",
+  sourceEntryPath: "autojs6/source/d24-empty-image-device-check.entry.js",
+  generatedPath: "autojs6/d24-empty-image-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -323,6 +341,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D21_UI_RESPONSIVENESS_CHECK_CASE,
   D22_NO_PERSISTENCE_CHECK_CASE,
   D23_SENSITIVE_LOGGING_CHECK_CASE,
+  D24_EMPTY_IMAGE_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
-
+import {
+  D01_TEST_CASE_ID,
+  runD01OneClick,
+} from "../scripts/autojs6/d01-launcher-core.js";
 import {
   D01_FORMAT_CHECK_CASE,
   D02_D05_FORMAT_CHECK_CASES,
@@ -17,10 +20,6 @@ import {
   assertAutoJs6FormatSyntaxCompatible,
   findAutoJs6FormatSyntaxIncompatibilities,
 } from "../scripts/autojs6-format-syntax-compatibility.mjs";
-import {
-  D01_TEST_CASE_ID,
-  runD01OneClick,
-} from "../scripts/autojs6/d01-launcher-core.js";
 import { IMAGE_INPUT_ERROR_CODES } from "../src/core/index.js";
 
 const PRIVATE_URI =
@@ -54,6 +53,7 @@ test("format-check manifest is static, immutable, and complete", () => {
       ["D21_UI_RESPONSIVENESS", "image/jpeg", "image/jpeg", 6121],
       ["D22_NO_PERSISTENCE", "image/jpeg", "image/jpeg", 6122],
       ["D23_SENSITIVE_LOGGING", "image/jpeg", "image/jpeg", 6123],
+      ["D24_EMPTY_IMAGE", "image/*", "image/jpeg", 6124],
     ],
   );
   assert.equal(Object.isFrozen(FORMAT_CHECK_CASES), true);

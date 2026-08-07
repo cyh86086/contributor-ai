@@ -7,24 +7,25 @@
  */
 
 import { IMAGE_INPUT_ERROR_CODES } from "../../src/core/index.js";
+import { runCleanupAfterFailureDeviceCheck } from "./cleanup-after-failure-device-check.js";
+import { runEmptyImageDeviceCheck } from "./empty-image-device-check.js";
+import { runExactPortableLimitDeviceCheck } from "./exact-portable-limit-device-check.js";
 import {
   normalizeFormatCheckErrorCode,
   runFormatCheck,
 } from "./format-check-launcher-core.js";
-import { runExactPortableLimitDeviceCheck } from "./exact-portable-limit-device-check.js";
 import { runImageReaderDeviceCheck } from "./image-reader-device-check.js";
+import { runMemoryBehaviorDeviceCheck } from "./memory-behavior-device-check.js";
 import { runMimeFallbackDeviceCheck } from "./mime-fallback-device-check.js";
+import { runMultiImageSequentialDeviceCheck } from "./multi-image-sequential-device-check.js";
+import { runNoPersistenceDeviceCheck } from "./no-persistence-device-check.js";
 import { runPortableSizeOverflowDeviceCheck } from "./portable-size-overflow-device-check.js";
 import { runReaderSafetyCeilingOverflowDeviceCheck } from "./reader-safety-ceiling-overflow-device-check.js";
-import { runMultiImageSequentialDeviceCheck } from "./multi-image-sequential-device-check.js";
 import { runRepeatedReadsDeviceCheck } from "./repeated-reads-device-check.js";
 import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
-import { runStreamCleanupSuccessDeviceCheck } from "./stream-cleanup-success-device-check.js";
-import { runCleanupAfterFailureDeviceCheck } from "./cleanup-after-failure-device-check.js";
-import { runMemoryBehaviorDeviceCheck } from "./memory-behavior-device-check.js";
-import { runUiResponsivenessDeviceCheck } from "./ui-responsiveness-device-check.js";
-import { runNoPersistenceDeviceCheck } from "./no-persistence-device-check.js";
 import { runSensitiveLoggingDeviceCheck } from "./sensitive-logging-device-check.js";
+import { runStreamCleanupSuccessDeviceCheck } from "./stream-cleanup-success-device-check.js";
+import { runUiResponsivenessDeviceCheck } from "./ui-responsiveness-device-check.js";
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 const READER_SAFETY_LIMIT_BYTES = 12 * 1024 * 1024;
@@ -514,6 +515,27 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
         return runImageReaderDeviceCheck({
           testCaseId,
           sourceUri: invalidUri ?? sourceUri,
+          maxSizeBytes: MAX_SIZE_BYTES,
+          readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
+          context,
+          contentResolver,
+          parseUri,
+          javaBridge,
+          isFileUriApproved: () => false,
+          reportMetadata: () => {},
+        });
+      },
+    });
+  }
+
+  if (formatCase.verificationMode === "empty-image") {
+    return runEmptyImageDeviceCheck({
+      expectedErrorCode: "EMPTY_IMAGE",
+      reportMetadata: () => {},
+      prepareSelectedImage: () => {
+        return runImageReaderDeviceCheck({
+          testCaseId,
+          sourceUri,
           maxSizeBytes: MAX_SIZE_BYTES,
           readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
           context,
