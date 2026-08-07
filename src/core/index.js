@@ -24,3 +24,4 @@ export {
 } from "./http-adapter.js";
 export { processImageWithAI } from "./ai-engine.js";
 export { processQueue } from "./queue-engine.js";
+export { orchestrateBatchAI } from "./queue-ai-orchestrator.js";

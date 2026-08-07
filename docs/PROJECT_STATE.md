@@ -299,7 +299,7 @@ snapshot records current state rather than repeating every completed branch.
 
 ## Historical target module status
 
-Five historical target modules are **MIGRATED**; the remaining four are
+Six historical target modules are **MIGRATED**; the remaining three are
 **NOT YET MIGRATED**:
 
 | Historical target module                                                      | Status           |
@@ -307,7 +307,7 @@ Five historical target modules are **MIGRATED**; the remaining four are
 | Launcher V1.3                                                                 | NOT YET MIGRATED |
 | Queue Engine V1.0                                                             | **MIGRATED**     |
 | AI Engine V1.0                                                                | **MIGRATED**     |
-| Queue-AI Orchestrator V1.0                                                    | NOT YET MIGRATED |
+| Queue-AI Orchestrator V1.0                                                    | **MIGRATED**     |
 | Contributor Engine V1.0                                                       | NOT YET MIGRATED |
 | Mock UI Adapter                                                               | NOT YET MIGRATED |
 | Vision Provider Interface V1.0                                                | **MIGRATED**     |
@@ -520,6 +520,12 @@ satisfy these requirements.
   (`src/core/queue-engine.js`), offline tests (9/9 pass), and integration
   documentation are complete. The integration contract is recorded in
   [`modules/queue-engine-v1-integration.md`](modules/queue-engine-v1-integration.md).
+  Device verification is deferred until production adapter implementation.
+- Queue-AI Orchestrator V1.0 is **MIGRATED**. The portable core
+  (`src/core/queue-ai-orchestrator.js`), offline tests (8/8 pass), and
+  integration documentation are complete. The integration contract is recorded
+  in
+  [`modules/queue-ai-orchestrator-v1-integration.md`](modules/queue-ai-orchestrator-v1-integration.md).
   Device verification is deferred until production adapter implementation.
   (`src/core/image-input.js`), production reader
   (`src/autojs6/android-image-reader.js`), offline tests, integration
