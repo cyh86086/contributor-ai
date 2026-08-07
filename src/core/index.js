@@ -23,3 +23,4 @@ export {
   classifyHttpResponse,
 } from "./http-adapter.js";
 export { processImageWithAI } from "./ai-engine.js";
+export { processQueue } from "./queue-engine.js";

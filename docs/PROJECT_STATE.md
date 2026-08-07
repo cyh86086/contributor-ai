@@ -299,13 +299,13 @@ snapshot records current state rather than repeating every completed branch.
 
 ## Historical target module status
 
-Four historical target modules are **MIGRATED**; the remaining five are
+Five historical target modules are **MIGRATED**; the remaining four are
 **NOT YET MIGRATED**:
 
 | Historical target module                                                      | Status           |
 | ----------------------------------------------------------------------------- | ---------------- |
 | Launcher V1.3                                                                 | NOT YET MIGRATED |
-| Queue Engine V1.0                                                             | NOT YET MIGRATED |
+| Queue Engine V1.0                                                             | **MIGRATED**     |
 | AI Engine V1.0                                                                | **MIGRATED**     |
 | Queue-AI Orchestrator V1.0                                                    | NOT YET MIGRATED |
 | Contributor Engine V1.0                                                       | NOT YET MIGRATED |
@@ -515,6 +515,11 @@ satisfy these requirements.
   (`src/core/ai-engine.js`), offline tests (12/12 pass), and integration
   documentation are complete. The integration contract is recorded in
   [`modules/ai-engine-v1-integration.md`](modules/ai-engine-v1-integration.md).
+  Device verification is deferred until production adapter implementation.
+- Queue Engine V1.0 is **MIGRATED**. The portable core
+  (`src/core/queue-engine.js`), offline tests (9/9 pass), and integration
+  documentation are complete. The integration contract is recorded in
+  [`modules/queue-engine-v1-integration.md`](modules/queue-engine-v1-integration.md).
   Device verification is deferred until production adapter implementation.
   (`src/core/image-input.js`), production reader
   (`src/autojs6/android-image-reader.js`), offline tests, integration
