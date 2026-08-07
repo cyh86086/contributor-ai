@@ -3955,7 +3955,20 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         expectedSizeBytes: formatCase.expectedSizeBytes,
         reportMetadata: function reportMetadata() {},
         prepareSelectedImage: function prepareSelectedImage(invalidUri) {
-          return _prepareSelectedImage(runtime, invalidUri != null ? invalidUri : sourceUri, testCaseId, formatCase);
+          return runImageReaderDeviceCheck({
+            testCaseId: testCaseId,
+            sourceUri: invalidUri != null ? invalidUri : sourceUri,
+            maxSizeBytes: MAX_SIZE_BYTES,
+            readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
+            context: context,
+            contentResolver: contentResolver,
+            parseUri: parseUri,
+            javaBridge: javaBridge,
+            isFileUriApproved: function isFileUriApproved() {
+              return false;
+            },
+            reportMetadata: function reportMetadata() {}
+          });
         }
       });
     }

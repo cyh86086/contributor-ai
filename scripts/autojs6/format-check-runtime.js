@@ -510,12 +510,18 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
       expectedSizeBytes: formatCase.expectedSizeBytes,
       reportMetadata: () => {},
       prepareSelectedImage: (invalidUri) => {
-        return prepareSelectedImage(
-          runtime,
-          invalidUri ?? sourceUri,
+        return runImageReaderDeviceCheck({
           testCaseId,
-          formatCase,
-        );
+          sourceUri: invalidUri ?? sourceUri,
+          maxSizeBytes: MAX_SIZE_BYTES,
+          readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
+          context,
+          contentResolver,
+          parseUri,
+          javaBridge,
+          isFileUriApproved: () => false,
+          reportMetadata: () => {},
+        });
       },
     });
   }
