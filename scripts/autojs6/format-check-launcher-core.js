@@ -11,7 +11,7 @@ import { IMAGE_INPUT_ERROR_CODES } from "../../src/core/index.js";
 const PUBLIC_ERROR_CODES = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
 const CONTENT_URI = /^content:\/\/.+/u;
 const SAFE_CASE_ID = /^[A-Z0-9_-]{1,40}$/u;
-const SAFE_MIME_TYPE = /^image\/(?:[a-z0-9.+-]+|\*)$/u;
+const SAFE_MIME_TYPE = /^(?:image\/(?:[a-z0-9.+-]+|\*)|\*\/\*)$/u;
 
 export function normalizeFormatCheckErrorCode(value) {
   const code = safelyReadProperty(value, "code");

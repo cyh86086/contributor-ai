@@ -65,10 +65,12 @@ Console 會輸出 sanitized JSON 記錄。記錄以下內容：
 ```
 
 **預期結果（如果選圖器允許選擇非圖片檔案）：**
+
 - `errorCode: "UNSUPPORTED_MIME_TYPE"` ✓
 - `uiResponsive: true` ✓
 
 **替代結果（如果選圖器拒絕非圖片檔案）：**
+
 - 記錄觀察到的行為
 - D25 成為 controlled-fake offline contract
 - Offline tests 已證明 `UNSUPPORTED_MIME_TYPE` 契約
@@ -86,6 +88,7 @@ Console 會輸出 sanitized JSON 記錄。記錄以下內容：
 **原因：** Android 系統選圖器可能忽略 `*/*` MIME 篩選器，只顯示圖片檔案
 
 **解決方案：**
+
 - 記錄此觀察
 - 依賴 offline tests 證明契約
 - D25 成為 controlled-fake offline contract（類似 D12、D24）
@@ -95,6 +98,7 @@ Console 會輸出 sanitized JSON 記錄。記錄以下內容：
 **原因：** 可能是 bundle 解析錯誤或相容性問題
 
 **解決方案：**
+
 1. 強制停止 AutoJs6
 2. 清除快取
 3. 重新啟動

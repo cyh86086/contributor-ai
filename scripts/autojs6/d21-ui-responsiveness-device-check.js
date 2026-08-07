@@ -1536,7 +1536,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   var PUBLIC_ERROR_CODES4 = new Set(Object.values(IMAGE_INPUT_ERROR_CODES));
   var CONTENT_URI = /^content:\/\/(?:[\0-\t\x0B\f\x0E-\u2027\u202A-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+/;
   var SAFE_CASE_ID3 = /^[\x2D0-9A-Z_]{1,40}$/;
-  var SAFE_MIME_TYPE2 = /^image\/(?:[\+\x2D\.0-9a-z]+|\*)$/;
+  var SAFE_MIME_TYPE2 = /^(?:image\/(?:[\+\x2D\.0-9a-z]+|\*)|\*\/\*)$/;
   function normalizeFormatCheckErrorCode(value) {
     var code = safelyReadProperty4(value, "code");
     if (PUBLIC_ERROR_CODES4.has(code)) {
