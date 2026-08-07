@@ -5,10 +5,12 @@ Execution baseline: resolve the live `main` SHA during mandatory preflight.
 
 ## Active task
 
-**D26-PREPARATION.** D25 device validation complete with platform observation
-(`IMAGE_READ_FAILED` for non-image sources on Vivo X Fold5 / Android 16). The
-next step is D26 (Controlled encoding failure → `ENCODING_FAILED`) preparation.
+**D26-DEVICE-VALIDATION.** D26 preparation complete. The next step is
+user-assisted device execution on Vivo X Fold5 / AutoJs6 v6.7.0 `arm64-v8a`
+following the procedure in the D26 user guide.
 
-D26 verifies that when a controlled encoding failure is injected after a valid
-read, the portable core returns the stable public error code `ENCODING_FAILED`
-with a frozen, sanitized failure record.
+The evidence-gap review is in
+[`testing/d26-controlled-encoding-failure-evidence-gap-review.md`](testing/d26-controlled-encoding-failure-evidence-gap-review.md).
+
+Note: D26 is a controlled-fake test that simulates encoding failure after a
+valid read. No special file selection is required.
