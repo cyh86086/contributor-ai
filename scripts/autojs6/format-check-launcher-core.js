@@ -647,8 +647,14 @@ function normalizeNoPersistenceExecution(formatCase, execution) {
 }
 
 function normalizeSensitiveLoggingExecution(formatCase, execution) {
+  // D23 wrapper returns the record directly (not wrapped in { uiResponsive, value })
   const uiResponsive = safelyReadProperty(execution, "uiResponsive");
-  const result = safelyReadProperty(execution, "value");
+  const status = safelyReadProperty(execution, "status");
+  const failureReason = safelyReadProperty(execution, "failureReason");
+  const successLogsClean = safelyReadProperty(execution, "successLogsClean");
+  const failureLogsClean = safelyReadProperty(execution, "failureLogsClean");
+  const mimeType = safelyReadProperty(execution, "mimeType");
+  const sizeBytes = safelyReadProperty(execution, "sizeBytes");
 
   if (uiResponsive !== true) {
     return Object.freeze({
@@ -658,11 +664,6 @@ function normalizeSensitiveLoggingExecution(formatCase, execution) {
       uiResponsive: false,
     });
   }
-
-  const status = safelyReadProperty(result, "status");
-  const failureReason = safelyReadProperty(result, "failureReason");
-  const successLogsClean = safelyReadProperty(result, "successLogsClean");
-  const failureLogsClean = safelyReadProperty(result, "failureLogsClean");
 
   if (failureReason === "SENSITIVE_LOG_VIOLATION") {
     return Object.freeze({
@@ -674,9 +675,6 @@ function normalizeSensitiveLoggingExecution(formatCase, execution) {
       uiResponsive: true,
     });
   }
-
-  const mimeType = safelyReadProperty(result, "mimeType");
-  const sizeBytes = safelyReadProperty(result, "sizeBytes");
 
   if (
     status === "PASS" &&

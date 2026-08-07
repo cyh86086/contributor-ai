@@ -1131,7 +1131,12 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   }
   function normalizeSensitiveLoggingExecution(formatCase, execution) {
     var uiResponsive = safelyReadProperty(execution, "uiResponsive");
-    var result = safelyReadProperty(execution, "value");
+    var status = safelyReadProperty(execution, "status");
+    var failureReason = safelyReadProperty(execution, "failureReason");
+    var successLogsClean = safelyReadProperty(execution, "successLogsClean");
+    var failureLogsClean = safelyReadProperty(execution, "failureLogsClean");
+    var mimeType = safelyReadProperty(execution, "mimeType");
+    var sizeBytes = safelyReadProperty(execution, "sizeBytes");
     if (uiResponsive !== true) {
       return Object.freeze({
         testCaseId: formatCase.testCaseId,
@@ -1140,10 +1145,6 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         uiResponsive: false
       });
     }
-    var status = safelyReadProperty(result, "status");
-    var failureReason = safelyReadProperty(result, "failureReason");
-    var successLogsClean = safelyReadProperty(result, "successLogsClean");
-    var failureLogsClean = safelyReadProperty(result, "failureLogsClean");
     if (failureReason === "SENSITIVE_LOG_VIOLATION") {
       return Object.freeze({
         testCaseId: formatCase.testCaseId,
@@ -1154,8 +1155,6 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         uiResponsive: true
       });
     }
-    var mimeType = safelyReadProperty(result, "mimeType");
-    var sizeBytes = safelyReadProperty(result, "sizeBytes");
     if (status === "PASS" && mimeType === formatCase.expectedMimeType && sizeBytes === formatCase.expectedSizeBytes && successLogsClean === true && failureLogsClean === true) {
       return Object.freeze({
         testCaseId: formatCase.testCaseId,
