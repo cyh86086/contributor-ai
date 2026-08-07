@@ -285,6 +285,24 @@ export const D22_NO_PERSISTENCE_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d22-no-persistence-device-check.js",
 });
 
+export const D23_SENSITIVE_LOGGING_CHECK_CASE = defineCase({
+  testCaseId: "D23_SENSITIVE_LOGGING",
+  fixtureId: "JPEG_REPEAT_VALID",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6123,
+  verificationMode: "sensitive-logging",
+  directExecution: true,
+  title: "D23 無敏感日誌裝置驗證",
+  instructionText:
+    "請在 Android 系統選圖器中選擇私下對應 JPEG_REPEAT_VALID、且已獨立確認為 6,406 bytes 的非敏感 JPEG。此 evidence-only 案例執行成功與失敗兩種路徑，捕獲並檢查 console 日誌中是否含有檔案路徑、URIs、Base64、byte arrays 或 exception stack traces，確認無敏感資料漏，並輸出含 successLogsClean 與 failureLogsClean 的 sanitized metadata。",
+  sourceEntryPath: "autojs6/source/d23-sensitive-logging-device-check.entry.js",
+  generatedPath: "autojs6/d23-sensitive-logging-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -304,6 +322,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D20_MEMORY_BEHAVIOR_CHECK_CASE,
   D21_UI_RESPONSIVENESS_CHECK_CASE,
   D22_NO_PERSISTENCE_CHECK_CASE,
+  D23_SENSITIVE_LOGGING_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

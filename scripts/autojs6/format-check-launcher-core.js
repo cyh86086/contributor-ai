@@ -107,6 +107,10 @@ function normalizeExecution(formatCase, execution) {
     return normalizeNoPersistenceExecution(formatCase, execution);
   }
 
+  if (formatCase.verificationMode === "sensitive-logging") {
+    return normalizeSensitiveLoggingExecution(formatCase, execution);
+  }
+
   const uiResponsive = safelyReadProperty(execution, "uiResponsive");
   if (uiResponsive !== true) {
     return failure(
@@ -629,6 +633,65 @@ function normalizeNoPersistenceExecution(formatCase, execution) {
       sizeBytes,
       successOutputClean,
       failureOutputClean,
+      uiResponsive: true,
+    });
+  }
+
+  return failure(
+    formatCase.testCaseId,
+    status === "FAIL" && PUBLIC_ERROR_CODES.has(failureReason)
+      ? failureReason
+      : IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED,
+    true,
+  );
+}
+
+function normalizeSensitiveLoggingExecution(formatCase, execution) {
+  const uiResponsive = safelyReadProperty(execution, "uiResponsive");
+  const result = safelyReadProperty(execution, "value");
+
+  if (uiResponsive !== true) {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      failureReason: "UI_NOT_RESPONSIVE",
+      uiResponsive: false,
+    });
+  }
+
+  const status = safelyReadProperty(result, "status");
+  const failureReason = safelyReadProperty(result, "failureReason");
+  const successLogsClean = safelyReadProperty(result, "successLogsClean");
+  const failureLogsClean = safelyReadProperty(result, "failureLogsClean");
+
+  if (failureReason === "SENSITIVE_LOG_VIOLATION") {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "FAIL",
+      failureReason,
+      successLogsClean,
+      failureLogsClean,
+      uiResponsive: true,
+    });
+  }
+
+  const mimeType = safelyReadProperty(result, "mimeType");
+  const sizeBytes = safelyReadProperty(result, "sizeBytes");
+
+  if (
+    status === "PASS" &&
+    mimeType === formatCase.expectedMimeType &&
+    sizeBytes === formatCase.expectedSizeBytes &&
+    successLogsClean === true &&
+    failureLogsClean === true
+  ) {
+    return Object.freeze({
+      testCaseId: formatCase.testCaseId,
+      status: "PASS",
+      mimeType,
+      sizeBytes,
+      successLogsClean,
+      failureLogsClean,
       uiResponsive: true,
     });
   }

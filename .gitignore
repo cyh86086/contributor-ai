@@ -29,3 +29,7 @@ build/
 # Temporary files
 tmp/
 temp/
+
+# Temporary device validation scripts (standalone versions for AutoJs6)
+scripts/autojs6/d*-no-persistence-*.js
+scripts/autojs6/d*-no-persistence-v*.js
