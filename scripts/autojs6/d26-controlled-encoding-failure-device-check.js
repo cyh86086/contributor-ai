@@ -1,5 +1,5 @@
 "ui";
-/* GENERATED: non-production AutoJs6 D07_MIME_FALLBACK device-verification support only. */
+/* GENERATED: non-production AutoJs6 D26_CONTROLLED_ENCODING_FAILURE device-verification support only. */
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
@@ -4295,5 +4295,5 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return IMAGE_INPUT_ERROR_CODES.IMAGE_READ_FAILED;
     }
   }
-  void runAutoJs6FormatCheck(D07_MIME_FALLBACK_CHECK_CASE);
+  void runAutoJs6FormatCheck(D26_CONTROLLED_ENCODING_FAILURE_CHECK_CASE);
 })();

@@ -340,6 +340,25 @@ export const D25_UNSUPPORTED_MIME_TYPE_CHECK_CASE = defineCase({
   generatedPath: "autojs6/d25-unsupported-mime-type-device-check.js",
 });
 
+export const D26_CONTROLLED_ENCODING_FAILURE_CHECK_CASE = defineCase({
+  testCaseId: "D26_CONTROLLED_ENCODING_FAILURE",
+  fixtureId: "ENCODING_FAILURE_CONTROLLED",
+  pickerMimeType: "image/jpeg",
+  expectedMimeType: "image/jpeg",
+  expectedSizeBytes: 6_406,
+  maxSizeBytes: 6_406,
+  readerSafetyLimitBytes: 12 * 1024 * 1024,
+  requestCode: 6126,
+  verificationMode: "controlled-encoding-failure",
+  directExecution: true,
+  title: "D26 受控編碼失敗裝置驗證",
+  instructionText:
+    "此 evidence-only 案例模擬有效讀取後的受控編碼失敗。預期 production reader 回傳 ENCODING_FAILED 錯誤碼，並輸出 sanitized metadata。",
+  sourceEntryPath:
+    "autojs6/source/d26-controlled-encoding-failure-device-check.entry.js",
+  generatedPath: "autojs6/d26-controlled-encoding-failure-device-check.js",
+});
+
 export const FORMAT_CHECK_CASES = Object.freeze([
   D01_FORMAT_CHECK_CASE,
   D02_FORMAT_CHECK_CASE,
@@ -362,6 +381,7 @@ export const FORMAT_CHECK_CASES = Object.freeze([
   D23_SENSITIVE_LOGGING_CHECK_CASE,
   D24_EMPTY_IMAGE_CHECK_CASE,
   D25_UNSUPPORTED_MIME_TYPE_CHECK_CASE,
+  D26_CONTROLLED_ENCODING_FAILURE_CHECK_CASE,
 ]);
 
 export const D02_D05_FORMAT_CHECK_CASES = Object.freeze([

@@ -25,6 +25,7 @@ import { runRepeatedReadsDeviceCheck } from "./repeated-reads-device-check.js";
 import { runResolverMimeDeviceCheck } from "./resolver-mime-device-check.js";
 import { runSensitiveLoggingDeviceCheck } from "./sensitive-logging-device-check.js";
 import { runUnsupportedMimeTypeDeviceCheck } from "./unsupported-mime-type-device-check.js";
+import { runControlledEncodingFailureDeviceCheck } from "./controlled-encoding-failure-device-check.js";
 import { runStreamCleanupSuccessDeviceCheck } from "./stream-cleanup-success-device-check.js";
 import { runUiResponsivenessDeviceCheck } from "./ui-responsiveness-device-check.js";
 
@@ -553,6 +554,27 @@ function prepareSelectedImage(runtime, sourceUri, testCaseId, formatCase) {
   if (formatCase.verificationMode === "unsupported-mime-type") {
     return runUnsupportedMimeTypeDeviceCheck({
       expectedErrorCode: "UNSUPPORTED_MIME_TYPE",
+      reportMetadata: () => {},
+      prepareSelectedImage: () => {
+        return runImageReaderDeviceCheck({
+          testCaseId,
+          sourceUri,
+          maxSizeBytes: MAX_SIZE_BYTES,
+          readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES,
+          context,
+          contentResolver,
+          parseUri,
+          javaBridge,
+          isFileUriApproved: () => false,
+          reportMetadata: () => {},
+        });
+      },
+    });
+  }
+
+  if (formatCase.verificationMode === "controlled-encoding-failure") {
+    return runControlledEncodingFailureDeviceCheck({
+      expectedErrorCode: "ENCODING_FAILED",
       reportMetadata: () => {},
       prepareSelectedImage: () => {
         return runImageReaderDeviceCheck({
