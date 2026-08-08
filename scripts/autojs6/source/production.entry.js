@@ -111,16 +111,6 @@ const launcher = createLauncher({
 async function main() {
   toast("Contributor AI starting...");
 
-  // Open gallery for user to browse (no result capture)
-  const galleryIntent = new android.content.Intent(
-    android.content.Intent.ACTION_VIEW,
-    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-  );
-  app.startActivity(galleryIntent);
-
-  toast("Please note the image file path from gallery, then enter it below.");
-  sleep(2000);
-
   // Ask user to input image file path(s), comma-separated for multiple
   const pathInput = dialogs.rawInput(
     "Enter image file path(s)\n(comma-separated for multiple):",
