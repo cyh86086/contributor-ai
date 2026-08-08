@@ -126,12 +126,10 @@ async function main() {
   global.__imagePickerResult = null;
 
   // Override onActivityResult via the ScriptActivity's built-in hook
-  // AutoJs6 exposes this through the __onActivityResult__ property
   if (typeof activity.__onActivityResult__ === "function") {
     const originalHandler = activity.__onActivityResult__;
     activity.__onActivityResult__ = function (requestCode, resultCode, data) {
       if (requestCode === 1001 && resultCode === -1) {
-        // RESULT_OK = -1
         global.__imagePickerResult = data;
       }
       if (originalHandler) {
@@ -143,15 +141,20 @@ async function main() {
   // Launch image picker
   activity.startActivityForResult(intent, 1001);
 
-  // Wait for result with timeout using sleep polling
-  let waited = 0;
-  while (!global.__imagePickerResult && waited < 120000) {
-    sleep(500);
-    waited += 500;
-  }
+  // Wait for result in background thread (sleep not allowed on UI thread)
+  let resultData = null;
+  const waitThread = threads.start(function () {
+    let waited = 0;
+    while (!global.__imagePickerResult && waited < 120000) {
+      sleep(500);
+      waited += 500;
+    }
+    resultData = global.__imagePickerResult;
+    delete global.__imagePickerResult;
+  });
 
-  const resultData = global.__imagePickerResult;
-  delete global.__imagePickerResult;
+  // Block main thread until background thread finishes
+  waitThread.join();
 
   if (!resultData) {
     toast("No images selected or timed out.");

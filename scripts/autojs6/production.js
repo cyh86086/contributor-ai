@@ -1867,7 +1867,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   function main() {
     return __async(this, null, _regenerator().m(function _callee17() {
-      var intent, originalHandler, waited, resultData, clipData, images, i, uri, imageInput, pipelineResult, _t27;
+      var intent, originalHandler, resultData, waitThread, clipData, images, i, uri, imageInput, pipelineResult, _t27;
       return _regenerator().w(function (_context17) {
         while (1) switch (_context17.p = _context17.n) {
           case 0:
@@ -1889,13 +1889,17 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               };
             }
             activity.startActivityForResult(intent, 1001);
-            waited = 0;
-            while (!global.__imagePickerResult && waited < 12e4) {
-              sleep(500);
-              waited += 500;
-            }
-            resultData = global.__imagePickerResult;
-            delete global.__imagePickerResult;
+            resultData = null;
+            waitThread = threads.start(function () {
+              var waited = 0;
+              while (!global.__imagePickerResult && waited < 12e4) {
+                sleep(500);
+                waited += 500;
+              }
+              resultData = global.__imagePickerResult;
+              delete global.__imagePickerResult;
+            });
+            waitThread.join();
             if (resultData) {
               _context17.n = 1;
               break;
