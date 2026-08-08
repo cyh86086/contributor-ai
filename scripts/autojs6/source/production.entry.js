@@ -106,82 +106,83 @@ const launcher = createLauncher({
   failFast: false,
 });
 
-// ── Main execution ─────────────────────────────────────────────────────────
-
-const PICK_REQUEST_CODE = 1001;
+// ── Main execution ────────────────────────────────────────────────────────
 
 async function main() {
   toast("Contributor AI starting...");
 
-  // Use ui.emitter to capture activity result (proper AutoJs6 pattern)
-  let resultData = null;
-  let resultReceived = false;
-
-  ui.emitter.on("activity_result", function (requestCode, resultCode, data) {
-    if (requestCode === PICK_REQUEST_CODE && resultCode === -1) {
-      // RESULT_OK = -1
-      resultData = data;
-      resultReceived = true;
-    }
-  });
-
-  // Build and launch image picker intent
-  const intent = new android.content.Intent(
-    android.content.Intent.ACTION_OPEN_DOCUMENT,
+  // Open gallery for user to browse (no result capture)
+  const galleryIntent = new android.content.Intent(
+    android.content.Intent.ACTION_VIEW,
+    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
   );
-  intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
-  intent.setType("image/*");
-  intent.putExtra(
-    android.content.Intent.EXTRA_ALLOW_MULTIPLE,
-    java.lang.Boolean.TRUE,
+  app.startActivity(galleryIntent);
+
+  toast("Please note the image file path from gallery, then enter it below.");
+  sleep(2000);
+
+  // Ask user to input image file path(s), comma-separated for multiple
+  const pathInput = dialogs.rawInput(
+    "Enter image file path(s)\n(comma-separated for multiple):",
+    "/storage/emulated/0/DCIM/Camera/",
   );
 
-  // Launch image picker
-  activity.startActivityForResult(intent, PICK_REQUEST_CODE);
-
-  // Wait for result in background thread
-  const waitThread = threads.start(function () {
-    let waited = 0;
-    while (!resultReceived && waited < 120000) {
-      sleep(500);
-      waited += 500;
-    }
-  });
-
-  waitThread.join();
-
-  if (!resultReceived || !resultData) {
-    toast("No images selected or timed out.");
+  if (!pathInput || pathInput.trim().length === 0) {
+    toast("No paths entered.");
     return;
   }
 
-  const clipData = resultData.getClipData();
-  if (!clipData) {
-    toast("No images selected.");
-    return;
-  }
-
+  // Parse paths and read images using AutoJs6 images module
+  const paths = pathInput
+    .split(",")
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
   const images = [];
-  for (let i = 0; i < clipData.getItemCount(); i++) {
-    const uri = clipData.getItemAt(i).getUri().toString();
+
+  for (const filePath of paths) {
     try {
-      const imageInput = await prepareImageInput({
-        sourceUri: uri,
-        reader: imageReader,
-        maxSizeBytes: PORTABLE_MAX_SIZE_BYTES,
-      });
+      const img = images.read(filePath);
+      if (!img) {
+        console.warn(`Failed to read: ${filePath}`);
+        continue;
+      }
+
+      // Convert AutoJs6 Image to base64 for our pipeline
+      const bitmap = img.getBitmap();
+      const byteArrayOutputStream = new java.io.ByteArrayOutputStream();
+      bitmap.compress(
+        android.graphics.Bitmap.CompressFormat.JPEG,
+        90,
+        byteArrayOutputStream,
+      );
+      const bytes = byteArrayOutputStream.toByteArray();
+      const base64 = android.util.Base64.encodeToString(
+        bytes,
+        android.util.Base64.NO_WRAP,
+      );
+
+      // Create ImageInput compatible with our portable core
+      const imageInput = {
+        sourceUri: `file://${filePath}`,
+        mimeType: "image/jpeg",
+        data: base64,
+        byteLength: bytes.length,
+      };
       images.push(imageInput);
-    } catch (_error) {
-      console.warn(`Failed to read image: ${uri}`);
+
+      bitmap.recycle();
+      img.recycle();
+    } catch (error) {
+      console.warn(`Error processing ${filePath}: ${error.message}`);
     }
   }
 
   if (images.length === 0) {
-    toast("No valid images to process.");
+    toast("No valid images loaded.");
     return;
   }
 
-  toast(`Processing ${images.length} images...`);
+  toast(`Loaded ${images.length} image(s). Processing...`);
 
   // Run the full pipeline
   const pipelineResult = await launcher.run(images);
