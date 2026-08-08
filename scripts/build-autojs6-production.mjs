@@ -51,6 +51,12 @@ const transpiled = Babel.transform(result.outputFiles[0].text, {
 
 const generated = `"ui";
 /* Contributor AI production entry point — Gemini provider. */
+/* Polyfill: String.prototype.trim for AutoJs6 Rhino engine */
+if (!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^\\s+|\\s+$/g, "");
+  };
+}
 ${transpiled}
 `;
 
