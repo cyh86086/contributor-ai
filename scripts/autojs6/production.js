@@ -1576,25 +1576,31 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   function main() {
     return __async(this, null, _regenerator().m(function _callee13() {
-      var rawPathInput, pathInput, paths, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
+      var rawPathInput, jsPathInput, rawPaths, paths, j, trimmed, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
       return _regenerator().w(function (_context13) {
         while (1) switch (_context13.p = _context13.n) {
           case 0:
             toast("Contributor AI starting...");
             rawPathInput = dialogs.rawInput("Enter image file path(s)\n(comma-separated for multiple):", "/storage/emulated/0/DCIM/Camera/");
-            pathInput = rawPathInput ? "" + rawPathInput : "";
-            if (!(pathInput.length === 0)) {
+            jsPathInput = "";
+            if (rawPathInput !== null && rawPathInput !== void 0) {
+              jsPathInput = rawPathInput.toString();
+            }
+            if (!(jsPathInput.length === 0)) {
               _context13.n = 1;
               break;
             }
             toast("No paths entered.");
             return _context13.a(2);
           case 1:
-            paths = pathInput.split(",").map(function (p) {
-              return String(p).replace(/^\s+|\s+$/g, "");
-            }).filter(function (p) {
-              return p.length > 0;
-            });
+            rawPaths = jsPathInput.split(",");
+            paths = [];
+            for (j = 0; j < rawPaths.length; j++) {
+              trimmed = rawPaths[j].toString().replace(/^\s+|\s+$/g, "");
+              if (trimmed.length > 0) {
+                paths.push(trimmed);
+              }
+            }
             autoJsImages = images;
             imageInputs = [];
             i = 0;
@@ -1603,14 +1609,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               _context13.n = 7;
               break;
             }
-            filePath = String(paths[i]);
+            filePath = paths[i];
             _context13.p = 3;
             img = autoJsImages.read(filePath);
             if (img) {
               _context13.n = 4;
               break;
             }
-            console.warn("Failed to read: " + filePath);
+            console.warn("Failed to read: ".concat(filePath));
             return _context13.a(3, 6);
           case 4:
             bitmap = img.getBitmap();
@@ -1619,7 +1625,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             bytes = byteArrayOutputStream.toByteArray();
             base64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
             imageInput = {
-              sourceUri: "file://" + filePath,
+              sourceUri: "file://".concat(filePath),
               mimeType: "image/jpeg",
               data: base64,
               byteLength: bytes.length
@@ -1632,7 +1638,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           case 5:
             _context13.p = 5;
             _t21 = _context13.v;
-            console.warn("Error processing " + filePath + ": " + _t21.message);
+            console.warn("Error processing ".concat(filePath, ": ").concat(_t21.message));
           case 6:
             i++;
             _context13.n = 2;
@@ -1645,7 +1651,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             toast("No valid images loaded.");
             return _context13.a(2);
           case 8:
-            toast("Loaded " + imageInputs.length + " image(s). Processing...");
+            toast("Loaded ".concat(imageInputs.length, " image(s). Processing..."));
             _context13.n = 9;
             return launcher.run(imageInputs);
           case 9:

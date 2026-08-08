@@ -10,7 +10,6 @@
  * - AutoJs6 v6.7.0+ with storage permission granted
  */
 
-import { prepareImageInput } from "../../../src/core/image-input.js";
 import { createAutoJs6AndroidImageReader } from "../../../src/autojs6/android-image-reader.js";
 import { createAutoJs6HttpCaller } from "../../../src/autojs6/http-caller.js";
 import { createGeminiVisionCaller } from "../../../src/autojs6/gemini-vision-caller.js";
@@ -117,34 +116,39 @@ async function main() {
     "/storage/emulated/0/DCIM/Camera/",
   );
 
-  // Force-convert Java String to JS string (Rhino interop)
-  const pathInput = rawPathInput ? "" + rawPathInput : "";
+  // Convert Java String to JS string using toString()
+  let jsPathInput = "";
+  if (rawPathInput !== null && rawPathInput !== undefined) {
+    jsPathInput = rawPathInput.toString();
+  }
 
-  if (pathInput.length === 0) {
+  if (jsPathInput.length === 0) {
     toast("No paths entered.");
     return;
   }
 
-  // Parse paths and read images using AutoJs6 images module
-  const paths = pathInput
-    .split(",")
-    .map(function (p) {
-      return String(p).replace(/^\s+|\s+$/g, "");
-    })
-    .filter(function (p) {
-      return p.length > 0;
-    });
+  // Parse paths - split returns Java String[], convert each element
+  const rawPaths = jsPathInput.split(",");
+  const paths = [];
+  let j;
+  for (j = 0; j < rawPaths.length; j++) {
+    const trimmed = rawPaths[j].toString().replace(/^\s+|\s+$/g, "");
+    if (trimmed.length > 0) {
+      paths.push(trimmed);
+    }
+  }
 
   // Save reference to AutoJs6 global images module before shadowing
   const autoJsImages = images;
   const imageInputs = [];
-
-  for (let i = 0; i < paths.length; i++) {
-    const filePath = String(paths[i]);
+  let i;
+  let filePath;
+  for (i = 0; i < paths.length; i++) {
+    filePath = paths[i];
     try {
       const img = autoJsImages.read(filePath);
       if (!img) {
-        console.warn("Failed to read: " + filePath);
+        console.warn(`Failed to read: ${filePath}`);
         continue;
       }
 
@@ -164,7 +168,7 @@ async function main() {
 
       // Create ImageInput compatible with our portable core
       const imageInput = {
-        sourceUri: "file://" + filePath,
+        sourceUri: `file://${filePath}`,
         mimeType: "image/jpeg",
         data: base64,
         byteLength: bytes.length,
@@ -174,7 +178,7 @@ async function main() {
       bitmap.recycle();
       img.recycle();
     } catch (error) {
-      console.warn("Error processing " + filePath + ": " + error.message);
+      console.warn(`Error processing ${filePath}: ${error.message}`);
     }
   }
 
@@ -183,7 +187,7 @@ async function main() {
     return;
   }
 
-  toast("Loaded " + imageInputs.length + " image(s). Processing...");
+  toast(`Loaded ${imageInputs.length} image(s). Processing...`);
 
   // Run the full pipeline
   const pipelineResult = await launcher.run(imageInputs);
