@@ -108,10 +108,24 @@ const launcher = createLauncher({
 
 // ── Main execution ─────────────────────────────────────────────────────────
 
+const PICK_REQUEST_CODE = 1001;
+
 async function main() {
   toast("Contributor AI starting...");
 
-  // Select images from gallery using activity.startActivityForResult
+  // Use ui.emitter to capture activity result (proper AutoJs6 pattern)
+  let resultData = null;
+  let resultReceived = false;
+
+  ui.emitter.on("activity_result", function (requestCode, resultCode, data) {
+    if (requestCode === PICK_REQUEST_CODE && resultCode === -1) {
+      // RESULT_OK = -1
+      resultData = data;
+      resultReceived = true;
+    }
+  });
+
+  // Build and launch image picker intent
   const intent = new android.content.Intent(
     android.content.Intent.ACTION_OPEN_DOCUMENT,
   );
@@ -122,41 +136,21 @@ async function main() {
     java.lang.Boolean.TRUE,
   );
 
-  // Use a shared variable to capture result from onActivityResult
-  global.__imagePickerResult = null;
-
-  // Override onActivityResult via the ScriptActivity's built-in hook
-  if (typeof activity.__onActivityResult__ === "function") {
-    const originalHandler = activity.__onActivityResult__;
-    activity.__onActivityResult__ = function (requestCode, resultCode, data) {
-      if (requestCode === 1001 && resultCode === -1) {
-        global.__imagePickerResult = data;
-      }
-      if (originalHandler) {
-        originalHandler.call(activity, requestCode, resultCode, data);
-      }
-    };
-  }
-
   // Launch image picker
-  activity.startActivityForResult(intent, 1001);
+  activity.startActivityForResult(intent, PICK_REQUEST_CODE);
 
-  // Wait for result in background thread (sleep not allowed on UI thread)
-  let resultData = null;
+  // Wait for result in background thread
   const waitThread = threads.start(function () {
     let waited = 0;
-    while (!global.__imagePickerResult && waited < 120000) {
+    while (!resultReceived && waited < 120000) {
       sleep(500);
       waited += 500;
     }
-    resultData = global.__imagePickerResult;
-    delete global.__imagePickerResult;
   });
 
-  // Block main thread until background thread finishes
   waitThread.join();
 
-  if (!resultData) {
+  if (!resultReceived || !resultData) {
     toast("No images selected or timed out.");
     return;
   }

@@ -1865,42 +1865,36 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     maxSizeBytes: PORTABLE_MAX_SIZE_BYTES,
     failFast: false
   });
+  var PICK_REQUEST_CODE = 1001;
   function main() {
     return __async(this, null, _regenerator().m(function _callee17() {
-      var intent, originalHandler, resultData, waitThread, clipData, images, i, uri, imageInput, pipelineResult, _t27;
+      var resultData, resultReceived, intent, waitThread, clipData, images, i, uri, imageInput, pipelineResult, _t27;
       return _regenerator().w(function (_context17) {
         while (1) switch (_context17.p = _context17.n) {
           case 0:
             toast("Contributor AI starting...");
+            resultData = null;
+            resultReceived = false;
+            ui.emitter.on("activity_result", function (requestCode, resultCode, data) {
+              if (requestCode === PICK_REQUEST_CODE && resultCode === -1) {
+                resultData = data;
+                resultReceived = true;
+              }
+            });
             intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");
             intent.putExtra(android.content.Intent.EXTRA_ALLOW_MULTIPLE, java.lang.Boolean.TRUE);
-            global.__imagePickerResult = null;
-            if (typeof activity.__onActivityResult__ === "function") {
-              originalHandler = activity.__onActivityResult__;
-              activity.__onActivityResult__ = function (requestCode, resultCode, data) {
-                if (requestCode === 1001 && resultCode === -1) {
-                  global.__imagePickerResult = data;
-                }
-                if (originalHandler) {
-                  originalHandler.call(activity, requestCode, resultCode, data);
-                }
-              };
-            }
-            activity.startActivityForResult(intent, 1001);
-            resultData = null;
+            activity.startActivityForResult(intent, PICK_REQUEST_CODE);
             waitThread = threads.start(function () {
               var waited = 0;
-              while (!global.__imagePickerResult && waited < 12e4) {
+              while (!resultReceived && waited < 12e4) {
                 sleep(500);
                 waited += 500;
               }
-              resultData = global.__imagePickerResult;
-              delete global.__imagePickerResult;
             });
             waitThread.join();
-            if (resultData) {
+            if (!(!resultReceived || !resultData)) {
               _context17.n = 1;
               break;
             }
