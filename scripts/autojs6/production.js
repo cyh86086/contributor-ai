@@ -1584,7 +1584,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             return _context13.a(2);
           case 1:
             paths = pathInput.split(",").map(function (p) {
-              return p.trim();
+              return p.replace(/^\s+|\s+$/g, "");
             }).filter(function (p) {
               return p.length > 0;
             });

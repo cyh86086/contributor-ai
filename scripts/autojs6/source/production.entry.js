@@ -125,8 +125,12 @@ async function main() {
   // Parse paths and read images using AutoJs6 images module
   const paths = pathInput
     .split(",")
-    .map((p) => p.trim())
-    .filter((p) => p.length > 0);
+    .map(function (p) {
+      return p.replace(/^\s+|\s+$/g, "");
+    })
+    .filter(function (p) {
+      return p.length > 0;
+    });
   const images = [];
 
   for (const filePath of paths) {
