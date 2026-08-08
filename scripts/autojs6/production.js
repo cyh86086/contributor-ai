@@ -1584,7 +1584,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             rawPathInput = dialogs.rawInput("Enter image file path(s)\n(comma-separated for multiple):", "/storage/emulated/0/DCIM/Camera/");
             jsPathInput = "";
             if (rawPathInput !== null && rawPathInput !== void 0) {
-              jsPathInput = rawPathInput.toString();
+              jsPathInput = java.lang.String.valueOf(rawPathInput);
             }
             if (!(jsPathInput.length === 0)) {
               _context13.n = 1;

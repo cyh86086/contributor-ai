@@ -116,10 +116,11 @@ async function main() {
     "/storage/emulated/0/DCIM/Camera/",
   );
 
-  // Convert Java String to JS string using toString()
-  let jsPathInput = "";
+  // Convert Java object to JS string
+  // dialogs.rawInput() may return various Java types; use java.lang.String.valueOf()
+  var jsPathInput = "";
   if (rawPathInput !== null && rawPathInput !== undefined) {
-    jsPathInput = rawPathInput.toString();
+    jsPathInput = java.lang.String.valueOf(rawPathInput);
   }
 
   if (jsPathInput.length === 0) {
