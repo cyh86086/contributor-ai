@@ -112,12 +112,15 @@ async function main() {
   toast("Contributor AI starting...");
 
   // Ask user to input image file path(s), comma-separated for multiple
-  const pathInput = dialogs.rawInput(
+  const rawPathInput = dialogs.rawInput(
     "Enter image file path(s)\n(comma-separated for multiple):",
     "/storage/emulated/0/DCIM/Camera/",
   );
 
-  if (!pathInput || pathInput.trim().length === 0) {
+  // Force-convert Java String to JS string (Rhino interop)
+  const pathInput = rawPathInput ? "" + rawPathInput : "";
+
+  if (pathInput.length === 0) {
     toast("No paths entered.");
     return;
   }

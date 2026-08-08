@@ -1576,13 +1576,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   function main() {
     return __async(this, null, _regenerator().m(function _callee13() {
-      var pathInput, paths, images, _iterator3, _step3, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21, _t22;
+      var rawPathInput, pathInput, paths, images, _iterator3, _step3, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21, _t22;
       return _regenerator().w(function (_context13) {
         while (1) switch (_context13.p = _context13.n) {
           case 0:
             toast("Contributor AI starting...");
-            pathInput = dialogs.rawInput("Enter image file path(s)\n(comma-separated for multiple):", "/storage/emulated/0/DCIM/Camera/");
-            if (!(!pathInput || pathInput.trim().length === 0)) {
+            rawPathInput = dialogs.rawInput("Enter image file path(s)\n(comma-separated for multiple):", "/storage/emulated/0/DCIM/Camera/");
+            pathInput = rawPathInput ? "" + rawPathInput : "";
+            if (!(pathInput.length === 0)) {
               _context13.n = 1;
               break;
             }
