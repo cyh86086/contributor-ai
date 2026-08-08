@@ -1867,27 +1867,40 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   function main() {
     return __async(this, null, _regenerator().m(function _callee17() {
-      var result, clipData, images, i, uri, imageInput, pipelineResult, _t27;
+      var intent, latch, resultData, originalOnActivityResult, clipData, images, i, uri, imageInput, pipelineResult, _t27;
       return _regenerator().w(function (_context17) {
         while (1) switch (_context17.p = _context17.n) {
           case 0:
             toast("Contributor AI starting...");
-            result = app.startActivityForResult({
-              action: "android.intent.action.OPEN_DOCUMENT",
-              categories: ["android.intent.category.OPENABLE"],
-              type: "image/*",
-              extras: {
-                "android.intent.extra.ALLOW_MULTIPLE": true
+            intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            intent.putExtra(android.content.Intent.EXTRA_ALLOW_MULTIPLE, java.lang.Boolean.TRUE);
+            latch = new java.util.concurrent.CountDownLatch(1);
+            resultData = null;
+            originalOnActivityResult = activity.onActivityResult;
+            activity.onActivityResult = function (requestCode, resultCode, data) {
+              if (originalOnActivityResult) {
+                originalOnActivityResult.call(activity, requestCode, resultCode, data);
               }
-            });
-            if (!(!result || !result.data)) {
+              if (requestCode === 1001 && resultCode === -1) {
+                resultData = data;
+              }
+              latch.countDown();
+            };
+            activity.startActivityForResult(intent, 1001);
+            latch.await(120, java.util.concurrent.TimeUnit.SECONDS);
+            if (originalOnActivityResult) {
+              activity.onActivityResult = originalOnActivityResult;
+            }
+            if (resultData) {
               _context17.n = 1;
               break;
             }
             toast("No images selected.");
             return _context17.a(2);
           case 1:
-            clipData = result.data.getClipData();
+            clipData = resultData.getClipData();
             if (clipData) {
               _context17.n = 2;
               break;

@@ -111,22 +111,53 @@ const launcher = createLauncher({
 async function main() {
   toast("Contributor AI starting...");
 
-  // Select images from gallery
-  const result = app.startActivityForResult({
-    action: "android.intent.action.OPEN_DOCUMENT",
-    categories: ["android.intent.category.OPENABLE"],
-    type: "image/*",
-    extras: {
-      "android.intent.extra.ALLOW_MULTIPLE": true,
-    },
-  });
+  // Select images from gallery using native Android API
+  const intent = new android.content.Intent(
+    android.content.Intent.ACTION_OPEN_DOCUMENT,
+  );
+  intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
+  intent.setType("image/*");
+  intent.putExtra(
+    android.content.Intent.EXTRA_ALLOW_MULTIPLE,
+    java.lang.Boolean.TRUE,
+  );
 
-  if (!result || !result.data) {
+  // Use CountDownLatch to wait for async startActivityForResult result
+  const latch = new java.util.concurrent.CountDownLatch(1);
+  let resultData = null;
+
+  // Store original onActivityResult if it exists
+  const originalOnActivityResult = activity.onActivityResult;
+
+  // Override onActivityResult to capture the result
+  activity.onActivityResult = function (requestCode, resultCode, data) {
+    if (originalOnActivityResult) {
+      originalOnActivityResult.call(activity, requestCode, resultCode, data);
+    }
+    if (requestCode === 1001 && resultCode === -1) {
+      // RESULT_OK = -1
+      resultData = data;
+    }
+    latch.countDown();
+  };
+
+  // Launch the image picker
+  activity.startActivityForResult(intent, 1001);
+
+  // Wait for result (with timeout)
+  latch.await(120, java.util.concurrent.TimeUnit.SECONDS);
+
+  // Restore original handler
+  if (originalOnActivityResult) {
+    activity.onActivityResult = originalOnActivityResult;
+  }
+
+  if (!resultData) {
     toast("No images selected.");
     return;
   }
 
-  const clipData = result.data.getClipData();
+  const clipData = resultData.getClipData();
   if (!clipData) {
     toast("No images selected.");
     return;
