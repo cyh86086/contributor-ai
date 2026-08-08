@@ -1245,7 +1245,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   }
   function orchestrateBatchAI(_0) {
     return __async(this, arguments, function (_ref16) {
-      var images = _ref16.images,
+      var images2 = _ref16.images,
         providerCaller2 = _ref16.providerCaller,
         maxImageBytes = _ref16.maxImageBytes,
         _ref16$failFast = _ref16.failFast,
@@ -1256,7 +1256,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           while (1) switch (_context10.n) {
             case 0:
               validateOrchestratorInput({
-                images: images,
+                images: images2,
                 providerCaller: providerCaller2,
                 maxImageBytes: maxImageBytes
               });
@@ -1272,7 +1272,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               };
               _context10.n = 1;
               return processQueue({
-                items: images,
+                items: images2,
                 processor: processor,
                 failFast: failFast
               });
@@ -1292,10 +1292,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     });
   }
   function validateOrchestratorInput(_ref17) {
-    var images = _ref17.images,
+    var images2 = _ref17.images,
       providerCaller2 = _ref17.providerCaller,
       maxImageBytes = _ref17.maxImageBytes;
-    if (!Array.isArray(images)) {
+    if (!Array.isArray(images2)) {
       throw new TypeError("images must be an array");
     }
     if (typeof providerCaller2 !== "function") {
@@ -1390,13 +1390,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       maxImageBytes: maxImageBytes,
       maxSizeBytes: maxSizeBytes
     });
-    function run(images) {
+    function run(images2) {
       return __async(this, null, _regenerator().m(function _callee12() {
         var _a, batchResult, contributorResults, contributorErrors, _iterator2, _step2, result, entry, _t19, _t20;
         return _regenerator().w(function (_context12) {
           while (1) switch (_context12.p = _context12.n) {
             case 0:
-              if (Array.isArray(images)) {
+              if (Array.isArray(images2)) {
                 _context12.n = 1;
                 break;
               }
@@ -1404,7 +1404,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 1:
               _context12.n = 2;
               return orchestrateBatchAI({
-                images: images,
+                images: images2,
                 providerCaller: providerCaller2,
                 maxImageBytes: maxImageBytes,
                 failFast: failFast
@@ -1576,7 +1576,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   function main() {
     return __async(this, null, _regenerator().m(function _callee13() {
-      var rawPathInput, pathInput, paths, images, _iterator3, _step3, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21, _t22;
+      var rawPathInput, pathInput, paths, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
       return _regenerator().w(function (_context13) {
         while (1) switch (_context13.p = _context13.n) {
           case 0:
@@ -1591,84 +1591,73 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             return _context13.a(2);
           case 1:
             paths = pathInput.split(",").map(function (p) {
-              return p.replace(/^\s+|\s+$/g, "");
+              return String(p).replace(/^\s+|\s+$/g, "");
             }).filter(function (p) {
               return p.length > 0;
             });
-            images = [];
-            _iterator3 = _createForOfIteratorHelper(paths);
-            _context13.p = 2;
-            _iterator3.s();
-          case 3:
-            if ((_step3 = _iterator3.n()).done) {
-              _context13.n = 8;
+            autoJsImages = images;
+            imageInputs = [];
+            i = 0;
+          case 2:
+            if (!(i < paths.length)) {
+              _context13.n = 7;
               break;
             }
-            filePath = _step3.value;
-            _context13.p = 4;
-            img = images.read(filePath);
+            filePath = String(paths[i]);
+            _context13.p = 3;
+            img = autoJsImages.read(filePath);
             if (img) {
-              _context13.n = 5;
+              _context13.n = 4;
               break;
             }
-            console.warn("Failed to read: ".concat(filePath));
-            return _context13.a(3, 7);
-          case 5:
+            console.warn("Failed to read: " + filePath);
+            return _context13.a(3, 6);
+          case 4:
             bitmap = img.getBitmap();
             byteArrayOutputStream = new java.io.ByteArrayOutputStream();
             bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
             bytes = byteArrayOutputStream.toByteArray();
             base64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
             imageInput = {
-              sourceUri: "file://".concat(filePath),
+              sourceUri: "file://" + filePath,
               mimeType: "image/jpeg",
               data: base64,
               byteLength: bytes.length
             };
-            images.push(imageInput);
+            imageInputs.push(imageInput);
             bitmap.recycle();
             img.recycle();
-            _context13.n = 7;
+            _context13.n = 6;
             break;
-          case 6:
-            _context13.p = 6;
+          case 5:
+            _context13.p = 5;
             _t21 = _context13.v;
-            console.warn("Error processing ".concat(filePath, ": ").concat(_t21.message));
+            console.warn("Error processing " + filePath + ": " + _t21.message);
+          case 6:
+            i++;
+            _context13.n = 2;
+            break;
           case 7:
-            _context13.n = 3;
-            break;
-          case 8:
-            _context13.n = 10;
-            break;
-          case 9:
-            _context13.p = 9;
-            _t22 = _context13.v;
-            _iterator3.e(_t22);
-          case 10:
-            _context13.p = 10;
-            _iterator3.f();
-            return _context13.f(10);
-          case 11:
-            if (!(images.length === 0)) {
-              _context13.n = 12;
+            if (!(imageInputs.length === 0)) {
+              _context13.n = 8;
               break;
             }
             toast("No valid images loaded.");
             return _context13.a(2);
-          case 12:
-            toast("Loaded ".concat(images.length, " image(s). Processing..."));
-            _context13.n = 13;
-            return launcher.run(images);
-          case 13:
+          case 8:
+            toast("Loaded " + imageInputs.length + " image(s). Processing...");
+            _context13.n = 9;
+            return launcher.run(imageInputs);
+          case 9:
             pipelineResult = _context13.v;
             toast("Done: ".concat(pipelineResult.succeeded, " succeeded, ").concat(pipelineResult.failed, " failed out of ").concat(pipelineResult.totalImages, " images."));
             if (pipelineResult.errors.length > 0) {
               console.warn("Errors:", JSON.stringify(pipelineResult.errors, null, 2));
             }
-          case 14:
+          case 10:
             return _context13.a(2);
         }
-      }, _callee13, null, [[4, 6], [2, 9, 10, 11]]);
+      }, _callee13, null, [[3, 5]]);
     }));
   }
   main().catch(function (error) {

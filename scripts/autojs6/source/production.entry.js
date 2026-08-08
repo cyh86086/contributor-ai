@@ -129,18 +129,22 @@ async function main() {
   const paths = pathInput
     .split(",")
     .map(function (p) {
-      return p.replace(/^\s+|\s+$/g, "");
+      return String(p).replace(/^\s+|\s+$/g, "");
     })
     .filter(function (p) {
       return p.length > 0;
     });
-  const images = [];
 
-  for (const filePath of paths) {
+  // Save reference to AutoJs6 global images module before shadowing
+  const autoJsImages = images;
+  const imageInputs = [];
+
+  for (let i = 0; i < paths.length; i++) {
+    const filePath = String(paths[i]);
     try {
-      const img = images.read(filePath);
+      const img = autoJsImages.read(filePath);
       if (!img) {
-        console.warn(`Failed to read: ${filePath}`);
+        console.warn("Failed to read: " + filePath);
         continue;
       }
 
@@ -160,29 +164,29 @@ async function main() {
 
       // Create ImageInput compatible with our portable core
       const imageInput = {
-        sourceUri: `file://${filePath}`,
+        sourceUri: "file://" + filePath,
         mimeType: "image/jpeg",
         data: base64,
         byteLength: bytes.length,
       };
-      images.push(imageInput);
+      imageInputs.push(imageInput);
 
       bitmap.recycle();
       img.recycle();
     } catch (error) {
-      console.warn(`Error processing ${filePath}: ${error.message}`);
+      console.warn("Error processing " + filePath + ": " + error.message);
     }
   }
 
-  if (images.length === 0) {
+  if (imageInputs.length === 0) {
     toast("No valid images loaded.");
     return;
   }
 
-  toast(`Loaded ${images.length} image(s). Processing...`);
+  toast("Loaded " + imageInputs.length + " image(s). Processing...");
 
   // Run the full pipeline
-  const pipelineResult = await launcher.run(images);
+  const pipelineResult = await launcher.run(imageInputs);
 
   // Report results
   toast(
