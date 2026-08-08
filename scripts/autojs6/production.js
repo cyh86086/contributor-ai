@@ -1576,7 +1576,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   function main() {
     return __async(this, null, _regenerator().m(function _callee13() {
-      var rawPathInput, jsPathInput, rawPaths, paths, j, trimmed, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
+      var rawPathInput, jsPathInput, rawPaths, paths, j, raw, trimmed, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
       return _regenerator().w(function (_context13) {
         while (1) switch (_context13.p = _context13.n) {
           case 0:
@@ -1593,13 +1593,20 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             toast("No paths entered.");
             return _context13.a(2);
           case 1:
+            console.warn("[DEBUG] Raw path input length: ".concat(jsPathInput.length));
+            console.warn("[DEBUG] Raw path input: ".concat(jsPathInput));
             rawPaths = jsPathInput.split(",");
             paths = [];
             for (j = 0; j < rawPaths.length; j++) {
-              trimmed = rawPaths[j].toString().replace(/^\s+|\s+$/g, "");
+              raw = "".concat(rawPaths[j]);
+              trimmed = raw.replace(/^\s+|\s+$/g, "");
               if (trimmed.length > 0) {
                 paths.push(trimmed);
               }
+            }
+            console.warn("[DEBUG] Parsed paths count: ".concat(paths.length));
+            for (j = 0; j < paths.length; j++) {
+              console.warn("[DEBUG] Path[".concat(j, "]: ").concat(paths[j]));
             }
             autoJsImages = images;
             imageInputs = [];

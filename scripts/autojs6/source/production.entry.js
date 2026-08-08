@@ -127,15 +127,26 @@ async function main() {
     return;
   }
 
-  // Parse paths - split returns Java String[], convert each element
+  // Log the raw input for debugging
+  console.warn(`[DEBUG] Raw path input length: ${jsPathInput.length}`);
+  console.warn(`[DEBUG] Raw path input: ${jsPathInput}`);
+
+  // Parse paths - use Java String methods directly
   const rawPaths = jsPathInput.split(",");
   const paths = [];
   let j;
   for (j = 0; j < rawPaths.length; j++) {
-    const trimmed = rawPaths[j].toString().replace(/^\s+|\s+$/g, "");
+    // Force Java String to JS string via template literal
+    const raw = `${rawPaths[j]}`;
+    const trimmed = raw.replace(/^\s+|\s+$/g, "");
     if (trimmed.length > 0) {
       paths.push(trimmed);
     }
+  }
+
+  console.warn(`[DEBUG] Parsed paths count: ${paths.length}`);
+  for (j = 0; j < paths.length; j++) {
+    console.warn(`[DEBUG] Path[${j}]: ${paths[j]}`);
   }
 
   // Save reference to AutoJs6 global images module before shadowing
