@@ -111,22 +111,54 @@ const launcher = createLauncher({
 async function main() {
   toast("Contributor AI starting...");
 
-  // Select images from gallery using AutoJs6 app API (blocks until user selects)
-  const result = app.startActivityForResult({
-    action: "android.intent.action.OPEN_DOCUMENT",
-    categories: ["android.intent.category.OPENABLE"],
-    type: "image/*",
-    extras: {
-      "android.intent.extra.ALLOW_MULTIPLE": true,
-    },
-  });
+  // Select images from gallery using activity.startActivityForResult
+  const intent = new android.content.Intent(
+    android.content.Intent.ACTION_OPEN_DOCUMENT,
+  );
+  intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
+  intent.setType("image/*");
+  intent.putExtra(
+    android.content.Intent.EXTRA_ALLOW_MULTIPLE,
+    java.lang.Boolean.TRUE,
+  );
 
-  if (!result || !result.data) {
-    toast("No images selected.");
+  // Use a shared variable to capture result from onActivityResult
+  global.__imagePickerResult = null;
+
+  // Override onActivityResult via the ScriptActivity's built-in hook
+  // AutoJs6 exposes this through the __onActivityResult__ property
+  if (typeof activity.__onActivityResult__ === "function") {
+    const originalHandler = activity.__onActivityResult__;
+    activity.__onActivityResult__ = function (requestCode, resultCode, data) {
+      if (requestCode === 1001 && resultCode === -1) {
+        // RESULT_OK = -1
+        global.__imagePickerResult = data;
+      }
+      if (originalHandler) {
+        originalHandler.call(activity, requestCode, resultCode, data);
+      }
+    };
+  }
+
+  // Launch image picker
+  activity.startActivityForResult(intent, 1001);
+
+  // Wait for result with timeout using sleep polling
+  let waited = 0;
+  while (!global.__imagePickerResult && waited < 120000) {
+    sleep(500);
+    waited += 500;
+  }
+
+  const resultData = global.__imagePickerResult;
+  delete global.__imagePickerResult;
+
+  if (!resultData) {
+    toast("No images selected or timed out.");
     return;
   }
 
-  const clipData = result.data.getClipData();
+  const clipData = resultData.getClipData();
   if (!clipData) {
     toast("No images selected.");
     return;
