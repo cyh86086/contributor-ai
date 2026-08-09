@@ -93,9 +93,12 @@ function parseGeminiResponse(body) {
     throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
   }
 
+  // Strip markdown code fences (e.g. ```json ... ```)
+  const cleanedText = stripCodeFences(text);
+
   let metadata;
   try {
-    metadata = JSON.parse(text);
+    metadata = JSON.parse(cleanedText);
   } catch {
     throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
   }
@@ -140,6 +143,16 @@ function extractText(response) {
   }
 
   return firstPart.text;
+}
+
+function stripCodeFences(text) {
+  // Remove markdown code fences like ```json ... ```
+  const fencePattern = /^```[a-zA-Z]*\n([\s\S]*?)\n?```$/;
+  const match = text.match(fencePattern);
+  if (match && match[1]) {
+    return match[1].trim();
+  }
+  return text;
 }
 
 function mapHttpErrorToVisionError(error) {

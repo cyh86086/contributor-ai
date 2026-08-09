@@ -945,9 +945,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     if (typeof text !== "string" || text.length === 0) {
       throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
     }
+    var cleanedText = stripCodeFences(text);
     var metadata;
     try {
-      metadata = JSON.parse(text);
+      metadata = JSON.parse(cleanedText);
     } catch (e) {
       throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
     }
@@ -972,6 +973,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       return void 0;
     }
     return firstPart.text;
+  }
+  function stripCodeFences(text) {
+    var fencePattern = /^```[a-zA-Z]*\n([\s\S]*?)\n?```$/;
+    var match = text.match(fencePattern);
+    if (match && match[1]) {
+      return match[1].trim();
+    }
+    return text;
   }
   function mapHttpErrorToVisionError(error) {
     if (error instanceof HttpAdapterError) {
