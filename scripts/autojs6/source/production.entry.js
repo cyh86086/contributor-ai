@@ -107,7 +107,7 @@ const launcher = createLauncher({
 
 // ── Main execution ────────────────────────────────────────────────────────
 
-async function main() {
+function main() {
   toast("Contributor AI starting...");
 
   // Write instructions to a file for user to edit
@@ -120,129 +120,143 @@ async function main() {
   files.write(configPath, instructions);
   toast(`Please edit: ${configPath}`);
 
-  // Use setTimeout to wait for user to edit (non-blocking)
-  // Check every 2 seconds, up to 2 minutes
-  var checkCount = 0;
-  var maxChecks = 60; // 60 * 2s = 120s
-  var originalContent = files.read(configPath);
+  // All work in background thread to keep script alive
+  threads.start(() => {
+    var originalContent = files.read(configPath);
+    var timeout = 120000; // 2 minutes
+    var waitStart = Date.now();
+    var currentContent = originalContent;
+    var lines;
+    var paths;
+    var j;
+    var line;
+    var parts;
+    var k;
+    var trimmed;
+    var autoJsImages;
+    var imageInputs;
+    var i;
+    var filePath;
+    var img;
+    var bitmap;
+    var byteArrayOutputStream;
+    var bytes;
+    var base64;
+    var imageInput;
 
-  function checkFile() {
-    checkCount++;
-    var currentContent = files.read(configPath);
-
-    if (currentContent !== originalContent || checkCount >= maxChecks) {
-      // File changed or timeout - continue processing
-      processPaths(currentContent);
-    } else {
-      // Check again in 2 seconds
-      setTimeout(checkFile, 2000);
-    }
-  }
-
-  // Start checking after 2 seconds
-  setTimeout(checkFile, 2000);
-}
-
-async function processPaths(pathContent) {
-  if (!pathContent || pathContent.length === 0) {
-    toast("No paths entered.");
-    return;
-  }
-
-  // Parse paths - filter out comment lines
-  var lines = pathContent.split("\n");
-  var paths = [];
-  var j;
-  var line;
-  var parts;
-  var k;
-  var trimmed;
-  for (j = 0; j < lines.length; j++) {
-    line = lines[j];
-    // Skip comments and empty lines
-    if (line.charAt(0) === "#" || line.length === 0) {
-      continue;
-    }
-    // Handle comma-separated on same line
-    parts = line.split(",");
-    for (k = 0; k < parts.length; k++) {
-      trimmed = parts[k].replace(/^\s+|\s+$/g, "");
-      if (trimmed.length > 0) {
-        paths.push(trimmed);
+    // Poll for file changes
+    while (Date.now() - waitStart < timeout) {
+      sleep(2000);
+      currentContent = files.read(configPath);
+      if (currentContent !== originalContent) {
+        break;
       }
     }
-  }
 
-  console.warn(`[DEBUG] Parsed paths count: ${paths.length}`);
-  for (j = 0; j < paths.length; j++) {
-    console.warn(`[DEBUG] Path[${j}]: ${paths[j]}`);
-  }
+    // Process paths
+    if (!currentContent || currentContent.length === 0) {
+      toast("No paths entered.");
+      return;
+    }
 
-  // Save reference to AutoJs6 global images module before shadowing
-  const autoJsImages = images;
-  const imageInputs = [];
-  let i;
-  let filePath;
-  for (i = 0; i < paths.length; i++) {
-    filePath = paths[i];
-    try {
-      const img = autoJsImages.read(filePath);
-      if (!img) {
-        console.warn(`Failed to read: ${filePath}`);
+    // Parse paths - filter out comment lines
+    lines = currentContent.split("\n");
+    paths = [];
+    for (j = 0; j < lines.length; j++) {
+      line = lines[j];
+      // Skip comments and empty lines
+      if (line.charAt(0) === "#" || line.length === 0) {
         continue;
       }
-
-      // Convert AutoJs6 Image to base64 for our pipeline
-      const bitmap = img.getBitmap();
-      const byteArrayOutputStream = new java.io.ByteArrayOutputStream();
-      bitmap.compress(
-        android.graphics.Bitmap.CompressFormat.JPEG,
-        90,
-        byteArrayOutputStream,
-      );
-      const bytes = byteArrayOutputStream.toByteArray();
-      const base64 = android.util.Base64.encodeToString(
-        bytes,
-        android.util.Base64.NO_WRAP,
-      );
-
-      // Create ImageInput compatible with our portable core
-      const imageInput = {
-        sourceUri: `file://${filePath}`,
-        mimeType: "image/jpeg",
-        data: base64,
-        byteLength: bytes.length,
-      };
-      imageInputs.push(imageInput);
-
-      bitmap.recycle();
-      img.recycle();
-    } catch (error) {
-      console.warn(`Error processing ${filePath}: ${error.message}`);
+      // Handle comma-separated on same line
+      parts = line.split(",");
+      for (k = 0; k < parts.length; k++) {
+        trimmed = parts[k].replace(/^\s+|\s+$/g, "");
+        if (trimmed.length > 0) {
+          paths.push(trimmed);
+        }
+      }
     }
-  }
 
-  if (imageInputs.length === 0) {
-    toast("No valid images loaded.");
-    return;
-  }
+    console.warn(`[DEBUG] Parsed paths count: ${paths.length}`);
+    for (j = 0; j < paths.length; j++) {
+      console.warn(`[DEBUG] Path[${j}]: ${paths[j]}`);
+    }
 
-  toast(`Loaded ${imageInputs.length} image(s). Processing...`);
+    if (paths.length === 0) {
+      toast("No valid paths found.");
+      return;
+    }
 
-  // Run the full pipeline
-  const pipelineResult = await launcher.run(imageInputs);
+    // Save reference to AutoJs6 global images module before shadowing
+    autoJsImages = images;
+    imageInputs = [];
+    for (i = 0; i < paths.length; i++) {
+      filePath = paths[i];
+      try {
+        img = autoJsImages.read(filePath);
+        if (!img) {
+          console.warn(`Failed to read: ${filePath}`);
+          continue;
+        }
 
-  // Report results
-  toast(
-    `Done: ${pipelineResult.succeeded} succeeded, ${pipelineResult.failed} failed out of ${pipelineResult.totalImages} images.`,
-  );
+        // Convert AutoJs6 Image to base64 for our pipeline
+        bitmap = img.getBitmap();
+        byteArrayOutputStream = new java.io.ByteArrayOutputStream();
+        bitmap.compress(
+          android.graphics.Bitmap.CompressFormat.JPEG,
+          90,
+          byteArrayOutputStream,
+        );
+        bytes = byteArrayOutputStream.toByteArray();
+        base64 = android.util.Base64.encodeToString(
+          bytes,
+          android.util.Base64.NO_WRAP,
+        );
 
-  if (pipelineResult.errors.length > 0) {
-    console.warn("Errors:", JSON.stringify(pipelineResult.errors, null, 2));
-  }
+        // Create ImageInput compatible with our portable core
+        imageInput = {
+          sourceUri: `file://${filePath}`,
+          mimeType: "image/jpeg",
+          data: base64,
+          byteLength: bytes.length,
+        };
+        imageInputs.push(imageInput);
+
+        bitmap.recycle();
+        img.recycle();
+      } catch (error) {
+        console.warn(`Error processing ${filePath}: ${error.message}`);
+      }
+    }
+
+    if (imageInputs.length === 0) {
+      toast("No valid images loaded.");
+      return;
+    }
+
+    toast(`Loaded ${imageInputs.length} image(s). Processing...`);
+
+    // Run the full pipeline
+    launcher
+      .run(imageInputs)
+      .then((pipelineResult) => {
+        toast(
+          `Done: ${pipelineResult.succeeded} succeeded, ${pipelineResult.failed} failed out of ${pipelineResult.totalImages} images.`,
+        );
+
+        if (pipelineResult.errors.length > 0) {
+          console.warn(
+            "Errors:",
+            JSON.stringify(pipelineResult.errors, null, 2),
+          );
+        }
+      })
+      .catch((error) => {
+        toast(`Error: ${error.message}`);
+        console.warn(`[DEBUG] Pipeline error: ${error.message}`);
+      });
+  });
 }
 
-main().catch((error) => {
-  console.error("Production pipeline failed:", error);
-  toast("An error occurred. Check the console for details.");
-});
+main();
