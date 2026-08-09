@@ -122,21 +122,40 @@ function main() {
   var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
   var rawInput = dialogs.rawInput("Enter image file path:", defaultPath);
 
-  // Debug: log the raw input type and value
+  // Debug: log the raw input details
   console.warn(`[DEBUG] rawInput type: ${typeof rawInput}`);
+  console.warn(
+    `[DEBUG] rawInput constructor: ${rawInput ? rawInput.constructor : "null"}`,
+  );
   console.warn(
     `[DEBUG] rawInput toString: ${rawInput ? rawInput.toString() : "null"}`,
   );
+  console.warn(
+    `[DEBUG] rawInput keys: ${rawInput ? Object.keys(rawInput).join(",") : "null"}`,
+  );
 
-  // Convert to JavaScript string
+  // Try to extract string value from the object
   var input = "";
   if (rawInput) {
+    // Try different ways to get the string value
     if (typeof rawInput === "string") {
       input = rawInput;
-    } else if (rawInput.toString) {
-      input = rawInput.toString();
+    } else if (rawInput.value !== undefined) {
+      input = String(rawInput.value);
+    } else if (rawInput.text !== undefined) {
+      input = String(rawInput.text);
+    } else if (rawInput.data !== undefined) {
+      input = String(rawInput.data);
+    } else if (rawInput[0] !== undefined) {
+      // Array-like object
+      input = String(rawInput[0]);
     } else {
-      input = String(rawInput);
+      // Try Java interop
+      try {
+        input = String(rawInput);
+      } catch (e) {
+        input = "";
+      }
     }
   }
 

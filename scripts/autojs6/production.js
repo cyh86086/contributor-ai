@@ -1587,15 +1587,27 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
     var rawInput = dialogs.rawInput("Enter image file path:", defaultPath);
     console.warn("[DEBUG] rawInput type: ".concat(_typeof(rawInput)));
+    console.warn("[DEBUG] rawInput constructor: ".concat(rawInput ? rawInput.constructor : "null"));
     console.warn("[DEBUG] rawInput toString: ".concat(rawInput ? rawInput.toString() : "null"));
+    console.warn("[DEBUG] rawInput keys: ".concat(rawInput ? Object.keys(rawInput).join(",") : "null"));
     var input = "";
     if (rawInput) {
       if (typeof rawInput === "string") {
         input = rawInput;
-      } else if (rawInput.toString) {
-        input = rawInput.toString();
+      } else if (rawInput.value !== void 0) {
+        input = String(rawInput.value);
+      } else if (rawInput.text !== void 0) {
+        input = String(rawInput.text);
+      } else if (rawInput.data !== void 0) {
+        input = String(rawInput.data);
+      } else if (rawInput[0] !== void 0) {
+        input = String(rawInput[0]);
       } else {
-        input = String(rawInput);
+        try {
+          input = String(rawInput);
+        } catch (e2) {
+          input = "";
+        }
       }
     }
     if (input.length === 0) {
