@@ -115,6 +115,7 @@ const launcher = createLauncher({
 // ── Main execution ────────────────────────────────────────────────────────
 
 function main() {
+  console.warn("[DEBUG] main() started");
   toast("Contributor AI starting...");
 
   // Write instructions to a file for user to edit
@@ -125,16 +126,20 @@ function main() {
     "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg\n";
 
   files.write(configPath, instructions);
+  console.warn(`[DEBUG] Config file written to ${configPath}`);
   toast(`Please edit: ${configPath}`);
 
   // Use setInterval to keep script alive and poll for file changes
   var originalContent = files.read(configPath);
+  console.warn(`[DEBUG] Original content length: ${originalContent.length}`);
   var timeout = 120000; // 2 minutes
   var waitStart = Date.now();
   var processed = false;
+  console.warn(`[DEBUG] setInterval created, timeout: ${timeout}ms`);
 
   var keepAliveInterval = setInterval(() => {
     var currentContent;
+    var elapsed;
     var lines;
     var paths;
     var j;
@@ -164,17 +169,25 @@ function main() {
         return;
       }
 
-      if (Date.now() - waitStart >= timeout) {
+      elapsed = Date.now() - waitStart;
+      console.warn(`[DEBUG] Elapsed: ${elapsed}ms, timeout: ${timeout}ms`);
+
+      if (elapsed >= timeout) {
         clearInterval(keepAliveInterval);
         toast("Timeout: no file changes detected.");
+        console.warn("[DEBUG] Timeout reached");
         return;
       }
 
       currentContent = files.read(configPath);
+      console.warn(
+        `[DEBUG] Content length: ${currentContent ? currentContent.length : 0}, original: ${originalContent.length}`,
+      );
       if (currentContent === originalContent) {
         return; // File not changed yet, keep waiting
       }
 
+      console.warn("[DEBUG] File changed detected!");
       // File changed - stop polling and process
       clearInterval(keepAliveInterval);
       processed = true;

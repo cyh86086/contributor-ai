@@ -1582,17 +1582,22 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     failFast: false
   });
   function main() {
+    console.warn("[DEBUG] main() started");
     toast("Contributor AI starting...");
     var configPath = "/sdcard/contributor-ai/image-paths.txt";
     var instructions = "# Enter image file paths, one per line or comma-separated\n# Example:\n/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg\n";
     files.write(configPath, instructions);
+    console.warn("[DEBUG] Config file written to ".concat(configPath));
     toast("Please edit: ".concat(configPath));
     var originalContent = files.read(configPath);
+    console.warn("[DEBUG] Original content length: ".concat(originalContent.length));
     var timeout = 12e4;
     var waitStart = Date.now();
     var processed = false;
+    console.warn("[DEBUG] setInterval created, timeout: ".concat(timeout, "ms"));
     var keepAliveInterval = setInterval(function () {
       var currentContent;
+      var elapsed;
       var lines;
       var paths;
       var j;
@@ -1620,15 +1625,20 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           clearInterval(keepAliveInterval);
           return;
         }
-        if (Date.now() - waitStart >= timeout) {
+        elapsed = Date.now() - waitStart;
+        console.warn("[DEBUG] Elapsed: ".concat(elapsed, "ms, timeout: ").concat(timeout, "ms"));
+        if (elapsed >= timeout) {
           clearInterval(keepAliveInterval);
           toast("Timeout: no file changes detected.");
+          console.warn("[DEBUG] Timeout reached");
           return;
         }
         currentContent = files.read(configPath);
+        console.warn("[DEBUG] Content length: ".concat(currentContent ? currentContent.length : 0, ", original: ").concat(originalContent.length));
         if (currentContent === originalContent) {
           return;
         }
+        console.warn("[DEBUG] File changed detected!");
         clearInterval(keepAliveInterval);
         processed = true;
         if (!currentContent || currentContent.length === 0) {
