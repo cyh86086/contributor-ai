@@ -160,7 +160,7 @@ function main() {
     input = "";
     if (rawInput && rawInput._value !== undefined) {
       // Promise already resolved, get the value
-      input = String(rawInput._value);
+      input = rawInput._value ? String(rawInput._value) : "";
       console.warn(`[DEBUG] Promise _value: ${input}`);
     } else if (rawInput && typeof rawInput.then === "function") {
       // Promise not yet resolved - need to wait
@@ -180,6 +180,10 @@ function main() {
       } else {
         console.warn("[DEBUG] Promise did not resolve in time");
       }
+    } else {
+      // Not a Promise, try direct conversion
+      input = rawInput ? String(rawInput) : "";
+      console.warn(`[DEBUG] Direct conversion: ${input}`);
     }
 
     if (input.length === 0) {

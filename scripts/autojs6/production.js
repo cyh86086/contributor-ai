@@ -1613,7 +1613,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       console.warn("[DEBUG] rawInput keys: ".concat(rawInput ? Object.keys(rawInput).join(",") : "null"));
       input = "";
       if (rawInput && rawInput._value !== void 0) {
-        input = String(rawInput._value);
+        input = rawInput._value ? String(rawInput._value) : "";
         console.warn("[DEBUG] Promise _value: ".concat(input));
       } else if (rawInput && typeof rawInput.then === "function") {
         console.warn("[DEBUG] Waiting for Promise to resolve...");
@@ -1628,6 +1628,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         } else {
           console.warn("[DEBUG] Promise did not resolve in time");
         }
+      } else {
+        input = rawInput ? String(rawInput) : "";
+        console.warn("[DEBUG] Direct conversion: ".concat(input));
       }
       if (input.length === 0) {
         toast("No path entered. Exiting.");
