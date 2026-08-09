@@ -54,7 +54,11 @@ export function createAutoJs6HttpCaller({ httpClient, logger } = {}) {
       throw new Error("The HTTP response was invalid.");
     }
 
+    safeLogger.warn(
+      `[DEBUG] HTTP response keys: ${Object.keys(response).join(",")}`,
+    );
     const status = response.statusCode;
+    safeLogger.warn(`[DEBUG] HTTP status: ${status}, type: ${typeof status}`);
     if (!Number.isSafeInteger(status)) {
       safeLogger.warn("HTTP response had no valid status.");
       throw new Error("The HTTP response had no valid status.");

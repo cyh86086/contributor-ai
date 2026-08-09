@@ -1076,7 +1076,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 safeLogger.warn("HTTP response was invalid.");
                 throw new Error("The HTTP response was invalid.");
               case 4:
+                safeLogger.warn("[DEBUG] HTTP response keys: ".concat(Object.keys(response).join(",")));
                 status = response.statusCode;
+                safeLogger.warn("[DEBUG] HTTP status: ".concat(status, ", type: ").concat(_typeof(status)));
                 if (Number.isSafeInteger(status)) {
                   _context9.n = 5;
                   break;
