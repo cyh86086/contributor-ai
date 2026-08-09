@@ -100,6 +100,13 @@ export function createAutoJs6HttpCaller({ httpClient, logger } = {}) {
       safeLogger.warn(
         `[DEBUG] HTTP error response body: ${responseBody.substring(0, 500)}`,
       );
+    } else {
+      safeLogger.warn(
+        `[DEBUG] HTTP response body length: ${responseBody.length}`,
+      );
+      safeLogger.warn(
+        `[DEBUG] HTTP response body: ${responseBody.substring(0, 500)}`,
+      );
     }
 
     return {

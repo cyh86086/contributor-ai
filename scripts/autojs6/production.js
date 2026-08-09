@@ -1115,6 +1115,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 }
                 if (status >= 400) {
                   safeLogger.warn("[DEBUG] HTTP error response body: ".concat(responseBody.substring(0, 500)));
+                } else {
+                  safeLogger.warn("[DEBUG] HTTP response body length: ".concat(responseBody.length));
+                  safeLogger.warn("[DEBUG] HTTP response body: ".concat(responseBody.substring(0, 500)));
                 }
                 return _context9.a(2, {
                   status: status,
