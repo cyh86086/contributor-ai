@@ -118,237 +118,126 @@ function main() {
   console.warn("[DEBUG] main() started");
   toast("Contributor AI starting...");
 
-  // Write instructions to a file for user to edit
-  var configPath = "/sdcard/contributor-ai/image-paths.txt";
-  var instructions =
-    "# Enter image file paths, one per line or comma-separated\n" +
-    "# Example:\n" +
-    "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg\n";
+  // Use dialogs.rawInput to get image path from user
+  var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
+  var input = dialogs.rawInput("Enter image file path:", defaultPath);
 
-  files.write(configPath, instructions);
-  console.warn(`[DEBUG] Config file written to ${configPath}`);
-  toast(`Please edit: ${configPath}`);
+  if (!input || input.trim().length === 0) {
+    toast("No path entered. Exiting.");
+    console.warn("[DEBUG] No path entered");
+    return;
+  }
 
-  // Use setInterval to keep script alive and poll for file changes
-  var originalContent = files.read(configPath);
-  console.warn(`[DEBUG] Original content length: ${originalContent.length}`);
-  var timeout = 120000; // 2 minutes
-  var waitStart = Date.now();
-  var processed = false;
-  console.warn(`[DEBUG] setInterval created, timeout: ${timeout}ms`);
+  var filePath = input.trim();
+  console.warn(`[DEBUG] User entered path: ${filePath}`);
+  toast(`Processing: ${filePath}`);
 
-  var keepAliveInterval = setInterval(() => {
-    var currentContent;
-    var elapsed;
-    var lines;
-    var paths;
-    var j;
-    var line;
-    var parts;
-    var k;
-    var trimmed;
-    var currentPath;
-    var finalPaths;
-    var autoJsImages;
-    var imageInputs;
-    var i;
-    var filePath;
-    var img;
-    var bitmap;
-    var byteArrayOutputStream;
-    var bytes;
-    var base64;
-    var imageInput;
-    var err;
-    var e;
+  // Process the single image
+  var paths = [filePath];
 
+  console.warn(`[DEBUG] Parsed paths count: ${paths.length}`);
+  console.warn(`[DEBUG] Path[0]: ${paths[0]}`);
+
+  if (paths.length === 0) {
+    toast("No valid paths found.");
+    return;
+  }
+
+  // Save reference to AutoJs6 global images module before shadowing
+  var autoJsImages = images;
+  var imageInputs = [];
+  var i;
+  var currentPath;
+  var img;
+  var bitmap;
+  var byteArrayOutputStream;
+  var bytes;
+  var base64;
+  var imageInput;
+  var e;
+  var err;
+
+  for (i = 0; i < paths.length; i++) {
+    currentPath = paths[i];
     try {
-      console.warn("[DEBUG] Interval callback fired");
-      if (processed) {
-        clearInterval(keepAliveInterval);
-        return;
+      console.warn(`[DEBUG] Reading image: ${currentPath}`);
+      img = autoJsImages.read(currentPath);
+      if (!img) {
+        console.warn(`Failed to read: ${currentPath}`);
+        continue;
       }
+      console.warn(`[DEBUG] Image read successfully`);
 
-      elapsed = Date.now() - waitStart;
-      console.warn(`[DEBUG] Elapsed: ${elapsed}ms, timeout: ${timeout}ms`);
-
-      if (elapsed >= timeout) {
-        clearInterval(keepAliveInterval);
-        toast("Timeout: no file changes detected.");
-        console.warn("[DEBUG] Timeout reached");
-        return;
-      }
-
-      currentContent = files.read(configPath);
+      // Convert AutoJs6 Image to base64 for our pipeline
+      bitmap = img.getBitmap();
       console.warn(
-        `[DEBUG] Content length: ${currentContent ? currentContent.length : 0}, original: ${originalContent.length}`,
+        `[DEBUG] Bitmap obtained, size: ${bitmap.getWidth()}x${bitmap.getHeight()}`,
       );
-      if (currentContent === originalContent) {
-        return; // File not changed yet, keep waiting
-      }
-
-      console.warn("[DEBUG] File changed detected!");
-      // File changed - stop polling and process
-      clearInterval(keepAliveInterval);
-      processed = true;
-
-      // Process paths
-      if (!currentContent || currentContent.length === 0) {
-        toast("No paths entered.");
-        return;
-      }
-
-      // Parse paths - filter out comment lines
-      // Also handle text editors that insert newlines mid-path (word wrap)
-      lines = currentContent.split("\n");
-      paths = [];
-      for (j = 0; j < lines.length; j++) {
-        line = lines[j];
-        // Skip comment lines
-        if (line.charAt(0) === "#") {
-          continue;
-        }
-        // Skip empty lines
-        if (line.length === 0) {
-          continue;
-        }
-        // If line starts with /, it's a new path
-        if (line.charAt(0) === "/") {
-          // Push previous path if exists
-          if (currentPath && currentPath.length > 0) {
-            paths.push(currentPath);
-          }
-          currentPath = line;
-        } else {
-          // Line doesn't start with / - it's a continuation of previous path
-          // (text editor inserted newline mid-path due to word wrap)
-          if (currentPath) {
-            currentPath = currentPath + line;
-          } else {
-            // Orphan continuation line - treat as standalone path
-            currentPath = line;
-          }
-        }
-      }
-      // Push last path
-      if (currentPath && currentPath.length > 0) {
-        paths.push(currentPath);
-      }
-
-      // Handle comma-separated paths within each path entry
-      finalPaths = [];
-      for (j = 0; j < paths.length; j++) {
-        parts = paths[j].split(",");
-        for (k = 0; k < parts.length; k++) {
-          trimmed = parts[k].replace(/^\s+|\s+$/g, "");
-          if (trimmed.length > 0) {
-            finalPaths.push(trimmed);
-          }
-        }
-      }
-      paths = finalPaths;
-
-      console.warn(`[DEBUG] Parsed paths count: ${paths.length}`);
-      for (j = 0; j < paths.length; j++) {
-        console.warn(`[DEBUG] Path[${j}]: ${paths[j]}`);
-      }
-
-      if (paths.length === 0) {
-        toast("No valid paths found.");
-        return;
-      }
-
-      // Save reference to AutoJs6 global images module before shadowing
-      autoJsImages = images;
-      imageInputs = [];
-      for (i = 0; i < paths.length; i++) {
-        filePath = paths[i];
-        try {
-          console.warn(`[DEBUG] Reading image: ${filePath}`);
-          img = autoJsImages.read(filePath);
-          if (!img) {
-            console.warn(`Failed to read: ${filePath}`);
-            continue;
-          }
-          console.warn(`[DEBUG] Image read successfully`);
-
-          // Convert AutoJs6 Image to base64 for our pipeline
-          bitmap = img.getBitmap();
-          console.warn(
-            `[DEBUG] Bitmap obtained, size: ${bitmap.getWidth()}x${bitmap.getHeight()}`,
-          );
-          byteArrayOutputStream = new java.io.ByteArrayOutputStream();
-          bitmap.compress(
-            android.graphics.Bitmap.CompressFormat.JPEG,
-            90,
-            byteArrayOutputStream,
-          );
-          bytes = byteArrayOutputStream.toByteArray();
-          console.warn(`[DEBUG] Bytes length: ${bytes.length}`);
-          base64 = android.util.Base64.encodeToString(
-            bytes,
-            android.util.Base64.NO_WRAP,
-          );
-          console.warn(`[DEBUG] Base64 length: ${base64.length}`);
-
-          // Create ImageInput compatible with our portable core
-          imageInput = {
-            sourceUri: `file://${filePath}`,
-            mimeType: "image/jpeg",
-            imageBase64: base64,
-            sizeBytes: bytes.length,
-          };
-          imageInputs.push(imageInput);
-          console.warn(`[DEBUG] ImageInput created`);
-
-          bitmap.recycle();
-          img.recycle();
-        } catch (error) {
-          console.warn(`Error processing ${filePath}: ${error.message}`);
-          console.warn(`[DEBUG] Error stack: ${error.stack}`);
-        }
-      }
-
-      if (imageInputs.length === 0) {
-        toast("No valid images loaded.");
-        return;
-      }
-
-      toast(`Loaded ${imageInputs.length} image(s). Processing...`);
-
-      // Run the full pipeline
-      console.warn(
-        `[DEBUG] Starting pipeline with ${imageInputs.length} image(s)`,
+      byteArrayOutputStream = new java.io.ByteArrayOutputStream();
+      bitmap.compress(
+        android.graphics.Bitmap.CompressFormat.JPEG,
+        90,
+        byteArrayOutputStream,
       );
-      launcher
-        .run(imageInputs)
-        .then((pipelineResult) => {
-          console.warn(
-            `[DEBUG] Pipeline result: ${JSON.stringify(pipelineResult, null, 2)}`,
-          );
-          toast(
-            `Done: ${pipelineResult.succeeded} succeeded, ${pipelineResult.failed} failed out of ${pipelineResult.totalImages} images.`,
-          );
+      bytes = byteArrayOutputStream.toByteArray();
+      console.warn(`[DEBUG] Bytes length: ${bytes.length}`);
+      base64 = android.util.Base64.encodeToString(
+        bytes,
+        android.util.Base64.NO_WRAP,
+      );
+      console.warn(`[DEBUG] Base64 length: ${base64.length}`);
 
-          if (pipelineResult.errors.length > 0) {
-            for (e = 0; e < pipelineResult.errors.length; e++) {
-              err = pipelineResult.errors[e];
-              console.warn(
-                `[DEBUG] Error[${e}]: index=${err.index}, code=${err.code}, message=${err.error ? err.error.message || String(err.error) : "unknown"}`,
-              );
-            }
-          }
-        })
-        .catch((error) => {
-          toast(`Error: ${error.message}`);
-          console.warn(`[DEBUG] Pipeline error: ${error.message}`);
-          console.warn(`[DEBUG] Pipeline error stack: ${error.stack}`);
-        });
-    } catch (callbackError) {
-      console.warn(`[DEBUG] Interval callback error: ${callbackError.message}`);
-      console.warn(`[DEBUG] Callback error stack: ${callbackError.stack}`);
+      // Create ImageInput compatible with our portable core
+      imageInput = {
+        sourceUri: `file://${currentPath}`,
+        mimeType: "image/jpeg",
+        imageBase64: base64,
+        sizeBytes: bytes.length,
+      };
+      imageInputs.push(imageInput);
+      console.warn(`[DEBUG] ImageInput created`);
+
+      bitmap.recycle();
+      img.recycle();
+    } catch (error) {
+      console.warn(`Error processing ${currentPath}: ${error.message}`);
+      console.warn(`[DEBUG] Error stack: ${error.stack}`);
     }
-  }, 2000); // Check every 2 seconds
+  }
+
+  if (imageInputs.length === 0) {
+    toast("No valid images loaded.");
+    return;
+  }
+
+  toast(`Loaded ${imageInputs.length} image(s). Processing...`);
+
+  // Run the full pipeline
+  console.warn(`[DEBUG] Starting pipeline with ${imageInputs.length} image(s)`);
+  launcher
+    .run(imageInputs)
+    .then((pipelineResult) => {
+      console.warn(
+        `[DEBUG] Pipeline result: ${JSON.stringify(pipelineResult, null, 2)}`,
+      );
+      toast(
+        `Done: ${pipelineResult.succeeded} succeeded, ${pipelineResult.failed} failed out of ${pipelineResult.totalImages} images.`,
+      );
+
+      if (pipelineResult.errors.length > 0) {
+        for (e = 0; e < pipelineResult.errors.length; e++) {
+          err = pipelineResult.errors[e];
+          console.warn(
+            `[DEBUG] Error[${e}]: index=${err.index}, code=${err.code}, message=${err.error ? err.error.message || String(err.error) : "unknown"}`,
+          );
+        }
+      }
+    })
+    .catch((error) => {
+      toast(`Error: ${error.message}`);
+      console.warn(`[DEBUG] Pipeline error: ${error.message}`);
+      console.warn(`[DEBUG] Pipeline error stack: ${error.stack}`);
+    });
 }
 
 main();

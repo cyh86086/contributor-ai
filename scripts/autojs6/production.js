@@ -1584,172 +1584,88 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   function main() {
     console.warn("[DEBUG] main() started");
     toast("Contributor AI starting...");
-    var configPath = "/sdcard/contributor-ai/image-paths.txt";
-    var instructions = "# Enter image file paths, one per line or comma-separated\n# Example:\n/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg\n";
-    files.write(configPath, instructions);
-    console.warn("[DEBUG] Config file written to ".concat(configPath));
-    toast("Please edit: ".concat(configPath));
-    var originalContent = files.read(configPath);
-    console.warn("[DEBUG] Original content length: ".concat(originalContent.length));
-    var timeout = 12e4;
-    var waitStart = Date.now();
-    var processed = false;
-    console.warn("[DEBUG] setInterval created, timeout: ".concat(timeout, "ms"));
-    var keepAliveInterval = setInterval(function () {
-      var currentContent;
-      var elapsed;
-      var lines;
-      var paths;
-      var j;
-      var line;
-      var parts;
-      var k;
-      var trimmed;
-      var currentPath;
-      var finalPaths;
-      var autoJsImages;
-      var imageInputs;
-      var i;
-      var filePath;
-      var img;
-      var bitmap;
-      var byteArrayOutputStream;
-      var bytes;
-      var base64;
-      var imageInput;
-      var err;
-      var e;
+    var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
+    var input = dialogs.rawInput("Enter image file path:", defaultPath);
+    if (!input || input.trim().length === 0) {
+      toast("No path entered. Exiting.");
+      console.warn("[DEBUG] No path entered");
+      return;
+    }
+    var filePath = input.trim();
+    console.warn("[DEBUG] User entered path: ".concat(filePath));
+    toast("Processing: ".concat(filePath));
+    var paths = [filePath];
+    console.warn("[DEBUG] Parsed paths count: ".concat(paths.length));
+    console.warn("[DEBUG] Path[0]: ".concat(paths[0]));
+    if (paths.length === 0) {
+      toast("No valid paths found.");
+      return;
+    }
+    var autoJsImages = images;
+    var imageInputs = [];
+    var i;
+    var currentPath;
+    var img;
+    var bitmap;
+    var byteArrayOutputStream;
+    var bytes;
+    var base64;
+    var imageInput;
+    var e;
+    var err;
+    for (i = 0; i < paths.length; i++) {
+      currentPath = paths[i];
       try {
-        console.warn("[DEBUG] Interval callback fired");
-        if (processed) {
-          clearInterval(keepAliveInterval);
-          return;
+        console.warn("[DEBUG] Reading image: ".concat(currentPath));
+        img = autoJsImages.read(currentPath);
+        if (!img) {
+          console.warn("Failed to read: ".concat(currentPath));
+          continue;
         }
-        elapsed = Date.now() - waitStart;
-        console.warn("[DEBUG] Elapsed: ".concat(elapsed, "ms, timeout: ").concat(timeout, "ms"));
-        if (elapsed >= timeout) {
-          clearInterval(keepAliveInterval);
-          toast("Timeout: no file changes detected.");
-          console.warn("[DEBUG] Timeout reached");
-          return;
-        }
-        currentContent = files.read(configPath);
-        console.warn("[DEBUG] Content length: ".concat(currentContent ? currentContent.length : 0, ", original: ").concat(originalContent.length));
-        if (currentContent === originalContent) {
-          return;
-        }
-        console.warn("[DEBUG] File changed detected!");
-        clearInterval(keepAliveInterval);
-        processed = true;
-        if (!currentContent || currentContent.length === 0) {
-          toast("No paths entered.");
-          return;
-        }
-        lines = currentContent.split("\n");
-        paths = [];
-        for (j = 0; j < lines.length; j++) {
-          line = lines[j];
-          if (line.charAt(0) === "#") {
-            continue;
-          }
-          if (line.length === 0) {
-            continue;
-          }
-          if (line.charAt(0) === "/") {
-            if (currentPath && currentPath.length > 0) {
-              paths.push(currentPath);
-            }
-            currentPath = line;
-          } else {
-            if (currentPath) {
-              currentPath = currentPath + line;
-            } else {
-              currentPath = line;
-            }
-          }
-        }
-        if (currentPath && currentPath.length > 0) {
-          paths.push(currentPath);
-        }
-        finalPaths = [];
-        for (j = 0; j < paths.length; j++) {
-          parts = paths[j].split(",");
-          for (k = 0; k < parts.length; k++) {
-            trimmed = parts[k].replace(/^\s+|\s+$/g, "");
-            if (trimmed.length > 0) {
-              finalPaths.push(trimmed);
-            }
-          }
-        }
-        paths = finalPaths;
-        console.warn("[DEBUG] Parsed paths count: ".concat(paths.length));
-        for (j = 0; j < paths.length; j++) {
-          console.warn("[DEBUG] Path[".concat(j, "]: ").concat(paths[j]));
-        }
-        if (paths.length === 0) {
-          toast("No valid paths found.");
-          return;
-        }
-        autoJsImages = images;
-        imageInputs = [];
-        for (i = 0; i < paths.length; i++) {
-          filePath = paths[i];
-          try {
-            console.warn("[DEBUG] Reading image: ".concat(filePath));
-            img = autoJsImages.read(filePath);
-            if (!img) {
-              console.warn("Failed to read: ".concat(filePath));
-              continue;
-            }
-            console.warn("[DEBUG] Image read successfully");
-            bitmap = img.getBitmap();
-            console.warn("[DEBUG] Bitmap obtained, size: ".concat(bitmap.getWidth(), "x").concat(bitmap.getHeight()));
-            byteArrayOutputStream = new java.io.ByteArrayOutputStream();
-            bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-            bytes = byteArrayOutputStream.toByteArray();
-            console.warn("[DEBUG] Bytes length: ".concat(bytes.length));
-            base64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
-            console.warn("[DEBUG] Base64 length: ".concat(base64.length));
-            imageInput = {
-              sourceUri: "file://".concat(filePath),
-              mimeType: "image/jpeg",
-              imageBase64: base64,
-              sizeBytes: bytes.length
-            };
-            imageInputs.push(imageInput);
-            console.warn("[DEBUG] ImageInput created");
-            bitmap.recycle();
-            img.recycle();
-          } catch (error) {
-            console.warn("Error processing ".concat(filePath, ": ").concat(error.message));
-            console.warn("[DEBUG] Error stack: ".concat(error.stack));
-          }
-        }
-        if (imageInputs.length === 0) {
-          toast("No valid images loaded.");
-          return;
-        }
-        toast("Loaded ".concat(imageInputs.length, " image(s). Processing..."));
-        console.warn("[DEBUG] Starting pipeline with ".concat(imageInputs.length, " image(s)"));
-        launcher.run(imageInputs).then(function (pipelineResult) {
-          console.warn("[DEBUG] Pipeline result: ".concat(JSON.stringify(pipelineResult, null, 2)));
-          toast("Done: ".concat(pipelineResult.succeeded, " succeeded, ").concat(pipelineResult.failed, " failed out of ").concat(pipelineResult.totalImages, " images."));
-          if (pipelineResult.errors.length > 0) {
-            for (e = 0; e < pipelineResult.errors.length; e++) {
-              err = pipelineResult.errors[e];
-              console.warn("[DEBUG] Error[".concat(e, "]: index=").concat(err.index, ", code=").concat(err.code, ", message=").concat(err.error ? err.error.message || String(err.error) : "unknown"));
-            }
-          }
-        }).catch(function (error) {
-          toast("Error: ".concat(error.message));
-          console.warn("[DEBUG] Pipeline error: ".concat(error.message));
-          console.warn("[DEBUG] Pipeline error stack: ".concat(error.stack));
-        });
-      } catch (callbackError) {
-        console.warn("[DEBUG] Interval callback error: ".concat(callbackError.message));
-        console.warn("[DEBUG] Callback error stack: ".concat(callbackError.stack));
+        console.warn("[DEBUG] Image read successfully");
+        bitmap = img.getBitmap();
+        console.warn("[DEBUG] Bitmap obtained, size: ".concat(bitmap.getWidth(), "x").concat(bitmap.getHeight()));
+        byteArrayOutputStream = new java.io.ByteArrayOutputStream();
+        bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+        bytes = byteArrayOutputStream.toByteArray();
+        console.warn("[DEBUG] Bytes length: ".concat(bytes.length));
+        base64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
+        console.warn("[DEBUG] Base64 length: ".concat(base64.length));
+        imageInput = {
+          sourceUri: "file://".concat(currentPath),
+          mimeType: "image/jpeg",
+          imageBase64: base64,
+          sizeBytes: bytes.length
+        };
+        imageInputs.push(imageInput);
+        console.warn("[DEBUG] ImageInput created");
+        bitmap.recycle();
+        img.recycle();
+      } catch (error) {
+        console.warn("Error processing ".concat(currentPath, ": ").concat(error.message));
+        console.warn("[DEBUG] Error stack: ".concat(error.stack));
       }
-    }, 2e3);
+    }
+    if (imageInputs.length === 0) {
+      toast("No valid images loaded.");
+      return;
+    }
+    toast("Loaded ".concat(imageInputs.length, " image(s). Processing..."));
+    console.warn("[DEBUG] Starting pipeline with ".concat(imageInputs.length, " image(s)"));
+    launcher.run(imageInputs).then(function (pipelineResult) {
+      console.warn("[DEBUG] Pipeline result: ".concat(JSON.stringify(pipelineResult, null, 2)));
+      toast("Done: ".concat(pipelineResult.succeeded, " succeeded, ").concat(pipelineResult.failed, " failed out of ").concat(pipelineResult.totalImages, " images."));
+      if (pipelineResult.errors.length > 0) {
+        for (e = 0; e < pipelineResult.errors.length; e++) {
+          err = pipelineResult.errors[e];
+          console.warn("[DEBUG] Error[".concat(e, "]: index=").concat(err.index, ", code=").concat(err.code, ", message=").concat(err.error ? err.error.message || String(err.error) : "unknown"));
+        }
+      }
+    }).catch(function (error) {
+      toast("Error: ".concat(error.message));
+      console.warn("[DEBUG] Pipeline error: ".concat(error.message));
+      console.warn("[DEBUG] Pipeline error stack: ".concat(error.stack));
+    });
   }
   main();
 })();
