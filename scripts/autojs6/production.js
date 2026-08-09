@@ -1668,16 +1668,21 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       for (i = 0; i < paths.length; i++) {
         filePath = paths[i];
         try {
+          console.warn("[DEBUG] Reading image: ".concat(filePath));
           img = autoJsImages.read(filePath);
           if (!img) {
             console.warn("Failed to read: ".concat(filePath));
             continue;
           }
+          console.warn("[DEBUG] Image read successfully");
           bitmap = img.getBitmap();
+          console.warn("[DEBUG] Bitmap obtained, size: ".concat(bitmap.getWidth(), "x").concat(bitmap.getHeight()));
           byteArrayOutputStream = new java.io.ByteArrayOutputStream();
           bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
           bytes = byteArrayOutputStream.toByteArray();
+          console.warn("[DEBUG] Bytes length: ".concat(bytes.length));
           base64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
+          console.warn("[DEBUG] Base64 length: ".concat(base64.length));
           imageInput = {
             sourceUri: "file://".concat(filePath),
             mimeType: "image/jpeg",
@@ -1685,10 +1690,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             byteLength: bytes.length
           };
           imageInputs.push(imageInput);
+          console.warn("[DEBUG] ImageInput created");
           bitmap.recycle();
           img.recycle();
         } catch (error) {
           console.warn("Error processing ".concat(filePath, ": ").concat(error.message));
+          console.warn("[DEBUG] Error stack: ".concat(error.stack));
         }
       }
       if (imageInputs.length === 0) {
@@ -1696,7 +1703,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return;
       }
       toast("Loaded ".concat(imageInputs.length, " image(s). Processing..."));
+      console.warn("[DEBUG] Starting pipeline with ".concat(imageInputs.length, " image(s)"));
       launcher.run(imageInputs).then(function (pipelineResult) {
+        console.warn("[DEBUG] Pipeline result: ".concat(JSON.stringify(pipelineResult, null, 2)));
         toast("Done: ".concat(pipelineResult.succeeded, " succeeded, ").concat(pipelineResult.failed, " failed out of ").concat(pipelineResult.totalImages, " images."));
         if (pipelineResult.errors.length > 0) {
           console.warn("Errors:", JSON.stringify(pipelineResult.errors, null, 2));
@@ -1704,6 +1713,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }).catch(function (error) {
         toast("Error: ".concat(error.message));
         console.warn("[DEBUG] Pipeline error: ".concat(error.message));
+        console.warn("[DEBUG] Pipeline error stack: ".concat(error.stack));
       });
     }, 2e3);
   }

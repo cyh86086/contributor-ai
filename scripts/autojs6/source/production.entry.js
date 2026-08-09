@@ -233,14 +233,19 @@ function main() {
     for (i = 0; i < paths.length; i++) {
       filePath = paths[i];
       try {
+        console.warn(`[DEBUG] Reading image: ${filePath}`);
         img = autoJsImages.read(filePath);
         if (!img) {
           console.warn(`Failed to read: ${filePath}`);
           continue;
         }
+        console.warn(`[DEBUG] Image read successfully`);
 
         // Convert AutoJs6 Image to base64 for our pipeline
         bitmap = img.getBitmap();
+        console.warn(
+          `[DEBUG] Bitmap obtained, size: ${bitmap.getWidth()}x${bitmap.getHeight()}`,
+        );
         byteArrayOutputStream = new java.io.ByteArrayOutputStream();
         bitmap.compress(
           android.graphics.Bitmap.CompressFormat.JPEG,
@@ -248,10 +253,12 @@ function main() {
           byteArrayOutputStream,
         );
         bytes = byteArrayOutputStream.toByteArray();
+        console.warn(`[DEBUG] Bytes length: ${bytes.length}`);
         base64 = android.util.Base64.encodeToString(
           bytes,
           android.util.Base64.NO_WRAP,
         );
+        console.warn(`[DEBUG] Base64 length: ${base64.length}`);
 
         // Create ImageInput compatible with our portable core
         imageInput = {
@@ -261,11 +268,13 @@ function main() {
           byteLength: bytes.length,
         };
         imageInputs.push(imageInput);
+        console.warn(`[DEBUG] ImageInput created`);
 
         bitmap.recycle();
         img.recycle();
       } catch (error) {
         console.warn(`Error processing ${filePath}: ${error.message}`);
+        console.warn(`[DEBUG] Error stack: ${error.stack}`);
       }
     }
 
@@ -277,9 +286,15 @@ function main() {
     toast(`Loaded ${imageInputs.length} image(s). Processing...`);
 
     // Run the full pipeline
+    console.warn(
+      `[DEBUG] Starting pipeline with ${imageInputs.length} image(s)`,
+    );
     launcher
       .run(imageInputs)
       .then((pipelineResult) => {
+        console.warn(
+          `[DEBUG] Pipeline result: ${JSON.stringify(pipelineResult, null, 2)}`,
+        );
         toast(
           `Done: ${pipelineResult.succeeded} succeeded, ${pipelineResult.failed} failed out of ${pipelineResult.totalImages} images.`,
         );
@@ -294,6 +309,7 @@ function main() {
       .catch((error) => {
         toast(`Error: ${error.message}`);
         console.warn(`[DEBUG] Pipeline error: ${error.message}`);
+        console.warn(`[DEBUG] Pipeline error stack: ${error.stack}`);
       });
   }, 2000); // Check every 2 seconds
 }
