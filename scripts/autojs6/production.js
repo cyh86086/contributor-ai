@@ -1097,6 +1097,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 } else if (typeof response.body === "string") {
                   responseBody = response.body;
                 }
+                if (status >= 400) {
+                  safeLogger.warn("[DEBUG] HTTP error response body: ".concat(responseBody.substring(0, 500)));
+                }
                 return _context9.a(2, {
                   status: status,
                   headers: (_a = response.headers) != null ? _a : {},

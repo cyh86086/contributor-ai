@@ -76,6 +76,12 @@ export function createAutoJs6HttpCaller({ httpClient, logger } = {}) {
       responseBody = response.body;
     }
 
+    if (status >= 400) {
+      safeLogger.warn(
+        `[DEBUG] HTTP error response body: ${responseBody.substring(0, 500)}`,
+      );
+    }
+
     return {
       status,
       headers: response.headers ?? {},
