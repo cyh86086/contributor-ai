@@ -120,32 +120,30 @@ async function main() {
   files.write(configPath, instructions);
   toast(`Please edit: ${configPath}`);
 
-  // Wait for user to edit the file using background thread
+  // Use setTimeout to wait for user to edit (non-blocking)
+  // Check every 2 seconds, up to 2 minutes
+  var checkCount = 0;
+  var maxChecks = 60; // 60 * 2s = 120s
   var originalContent = files.read(configPath);
-  var waitStart = Date.now();
-  var timeout = 120000; // 2 minutes
-  var currentContent;
-  var line;
-  var parts;
-  var k;
-  var trimmed;
 
-  // Use threads to poll without blocking UI
-  var pollingThread = threads.start(() => {
-    while (Date.now() - waitStart < timeout) {
-      sleep(1000);
-      currentContent = files.read(configPath);
-      if (currentContent !== originalContent) {
-        break;
-      }
+  function checkFile() {
+    checkCount++;
+    var currentContent = files.read(configPath);
+
+    if (currentContent !== originalContent || checkCount >= maxChecks) {
+      // File changed or timeout - continue processing
+      processPaths(currentContent);
+    } else {
+      // Check again in 2 seconds
+      setTimeout(checkFile, 2000);
     }
-  });
+  }
 
-  // Wait for thread to finish or timeout
-  pollingThread.join(timeout);
+  // Start checking after 2 seconds
+  setTimeout(checkFile, 2000);
+}
 
-  // Read the edited content
-  var pathContent = files.read(configPath);
+async function processPaths(pathContent) {
   if (!pathContent || pathContent.length === 0) {
     toast("No paths entered.");
     return;
@@ -155,6 +153,10 @@ async function main() {
   var lines = pathContent.split("\n");
   var paths = [];
   var j;
+  var line;
+  var parts;
+  var k;
+  var trimmed;
   for (j = 0; j < lines.length; j++) {
     line = lines[j];
     // Skip comments and empty lines

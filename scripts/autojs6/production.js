@@ -1576,50 +1576,61 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   function main() {
     return __async(this, null, _regenerator().m(function _callee13() {
-      var configPath, instructions, originalContent, waitStart, timeout, currentContent, line, parts, k, trimmed, pollingThread, pathContent, lines, paths, j, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
+      var configPath, instructions, checkCount, maxChecks, originalContent, checkFile;
       return _regenerator().w(function (_context13) {
-        while (1) switch (_context13.p = _context13.n) {
+        while (1) switch (_context13.n) {
           case 0:
+            checkFile = function _checkFile() {
+              checkCount++;
+              var currentContent = files.read(configPath);
+              if (currentContent !== originalContent || checkCount >= maxChecks) {
+                processPaths(currentContent);
+              } else {
+                setTimeout(checkFile, 2e3);
+              }
+            };
             toast("Contributor AI starting...");
             configPath = "/sdcard/contributor-ai/image-paths.txt";
             instructions = "# Enter image file paths, one per line or comma-separated\n# Example:\n/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg\n";
             files.write(configPath, instructions);
             toast("Please edit: ".concat(configPath));
+            checkCount = 0;
+            maxChecks = 60;
             originalContent = files.read(configPath);
-            waitStart = Date.now();
-            timeout = 12e4;
-            pollingThread = threads.start(function () {
-              while (Date.now() - waitStart < timeout) {
-                sleep(1e3);
-                currentContent = files.read(configPath);
-                if (currentContent !== originalContent) {
-                  break;
-                }
-              }
-            });
-            pollingThread.join(timeout);
-            pathContent = files.read(configPath);
+            setTimeout(checkFile, 2e3);
+          case 1:
+            return _context13.a(2);
+        }
+      }, _callee13);
+    }));
+  }
+  function processPaths(pathContent) {
+    return __async(this, null, _regenerator().m(function _callee14() {
+      var lines, paths, j, line, parts, k, trimmed, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
+      return _regenerator().w(function (_context14) {
+        while (1) switch (_context14.p = _context14.n) {
+          case 0:
             if (!(!pathContent || pathContent.length === 0)) {
-              _context13.n = 1;
+              _context14.n = 1;
               break;
             }
             toast("No paths entered.");
-            return _context13.a(2);
+            return _context14.a(2);
           case 1:
             lines = pathContent.split("\n");
             paths = [];
             j = 0;
           case 2:
             if (!(j < lines.length)) {
-              _context13.n = 5;
+              _context14.n = 5;
               break;
             }
             line = lines[j];
             if (!(line.charAt(0) === "#" || line.length === 0)) {
-              _context13.n = 3;
+              _context14.n = 3;
               break;
             }
-            return _context13.a(3, 4);
+            return _context14.a(3, 4);
           case 3:
             parts = line.split(",");
             for (k = 0; k < parts.length; k++) {
@@ -1630,7 +1641,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             }
           case 4:
             j++;
-            _context13.n = 2;
+            _context14.n = 2;
             break;
           case 5:
             console.warn("[DEBUG] Parsed paths count: ".concat(paths.length));
@@ -1642,18 +1653,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             i = 0;
           case 6:
             if (!(i < paths.length)) {
-              _context13.n = 11;
+              _context14.n = 11;
               break;
             }
             filePath = paths[i];
-            _context13.p = 7;
+            _context14.p = 7;
             img = autoJsImages.read(filePath);
             if (img) {
-              _context13.n = 8;
+              _context14.n = 8;
               break;
             }
             console.warn("Failed to read: ".concat(filePath));
-            return _context13.a(3, 10);
+            return _context14.a(3, 10);
           case 8:
             bitmap = img.getBitmap();
             byteArrayOutputStream = new java.io.ByteArrayOutputStream();
@@ -1669,37 +1680,37 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             imageInputs.push(imageInput);
             bitmap.recycle();
             img.recycle();
-            _context13.n = 10;
+            _context14.n = 10;
             break;
           case 9:
-            _context13.p = 9;
-            _t21 = _context13.v;
+            _context14.p = 9;
+            _t21 = _context14.v;
             console.warn("Error processing ".concat(filePath, ": ").concat(_t21.message));
           case 10:
             i++;
-            _context13.n = 6;
+            _context14.n = 6;
             break;
           case 11:
             if (!(imageInputs.length === 0)) {
-              _context13.n = 12;
+              _context14.n = 12;
               break;
             }
             toast("No valid images loaded.");
-            return _context13.a(2);
+            return _context14.a(2);
           case 12:
             toast("Loaded ".concat(imageInputs.length, " image(s). Processing..."));
-            _context13.n = 13;
+            _context14.n = 13;
             return launcher.run(imageInputs);
           case 13:
-            pipelineResult = _context13.v;
+            pipelineResult = _context14.v;
             toast("Done: ".concat(pipelineResult.succeeded, " succeeded, ").concat(pipelineResult.failed, " failed out of ").concat(pipelineResult.totalImages, " images."));
             if (pipelineResult.errors.length > 0) {
               console.warn("Errors:", JSON.stringify(pipelineResult.errors, null, 2));
             }
           case 14:
-            return _context13.a(2);
+            return _context14.a(2);
         }
-      }, _callee13, null, [[7, 9]]);
+      }, _callee14, null, [[7, 9]]);
     }));
   }
   main().catch(function (error) {
