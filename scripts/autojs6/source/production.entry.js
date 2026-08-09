@@ -156,19 +156,22 @@ function main() {
       `[DEBUG] rawInput keys: ${rawInput ? Object.keys(rawInput).join(",") : "null"}`,
     );
 
-    // rawInput is a Promise - wait for it to resolve
+    // Handle both string and Promise return values
     input = "";
-    if (rawInput && rawInput._value !== undefined) {
-      // Promise already resolved, get the value
+    if (typeof rawInput === "string") {
+      // Direct string return (non-UI mode)
+      input = rawInput;
+      console.warn(`[DEBUG] Direct string: ${input}`);
+    } else if (rawInput && rawInput._value !== undefined) {
+      // Promise already resolved
       input = rawInput._value ? String(rawInput._value) : "";
       console.warn(`[DEBUG] Promise _value: ${input}`);
     } else if (rawInput && typeof rawInput.then === "function") {
-      // Promise not yet resolved - need to wait
-      console.warn("[DEBUG] Waiting for Promise to resolve...");
-      // Use a simple polling approach
+      // Promise not yet resolved - wait briefly
+      console.warn("[DEBUG] Waiting for Promise...");
       waitCount = 0;
       while (
-        waitCount < 50 &&
+        waitCount < 30 &&
         (!rawInput._value || rawInput._state !== "resolved")
       ) {
         java.lang.Thread.sleep(100);
@@ -176,14 +179,14 @@ function main() {
       }
       if (rawInput._value) {
         input = String(rawInput._value);
-        console.warn(`[DEBUG] Promise resolved with: ${input}`);
+        console.warn(`[DEBUG] Promise resolved: ${input}`);
       } else {
-        console.warn("[DEBUG] Promise did not resolve in time");
+        console.warn("[DEBUG] Promise timeout");
       }
     } else {
-      // Not a Promise, try direct conversion
+      // Fallback
       input = rawInput ? String(rawInput) : "";
-      console.warn(`[DEBUG] Direct conversion: ${input}`);
+      console.warn(`[DEBUG] Fallback: ${input}`);
     }
 
     if (input.length === 0) {

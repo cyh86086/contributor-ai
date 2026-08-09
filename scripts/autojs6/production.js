@@ -1,4 +1,3 @@
-"ui";
 /* Contributor AI production entry point — Gemini provider. */
 /* Polyfill: String.prototype.trim for AutoJs6 Rhino engine */
 if (!String.prototype.trim) {
@@ -1612,25 +1611,28 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       console.warn("[DEBUG] rawInput toString: ".concat(rawInput ? rawInput.toString() : "null"));
       console.warn("[DEBUG] rawInput keys: ".concat(rawInput ? Object.keys(rawInput).join(",") : "null"));
       input = "";
-      if (rawInput && rawInput._value !== void 0) {
+      if (typeof rawInput === "string") {
+        input = rawInput;
+        console.warn("[DEBUG] Direct string: ".concat(input));
+      } else if (rawInput && rawInput._value !== void 0) {
         input = rawInput._value ? String(rawInput._value) : "";
         console.warn("[DEBUG] Promise _value: ".concat(input));
       } else if (rawInput && typeof rawInput.then === "function") {
-        console.warn("[DEBUG] Waiting for Promise to resolve...");
+        console.warn("[DEBUG] Waiting for Promise...");
         waitCount = 0;
-        while (waitCount < 50 && (!rawInput._value || rawInput._state !== "resolved")) {
+        while (waitCount < 30 && (!rawInput._value || rawInput._state !== "resolved")) {
           java.lang.Thread.sleep(100);
           waitCount++;
         }
         if (rawInput._value) {
           input = String(rawInput._value);
-          console.warn("[DEBUG] Promise resolved with: ".concat(input));
+          console.warn("[DEBUG] Promise resolved: ".concat(input));
         } else {
-          console.warn("[DEBUG] Promise did not resolve in time");
+          console.warn("[DEBUG] Promise timeout");
         }
       } else {
         input = rawInput ? String(rawInput) : "";
-        console.warn("[DEBUG] Direct conversion: ".concat(input));
+        console.warn("[DEBUG] Fallback: ".concat(input));
       }
       if (input.length === 0) {
         toast("No path entered. Exiting.");
