@@ -120,38 +120,32 @@ function main() {
   files.write(configPath, instructions);
   toast(`Please edit: ${configPath}`);
 
-  // All work in background thread to keep script alive
-  threads.start(() => {
-    var originalContent = files.read(configPath);
-    var timeout = 120000; // 2 minutes
-    var waitStart = Date.now();
-    var currentContent = originalContent;
-    var lines;
-    var paths;
-    var j;
-    var line;
-    var parts;
-    var k;
-    var trimmed;
-    var autoJsImages;
-    var imageInputs;
-    var i;
-    var filePath;
-    var img;
-    var bitmap;
-    var byteArrayOutputStream;
-    var bytes;
-    var base64;
-    var imageInput;
+  // Use setInterval to keep script alive and poll for file changes
+  var originalContent = files.read(configPath);
+  var timeout = 120000; // 2 minutes
+  var waitStart = Date.now();
+  var processed = false;
 
-    // Poll for file changes
-    while (Date.now() - waitStart < timeout) {
-      sleep(2000);
-      currentContent = files.read(configPath);
-      if (currentContent !== originalContent) {
-        break;
-      }
+  var keepAliveInterval = setInterval(() => {
+    if (processed) {
+      clearInterval(keepAliveInterval);
+      return;
     }
+
+    if (Date.now() - waitStart >= timeout) {
+      clearInterval(keepAliveInterval);
+      toast("Timeout: no file changes detected.");
+      return;
+    }
+
+    var currentContent = files.read(configPath);
+    if (currentContent === originalContent) {
+      return; // File not changed yet, keep waiting
+    }
+
+    // File changed - stop polling and process
+    clearInterval(keepAliveInterval);
+    processed = true;
 
     // Process paths
     if (!currentContent || currentContent.length === 0) {
@@ -160,8 +154,13 @@ function main() {
     }
 
     // Parse paths - filter out comment lines
-    lines = currentContent.split("\n");
-    paths = [];
+    var lines = currentContent.split("\n");
+    var paths = [];
+    var j;
+    var line;
+    var parts;
+    var k;
+    var trimmed;
     for (j = 0; j < lines.length; j++) {
       line = lines[j];
       // Skip comments and empty lines
@@ -189,8 +188,16 @@ function main() {
     }
 
     // Save reference to AutoJs6 global images module before shadowing
-    autoJsImages = images;
-    imageInputs = [];
+    var autoJsImages = images;
+    var imageInputs = [];
+    var i;
+    var filePath;
+    var img;
+    var bitmap;
+    var byteArrayOutputStream;
+    var bytes;
+    var base64;
+    var imageInput;
     for (i = 0; i < paths.length; i++) {
       filePath = paths[i];
       try {
@@ -256,7 +263,7 @@ function main() {
         toast(`Error: ${error.message}`);
         console.warn(`[DEBUG] Pipeline error: ${error.message}`);
       });
-  });
+  }, 2000); // Check every 2 seconds
 }
 
 main();

@@ -1580,41 +1580,37 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     var instructions = "# Enter image file paths, one per line or comma-separated\n# Example:\n/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg\n";
     files.write(configPath, instructions);
     toast("Please edit: ".concat(configPath));
-    threads.start(function () {
-      var originalContent = files.read(configPath);
-      var timeout = 12e4;
-      var waitStart = Date.now();
-      var currentContent = originalContent;
-      var lines;
-      var paths;
+    var originalContent = files.read(configPath);
+    var timeout = 12e4;
+    var waitStart = Date.now();
+    var processed = false;
+    var keepAliveInterval = setInterval(function () {
+      if (processed) {
+        clearInterval(keepAliveInterval);
+        return;
+      }
+      if (Date.now() - waitStart >= timeout) {
+        clearInterval(keepAliveInterval);
+        toast("Timeout: no file changes detected.");
+        return;
+      }
+      var currentContent = files.read(configPath);
+      if (currentContent === originalContent) {
+        return;
+      }
+      clearInterval(keepAliveInterval);
+      processed = true;
+      if (!currentContent || currentContent.length === 0) {
+        toast("No paths entered.");
+        return;
+      }
+      var lines = currentContent.split("\n");
+      var paths = [];
       var j;
       var line;
       var parts;
       var k;
       var trimmed;
-      var autoJsImages;
-      var imageInputs;
-      var i;
-      var filePath;
-      var img;
-      var bitmap;
-      var byteArrayOutputStream;
-      var bytes;
-      var base64;
-      var imageInput;
-      while (Date.now() - waitStart < timeout) {
-        sleep(2e3);
-        currentContent = files.read(configPath);
-        if (currentContent !== originalContent) {
-          break;
-        }
-      }
-      if (!currentContent || currentContent.length === 0) {
-        toast("No paths entered.");
-        return;
-      }
-      lines = currentContent.split("\n");
-      paths = [];
       for (j = 0; j < lines.length; j++) {
         line = lines[j];
         if (line.charAt(0) === "#" || line.length === 0) {
@@ -1636,8 +1632,16 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         toast("No valid paths found.");
         return;
       }
-      autoJsImages = images;
-      imageInputs = [];
+      var autoJsImages = images;
+      var imageInputs = [];
+      var i;
+      var filePath;
+      var img;
+      var bitmap;
+      var byteArrayOutputStream;
+      var bytes;
+      var base64;
+      var imageInput;
       for (i = 0; i < paths.length; i++) {
         filePath = paths[i];
         try {
@@ -1678,7 +1682,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         toast("Error: ".concat(error.message));
         console.warn("[DEBUG] Pipeline error: ".concat(error.message));
       });
-    });
+    }, 2e3);
   }
   main();
 })();
