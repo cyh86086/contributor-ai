@@ -480,96 +480,115 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       warn: function warn() {}
     });
   }
-  function createAutoJs6HttpCaller() {
+  var DEFAULT_WAIT_MS = 1e4;
+  var DEFAULT_PACKAGE_NAME = "com.contributor.app";
+  function createContributorUIAdapter() {
     var _ref6 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      httpClient = _ref6.httpClient,
-      logger = _ref6.logger;
-    validateHttpClient(httpClient);
-    var safeLogger = normalizeLogger2(logger);
-    return function httpCaller2() {
-      return __async(this, arguments, function () {
-        var _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          url = _ref7.url,
-          method = _ref7.method,
-          headers = _ref7.headers,
-          body = _ref7.body,
-          timeoutMs = _ref7.timeoutMs;
+      appLauncher = _ref6.appLauncher,
+      findDescription = _ref6.findDescription,
+      findKeywords = _ref6.findKeywords,
+      _ref6$packageName = _ref6.packageName,
+      packageName = _ref6$packageName === void 0 ? DEFAULT_PACKAGE_NAME : _ref6$packageName,
+      _ref6$waitMs = _ref6.waitMs,
+      waitMs = _ref6$waitMs === void 0 ? DEFAULT_WAIT_MS : _ref6$waitMs;
+    validateAppLauncher(appLauncher);
+    validateFinder(findDescription, "findDescription");
+    validateFinder(findKeywords, "findKeywords");
+    validateWaitMs(waitMs);
+    return function uiAdapter2(_0) {
+      return __async(this, arguments, function (_ref7) {
+        var description = _ref7.description,
+          keywords = _ref7.keywords;
         return _regenerator().m(function _callee5() {
-          var _a, options, response, status, responseBody, _t8;
+          var descField, kwField, keywordsText, _t8, _t9, _t0, _t1, _t10;
           return _regenerator().w(function (_context5) {
             while (1) switch (_context5.p = _context5.n) {
               case 0:
-                options = {
-                  method: method != null ? method : "GET"
-                };
-                if (headers) {
-                  options.headers = headers;
-                }
-                if (body !== void 0) {
-                  options.body = body;
-                }
-                if (timeoutMs !== void 0) {
-                  options.timeout = timeoutMs;
-                }
-                _context5.p = 1;
-                response = httpClient.request(url, options);
-                _context5.n = 3;
+                _context5.p = 0;
+                appLauncher(packageName);
+                _context5.n = 2;
                 break;
+              case 1:
+                _context5.p = 1;
+                _t8 = _context5.v;
+                throw new Error("Could not launch the Contributor app.");
               case 2:
                 _context5.p = 2;
-                _t8 = _context5.v;
-                safeLogger.warn("HTTP request failed.");
-                throw new Error("The HTTP request failed.");
+                _context5.n = 3;
+                return findDescription(waitMs);
               case 3:
-                if (!(!response || _typeof(response) !== "object")) {
-                  _context5.n = 4;
-                  break;
-                }
-                safeLogger.warn("HTTP response was invalid.");
-                throw new Error("The HTTP response was invalid.");
+                descField = _context5.v;
+                _context5.n = 5;
+                break;
               case 4:
-                status = response.statusCode;
-                if (Number.isSafeInteger(status)) {
-                  _context5.n = 5;
+                _context5.p = 4;
+                _t9 = _context5.v;
+                throw new Error("Could not find the Description field.");
+              case 5:
+                if (!(!descField || typeof descField.setText !== "function")) {
+                  _context5.n = 6;
                   break;
                 }
-                safeLogger.warn("HTTP response had no valid status.");
-                throw new Error("The HTTP response had no valid status.");
-              case 5:
-                responseBody = "";
-                if (typeof response.body === "function") {
-                  try {
-                    responseBody = response.body();
-                  } catch (e) {
-                    safeLogger.warn("HTTP response body extraction failed.");
-                    responseBody = "";
-                  }
-                } else if (typeof response.body === "string") {
-                  responseBody = response.body;
+                throw new Error("The Description field does not support text entry.");
+              case 6:
+                _context5.p = 6;
+                descField.setText(description);
+                _context5.n = 8;
+                break;
+              case 7:
+                _context5.p = 7;
+                _t0 = _context5.v;
+                throw new Error("Could not enter the description.");
+              case 8:
+                _context5.p = 8;
+                _context5.n = 9;
+                return findKeywords(waitMs);
+              case 9:
+                kwField = _context5.v;
+                _context5.n = 11;
+                break;
+              case 10:
+                _context5.p = 10;
+                _t1 = _context5.v;
+                throw new Error("Could not find the Keywords field.");
+              case 11:
+                if (!(!kwField || typeof kwField.setText !== "function")) {
+                  _context5.n = 12;
+                  break;
                 }
-                return _context5.a(2, {
-                  status: status,
-                  headers: (_a = response.headers) != null ? _a : {},
-                  body: responseBody
-                });
+                throw new Error("The Keywords field does not support text entry.");
+              case 12:
+                keywordsText = Array.isArray(keywords) ? keywords.join(", ") : String(keywords);
+                _context5.p = 13;
+                kwField.setText(keywordsText);
+                _context5.n = 15;
+                break;
+              case 14:
+                _context5.p = 14;
+                _t10 = _context5.v;
+                throw new Error("Could not enter the keywords.");
+              case 15:
+                return _context5.a(2);
             }
-          }, _callee5, null, [[1, 2]]);
+          }, _callee5, null, [[13, 14], [8, 10], [6, 7], [2, 4], [0, 1]]);
         })();
       });
     };
   }
-  function validateHttpClient(httpClient) {
-    if (!httpClient || typeof httpClient.request !== "function") {
-      throw new TypeError("httpClient must be an object with a request() method");
+  function validateAppLauncher(appLauncher) {
+    if (typeof appLauncher !== "function") {
+      throw new TypeError("appLauncher must be a function");
     }
   }
-  function normalizeLogger2(logger) {
-    if (logger && typeof logger.warn === "function") {
-      return logger;
+  function validateFinder(finder, name) {
+    if (typeof finder !== "function") {
+      throw new TypeError("".concat(name, " must be a function"));
     }
-    return {
-      warn: function warn() {}
-    };
+  }
+  function validateWaitMs(waitMs) {
+    if (!Number.isSafeInteger(waitMs) || waitMs <= 0) {
+      throw new TypeError("waitMs must be a positive safe integer");
+    }
   }
   var HTTP_ADAPTER_ERROR_CODES = Object.freeze({
     HTTP_REQUEST_FAILED: "HTTP_REQUEST_FAILED",
@@ -607,7 +626,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         timeoutMs = _ref8.timeoutMs,
         httpCaller2 = _ref8.httpCaller;
       return _regenerator().m(function _callee6() {
-        var rawResponse, _t9;
+        var rawResponse, _t11;
         return _regenerator().w(function (_context6) {
           while (1) switch (_context6.p = _context6.n) {
             case 0:
@@ -630,12 +649,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               break;
             case 3:
               _context6.p = 3;
-              _t9 = _context6.v;
-              if (!(_t9 instanceof HttpAdapterError)) {
+              _t11 = _context6.v;
+              if (!(_t11 instanceof HttpAdapterError)) {
                 _context6.n = 4;
                 break;
               }
-              throw _t9;
+              throw _t11;
             case 4:
               throw httpAdapterError(HTTP_ADAPTER_ERROR_CODES.HTTP_REQUEST_FAILED);
             case 5:
@@ -755,7 +774,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         providerCaller2 = _ref9.providerCaller,
         maxImageBytes = _ref9.maxImageBytes;
       return _regenerator().m(function _callee7() {
-        var rawResponse, normalized, _t0, _t1;
+        var rawResponse, normalized, _t12, _t13;
         return _regenerator().w(function (_context7) {
           while (1) switch (_context7.p = _context7.n) {
             case 0:
@@ -781,12 +800,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               break;
             case 3:
               _context7.p = 3;
-              _t0 = _context7.v;
-              if (!(_t0 instanceof VisionProviderError)) {
+              _t12 = _context7.v;
+              if (!(_t12 instanceof VisionProviderError)) {
                 _context7.n = 4;
                 break;
               }
-              throw _t0;
+              throw _t12;
             case 4:
               throw visionProviderError(VISION_PROVIDER_ERROR_CODES.PROVIDER_REQUEST_FAILED);
             case 5:
@@ -795,7 +814,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return _context7.a(2, validateVisionMetadata(normalized));
             case 7:
               _context7.p = 7;
-              _t1 = _context7.v;
+              _t13 = _context7.v;
               throw visionProviderError(VISION_PROVIDER_ERROR_CODES.PROVIDER_RESPONSE_INVALID);
             case 8:
               return _context7.a(2);
@@ -861,7 +880,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         var imageBase64 = _ref1.imageBase64,
           mimeType = _ref1.mimeType;
         return _regenerator().m(function _callee8() {
-          var apiKey, url, requestBody, httpResponse, _t10;
+          var apiKey, url, requestBody, httpResponse, _t14;
           return _regenerator().w(function (_context8) {
             while (1) switch (_context8.p = _context8.n) {
               case 0:
@@ -900,14 +919,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 break;
               case 3:
                 _context8.p = 3;
-                _t10 = _context8.v;
-                if (!(_t10 instanceof VisionProviderError)) {
+                _t14 = _context8.v;
+                if (!(_t14 instanceof VisionProviderError)) {
                   _context8.n = 4;
                   break;
                 }
-                throw _t10;
+                throw _t14;
               case 4:
-                throw mapHttpErrorToVisionError(_t10);
+                throw mapHttpErrorToVisionError(_t14);
               case 5:
                 return _context8.a(2, parseGeminiResponse(httpResponse.body));
             }
@@ -1005,115 +1024,96 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       throw new TypeError("apiEndpoint must be a non-empty string");
     }
   }
-  var DEFAULT_WAIT_MS = 1e4;
-  var DEFAULT_PACKAGE_NAME = "com.contributor.app";
-  function createContributorUIAdapter() {
+  function createAutoJs6HttpCaller() {
     var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      appLauncher = _ref10.appLauncher,
-      findDescription = _ref10.findDescription,
-      findKeywords = _ref10.findKeywords,
-      _ref10$packageName = _ref10.packageName,
-      packageName = _ref10$packageName === void 0 ? DEFAULT_PACKAGE_NAME : _ref10$packageName,
-      _ref10$waitMs = _ref10.waitMs,
-      waitMs = _ref10$waitMs === void 0 ? DEFAULT_WAIT_MS : _ref10$waitMs;
-    validateAppLauncher(appLauncher);
-    validateFinder(findDescription, "findDescription");
-    validateFinder(findKeywords, "findKeywords");
-    validateWaitMs(waitMs);
-    return function uiAdapter2(_0) {
-      return __async(this, arguments, function (_ref11) {
-        var description = _ref11.description,
-          keywords = _ref11.keywords;
+      httpClient = _ref10.httpClient,
+      logger = _ref10.logger;
+    validateHttpClient(httpClient);
+    var safeLogger = normalizeLogger2(logger);
+    return function httpCaller2() {
+      return __async(this, arguments, function () {
+        var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          url = _ref11.url,
+          method = _ref11.method,
+          headers = _ref11.headers,
+          body = _ref11.body,
+          timeoutMs = _ref11.timeoutMs;
         return _regenerator().m(function _callee9() {
-          var descField, kwField, keywordsText, _t11, _t12, _t13, _t14, _t15;
+          var _a, options, response, status, responseBody, _t15;
           return _regenerator().w(function (_context9) {
             while (1) switch (_context9.p = _context9.n) {
               case 0:
-                _context9.p = 0;
-                appLauncher(packageName);
-                _context9.n = 2;
-                break;
-              case 1:
+                options = {
+                  method: method != null ? method : "GET"
+                };
+                if (headers) {
+                  options.headers = headers;
+                }
+                if (body !== void 0) {
+                  options.body = body;
+                }
+                if (timeoutMs !== void 0) {
+                  options.timeout = timeoutMs;
+                }
                 _context9.p = 1;
-                _t11 = _context9.v;
-                throw new Error("Could not launch the Contributor app.");
+                response = httpClient.request(url, options);
+                _context9.n = 3;
+                break;
               case 2:
                 _context9.p = 2;
-                _context9.n = 3;
-                return findDescription(waitMs);
-              case 3:
-                descField = _context9.v;
-                _context9.n = 5;
-                break;
-              case 4:
-                _context9.p = 4;
-                _t12 = _context9.v;
-                throw new Error("Could not find the Description field.");
-              case 5:
-                if (!(!descField || typeof descField.setText !== "function")) {
-                  _context9.n = 6;
-                  break;
-                }
-                throw new Error("The Description field does not support text entry.");
-              case 6:
-                _context9.p = 6;
-                descField.setText(description);
-                _context9.n = 8;
-                break;
-              case 7:
-                _context9.p = 7;
-                _t13 = _context9.v;
-                throw new Error("Could not enter the description.");
-              case 8:
-                _context9.p = 8;
-                _context9.n = 9;
-                return findKeywords(waitMs);
-              case 9:
-                kwField = _context9.v;
-                _context9.n = 11;
-                break;
-              case 10:
-                _context9.p = 10;
-                _t14 = _context9.v;
-                throw new Error("Could not find the Keywords field.");
-              case 11:
-                if (!(!kwField || typeof kwField.setText !== "function")) {
-                  _context9.n = 12;
-                  break;
-                }
-                throw new Error("The Keywords field does not support text entry.");
-              case 12:
-                keywordsText = Array.isArray(keywords) ? keywords.join(", ") : String(keywords);
-                _context9.p = 13;
-                kwField.setText(keywordsText);
-                _context9.n = 15;
-                break;
-              case 14:
-                _context9.p = 14;
                 _t15 = _context9.v;
-                throw new Error("Could not enter the keywords.");
-              case 15:
-                return _context9.a(2);
+                safeLogger.warn("HTTP request failed.");
+                throw new Error("The HTTP request failed.");
+              case 3:
+                if (!(!response || _typeof(response) !== "object")) {
+                  _context9.n = 4;
+                  break;
+                }
+                safeLogger.warn("HTTP response was invalid.");
+                throw new Error("The HTTP response was invalid.");
+              case 4:
+                status = response.statusCode;
+                if (Number.isSafeInteger(status)) {
+                  _context9.n = 5;
+                  break;
+                }
+                safeLogger.warn("HTTP response had no valid status.");
+                throw new Error("The HTTP response had no valid status.");
+              case 5:
+                responseBody = "";
+                if (typeof response.body === "function") {
+                  try {
+                    responseBody = response.body();
+                  } catch (e) {
+                    safeLogger.warn("HTTP response body extraction failed.");
+                    responseBody = "";
+                  }
+                } else if (typeof response.body === "string") {
+                  responseBody = response.body;
+                }
+                return _context9.a(2, {
+                  status: status,
+                  headers: (_a = response.headers) != null ? _a : {},
+                  body: responseBody
+                });
             }
-          }, _callee9, null, [[13, 14], [8, 10], [6, 7], [2, 4], [0, 1]]);
+          }, _callee9, null, [[1, 2]]);
         })();
       });
     };
   }
-  function validateAppLauncher(appLauncher) {
-    if (typeof appLauncher !== "function") {
-      throw new TypeError("appLauncher must be a function");
+  function validateHttpClient(httpClient) {
+    if (!httpClient || typeof httpClient.request !== "function") {
+      throw new TypeError("httpClient must be an object with a request() method");
     }
   }
-  function validateFinder(finder, name) {
-    if (typeof finder !== "function") {
-      throw new TypeError("".concat(name, " must be a function"));
+  function normalizeLogger2(logger) {
+    if (logger && typeof logger.warn === "function") {
+      return logger;
     }
-  }
-  function validateWaitMs(waitMs) {
-    if (!Number.isSafeInteger(waitMs) || waitMs <= 0) {
-      throw new TypeError("waitMs must be a positive safe integer");
-    }
+    return {
+      warn: function warn() {}
+    };
   }
   function processQueue(_0) {
     return __async(this, arguments, function (_ref12) {
@@ -1611,19 +1611,42 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var parts;
       var k;
       var trimmed;
+      var currentPath;
       for (j = 0; j < lines.length; j++) {
         line = lines[j];
-        if (line.charAt(0) === "#" || line.length === 0) {
+        if (line.charAt(0) === "#") {
           continue;
         }
-        parts = line.split(",");
-        for (k = 0; k < parts.length; k++) {
-          trimmed = parts[k].replace(/^\s+|\s+$/g, "");
-          if (trimmed.length > 0) {
-            paths.push(trimmed);
+        if (line.length === 0) {
+          continue;
+        }
+        if (line.charAt(0) === "/") {
+          if (currentPath && currentPath.length > 0) {
+            paths.push(currentPath);
+          }
+          currentPath = line;
+        } else {
+          if (currentPath) {
+            currentPath = currentPath + line;
+          } else {
+            currentPath = line;
           }
         }
       }
+      if (currentPath && currentPath.length > 0) {
+        paths.push(currentPath);
+      }
+      var finalPaths = [];
+      for (j = 0; j < paths.length; j++) {
+        parts = paths[j].split(",");
+        for (k = 0; k < parts.length; k++) {
+          trimmed = parts[k].replace(/^\s+|\s+$/g, "");
+          if (trimmed.length > 0) {
+            finalPaths.push(trimmed);
+          }
+        }
+      }
+      paths = finalPaths;
       console.warn("[DEBUG] Parsed paths count: ".concat(paths.length));
       for (j = 0; j < paths.length; j++) {
         console.warn("[DEBUG] Path[".concat(j, "]: ").concat(paths[j]));

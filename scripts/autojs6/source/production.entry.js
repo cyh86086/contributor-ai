@@ -11,9 +11,9 @@
  */
 
 import { createAutoJs6AndroidImageReader } from "../../../src/autojs6/android-image-reader.js";
-import { createAutoJs6HttpCaller } from "../../../src/autojs6/http-caller.js";
-import { createGeminiVisionCaller } from "../../../src/autojs6/gemini-vision-caller.js";
 import { createContributorUIAdapter } from "../../../src/autojs6/contributor-ui-adapter.js";
+import { createGeminiVisionCaller } from "../../../src/autojs6/gemini-vision-caller.js";
+import { createAutoJs6HttpCaller } from "../../../src/autojs6/http-caller.js";
 import { createLauncher } from "../../../src/core/launcher.js";
 
 // ── Configuration ──────────────────────────────────────────────────────────
@@ -154,6 +154,7 @@ function main() {
     }
 
     // Parse paths - filter out comment lines
+    // Also handle text editors that insert newlines mid-path (word wrap)
     var lines = currentContent.split("\n");
     var paths = [];
     var j;
@@ -161,21 +162,52 @@ function main() {
     var parts;
     var k;
     var trimmed;
+    var currentPath;
     for (j = 0; j < lines.length; j++) {
       line = lines[j];
-      // Skip comments and empty lines
-      if (line.charAt(0) === "#" || line.length === 0) {
+      // Skip comment lines
+      if (line.charAt(0) === "#") {
         continue;
       }
-      // Handle comma-separated on same line
-      parts = line.split(",");
-      for (k = 0; k < parts.length; k++) {
-        trimmed = parts[k].replace(/^\s+|\s+$/g, "");
-        if (trimmed.length > 0) {
-          paths.push(trimmed);
+      // Skip empty lines
+      if (line.length === 0) {
+        continue;
+      }
+      // If line starts with /, it's a new path
+      if (line.charAt(0) === "/") {
+        // Push previous path if exists
+        if (currentPath && currentPath.length > 0) {
+          paths.push(currentPath);
+        }
+        currentPath = line;
+      } else {
+        // Line doesn't start with / - it's a continuation of previous path
+        // (text editor inserted newline mid-path due to word wrap)
+        if (currentPath) {
+          currentPath = currentPath + line;
+        } else {
+          // Orphan continuation line - treat as standalone path
+          currentPath = line;
         }
       }
     }
+    // Push last path
+    if (currentPath && currentPath.length > 0) {
+      paths.push(currentPath);
+    }
+
+    // Handle comma-separated paths within each path entry
+    var finalPaths = [];
+    for (j = 0; j < paths.length; j++) {
+      parts = paths[j].split(",");
+      for (k = 0; k < parts.length; k++) {
+        trimmed = parts[k].replace(/^\s+|\s+$/g, "");
+        if (trimmed.length > 0) {
+          finalPaths.push(trimmed);
+        }
+      }
+    }
+    paths = finalPaths;
 
     console.warn(`[DEBUG] Parsed paths count: ${paths.length}`);
     for (j = 0; j < paths.length; j++) {
