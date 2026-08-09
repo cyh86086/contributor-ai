@@ -118,6 +118,10 @@ function main() {
   console.warn("[DEBUG] main() started");
   toast("Contributor AI starting...");
 
+  var waitCount;
+  var input;
+  var filePath;
+
   // Use dialogs.rawInput to get image path from user
   var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
   var rawInput = dialogs.rawInput("Enter image file path:", defaultPath);
@@ -134,28 +138,29 @@ function main() {
     `[DEBUG] rawInput keys: ${rawInput ? Object.keys(rawInput).join(",") : "null"}`,
   );
 
-  // Try to extract string value from the object
-  var input = "";
-  if (rawInput) {
-    // Try different ways to get the string value
-    if (typeof rawInput === "string") {
-      input = rawInput;
-    } else if (rawInput.value !== undefined) {
-      input = String(rawInput.value);
-    } else if (rawInput.text !== undefined) {
-      input = String(rawInput.text);
-    } else if (rawInput.data !== undefined) {
-      input = String(rawInput.data);
-    } else if (rawInput[0] !== undefined) {
-      // Array-like object
-      input = String(rawInput[0]);
+  // rawInput is a Promise - wait for it to resolve
+  input = "";
+  if (rawInput && rawInput._value !== undefined) {
+    // Promise already resolved, get the value
+    input = String(rawInput._value);
+    console.warn(`[DEBUG] Promise _value: ${input}`);
+  } else if (rawInput && typeof rawInput.then === "function") {
+    // Promise not yet resolved - need to wait
+    console.warn("[DEBUG] Waiting for Promise to resolve...");
+    // Use a simple polling approach
+    waitCount = 0;
+    while (
+      waitCount < 50 &&
+      (!rawInput._value || rawInput._state !== "resolved")
+    ) {
+      java.lang.Thread.sleep(100);
+      waitCount++;
+    }
+    if (rawInput._value) {
+      input = String(rawInput._value);
+      console.warn(`[DEBUG] Promise resolved with: ${input}`);
     } else {
-      // Try Java interop
-      try {
-        input = String(rawInput);
-      } catch (e) {
-        input = "";
-      }
+      console.warn("[DEBUG] Promise did not resolve in time");
     }
   }
 
@@ -166,7 +171,7 @@ function main() {
   }
 
   // Simple trim without regex
-  var filePath = input;
+  filePath = input;
   while (
     filePath.length > 0 &&
     (filePath.charAt(0) === " " || filePath.charAt(0) === "\t")

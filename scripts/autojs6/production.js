@@ -1584,30 +1584,31 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   function main() {
     console.warn("[DEBUG] main() started");
     toast("Contributor AI starting...");
+    var waitCount;
+    var input;
+    var filePath;
     var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
     var rawInput = dialogs.rawInput("Enter image file path:", defaultPath);
     console.warn("[DEBUG] rawInput type: ".concat(_typeof(rawInput)));
     console.warn("[DEBUG] rawInput constructor: ".concat(rawInput ? rawInput.constructor : "null"));
     console.warn("[DEBUG] rawInput toString: ".concat(rawInput ? rawInput.toString() : "null"));
     console.warn("[DEBUG] rawInput keys: ".concat(rawInput ? Object.keys(rawInput).join(",") : "null"));
-    var input = "";
-    if (rawInput) {
-      if (typeof rawInput === "string") {
-        input = rawInput;
-      } else if (rawInput.value !== void 0) {
-        input = String(rawInput.value);
-      } else if (rawInput.text !== void 0) {
-        input = String(rawInput.text);
-      } else if (rawInput.data !== void 0) {
-        input = String(rawInput.data);
-      } else if (rawInput[0] !== void 0) {
-        input = String(rawInput[0]);
+    input = "";
+    if (rawInput && rawInput._value !== void 0) {
+      input = String(rawInput._value);
+      console.warn("[DEBUG] Promise _value: ".concat(input));
+    } else if (rawInput && typeof rawInput.then === "function") {
+      console.warn("[DEBUG] Waiting for Promise to resolve...");
+      waitCount = 0;
+      while (waitCount < 50 && (!rawInput._value || rawInput._state !== "resolved")) {
+        java.lang.Thread.sleep(100);
+        waitCount++;
+      }
+      if (rawInput._value) {
+        input = String(rawInput._value);
+        console.warn("[DEBUG] Promise resolved with: ".concat(input));
       } else {
-        try {
-          input = String(rawInput);
-        } catch (e2) {
-          input = "";
-        }
+        console.warn("[DEBUG] Promise did not resolve in time");
       }
     }
     if (input.length === 0) {
@@ -1615,7 +1616,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       console.warn("[DEBUG] No path entered");
       return;
     }
-    var filePath = input;
+    filePath = input;
     while (filePath.length > 0 && (filePath.charAt(0) === " " || filePath.charAt(0) === "	")) {
       filePath = filePath.substring(1);
     }
