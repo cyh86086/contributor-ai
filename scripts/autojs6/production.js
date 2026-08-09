@@ -1636,6 +1636,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     var imageInput;
     var e;
     var err;
+    var trimChars;
     try {
       console.warn("[DEBUG] main() started");
       toast("Contributor AI starting...");
@@ -1677,10 +1678,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return;
       }
       filePath = input;
-      while (filePath.length > 0 && (filePath.charAt(0) === " " || filePath.charAt(0) === "	")) {
+      trimChars = " \t\uFF1A:\u3001\uFF0C\u3002.!\uFF01?\uFF1F";
+      while (filePath.length > 0 && trimChars.indexOf(filePath.charAt(0)) !== -1) {
         filePath = filePath.substring(1);
       }
-      while (filePath.length > 0 && (filePath.charAt(filePath.length - 1) === " " || filePath.charAt(filePath.length - 1) === "	")) {
+      while (filePath.length > 0 && trimChars.indexOf(filePath.charAt(filePath.length - 1)) !== -1) {
         filePath = filePath.substring(0, filePath.length - 1);
       }
       console.warn("[DEBUG] User entered path: ".concat(filePath));

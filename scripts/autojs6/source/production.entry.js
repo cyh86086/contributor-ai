@@ -133,6 +133,7 @@ function main() {
   var imageInput;
   var e;
   var err;
+  var trimChars;
 
   try {
     console.warn("[DEBUG] main() started");
@@ -195,18 +196,18 @@ function main() {
       return;
     }
 
-    // Simple trim without regex
+    // Enhanced trim: remove whitespace and common punctuation
     filePath = input;
+    trimChars = " \t：:、，。.!！?？";
     while (
       filePath.length > 0 &&
-      (filePath.charAt(0) === " " || filePath.charAt(0) === "\t")
+      trimChars.indexOf(filePath.charAt(0)) !== -1
     ) {
       filePath = filePath.substring(1);
     }
     while (
       filePath.length > 0 &&
-      (filePath.charAt(filePath.length - 1) === " " ||
-        filePath.charAt(filePath.length - 1) === "\t")
+      trimChars.indexOf(filePath.charAt(filePath.length - 1)) !== -1
     ) {
       filePath = filePath.substring(0, filePath.length - 1);
     }
