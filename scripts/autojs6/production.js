@@ -1087,6 +1087,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 throw new Error("The HTTP response had no valid status.");
               case 5:
                 responseBody = "";
+                safeLogger.warn("[DEBUG] response.body type: ".concat(_typeof(response.body)));
+                safeLogger.warn("[DEBUG] response.statusMessage: ".concat(response.statusMessage || "none"));
                 if (typeof response.body === "function") {
                   try {
                     responseBody = response.body();
@@ -1096,6 +1098,20 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                   }
                 } else if (typeof response.body === "string") {
                   responseBody = response.body;
+                } else if (response.body && typeof response.body.string === "function") {
+                  try {
+                    responseBody = response.body.string();
+                  } catch (e) {
+                    safeLogger.warn("HTTP response.body.string() failed.");
+                    responseBody = "";
+                  }
+                } else if (response.body && typeof response.body.text === "function") {
+                  try {
+                    responseBody = response.body.text();
+                  } catch (e) {
+                    safeLogger.warn("HTTP response.body.text() failed.");
+                    responseBody = "";
+                  }
                 }
                 if (status >= 400) {
                   safeLogger.warn("[DEBUG] HTTP error response body: ".concat(responseBody.substring(0, 500)));

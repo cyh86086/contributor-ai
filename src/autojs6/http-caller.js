@@ -65,6 +65,10 @@ export function createAutoJs6HttpCaller({ httpClient, logger } = {}) {
     }
 
     let responseBody = "";
+    safeLogger.warn(`[DEBUG] response.body type: ${typeof response.body}`);
+    safeLogger.warn(
+      `[DEBUG] response.statusMessage: ${response.statusMessage || "none"}`,
+    );
     if (typeof response.body === "function") {
       try {
         responseBody = response.body();
@@ -74,6 +78,22 @@ export function createAutoJs6HttpCaller({ httpClient, logger } = {}) {
       }
     } else if (typeof response.body === "string") {
       responseBody = response.body;
+    } else if (response.body && typeof response.body.string === "function") {
+      // AutoJs6 ResponseBody object
+      try {
+        responseBody = response.body.string();
+      } catch {
+        safeLogger.warn("HTTP response.body.string() failed.");
+        responseBody = "";
+      }
+    } else if (response.body && typeof response.body.text === "function") {
+      // Alternative AutoJs6 method
+      try {
+        responseBody = response.body.text();
+      } catch {
+        safeLogger.warn("HTTP response.body.text() failed.");
+        responseBody = "";
+      }
     }
 
     if (status >= 400) {
