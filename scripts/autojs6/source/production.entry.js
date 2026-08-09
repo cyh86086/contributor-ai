@@ -29,6 +29,7 @@ const API_KEY_PATH = "/sdcard/contributor-ai/api-key.txt";
 
 function getGeminiApiKey() {
   const file = new java.io.File(API_KEY_PATH);
+  console.warn(`[DEBUG] API key file exists: ${file.exists()}`);
   if (!file.exists()) {
     throw new Error(
       `API key file not found at ${API_KEY_PATH}. Please create it.`,
@@ -37,6 +38,7 @@ function getGeminiApiKey() {
   const reader = new java.io.BufferedReader(new java.io.FileReader(file));
   try {
     const key = reader.readLine();
+    console.warn(`[DEBUG] API key read, length: ${key ? key.length : 0}`);
     if (key == null || key.trim().length === 0) {
       throw new Error("API key file is empty.");
     }
@@ -78,7 +80,12 @@ const imageReader = createAutoJs6AndroidImageReader({
 });
 
 // HTTP caller (AutoJs6 http global)
-const httpCaller = createAutoJs6HttpCaller({ httpClient: http });
+const httpCaller = createAutoJs6HttpCaller({
+  httpClient: http,
+  logger: {
+    warn: (msg) => console.warn(`[HTTP] ${msg}`),
+  },
+});
 
 // Gemini vision caller
 const providerCaller = createGeminiVisionCaller({

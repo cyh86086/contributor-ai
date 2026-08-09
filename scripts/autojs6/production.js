@@ -1501,12 +1501,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   var API_KEY_PATH = "/sdcard/contributor-ai/api-key.txt";
   function getGeminiApiKey() {
     var file = new java.io.File(API_KEY_PATH);
+    console.warn("[DEBUG] API key file exists: ".concat(file.exists()));
     if (!file.exists()) {
       throw new Error("API key file not found at ".concat(API_KEY_PATH, ". Please create it."));
     }
     var reader = new java.io.BufferedReader(new java.io.FileReader(file));
     try {
       var key = reader.readLine();
+      console.warn("[DEBUG] API key read, length: ".concat(key ? key.length : 0));
       if (key == null || key.trim().length === 0) {
         throw new Error("API key file is empty.");
       }
@@ -1547,7 +1549,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     readerSafetyLimitBytes: READER_SAFETY_LIMIT_BYTES
   });
   var httpCaller = createAutoJs6HttpCaller({
-    httpClient: http
+    httpClient: http,
+    logger: {
+      warn: function warn(msg) {
+        return console.warn("[HTTP] ".concat(msg));
+      }
+    }
   });
   var providerCaller = createGeminiVisionCaller({
     httpCaller: httpCaller,
