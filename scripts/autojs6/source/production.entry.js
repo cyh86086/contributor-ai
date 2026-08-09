@@ -120,15 +120,32 @@ function main() {
 
   // Use dialogs.rawInput to get image path from user
   var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
-  var input = dialogs.rawInput("Enter image file path:", defaultPath);
+  var rawInput = dialogs.rawInput("Enter image file path:", defaultPath);
 
-  if (!input || input.replace(/^\s+|\s+$/g, "").length === 0) {
+  // Convert Java String to JavaScript string
+  var input = rawInput ? String(rawInput) : "";
+
+  if (input.length === 0) {
     toast("No path entered. Exiting.");
     console.warn("[DEBUG] No path entered");
     return;
   }
 
-  var filePath = input.replace(/^\s+|\s+$/g, "");
+  // Simple trim without regex
+  var filePath = input;
+  while (
+    filePath.length > 0 &&
+    (filePath.charAt(0) === " " || filePath.charAt(0) === "\t")
+  ) {
+    filePath = filePath.substring(1);
+  }
+  while (
+    filePath.length > 0 &&
+    (filePath.charAt(filePath.length - 1) === " " ||
+      filePath.charAt(filePath.length - 1) === "\t")
+  ) {
+    filePath = filePath.substring(0, filePath.length - 1);
+  }
   console.warn(`[DEBUG] User entered path: ${filePath}`);
   toast(`Processing: ${filePath}`);
 
