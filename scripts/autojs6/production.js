@@ -1529,7 +1529,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       throw new TypeError("maxSizeBytes must be a positive safe integer");
     }
   }
-  var GEMINI_MODEL = "gemini-3.6-flash";
   var GEMINI_MAX_IMAGE_BYTES = 20 * 1024 * 1024;
   var PORTABLE_MAX_SIZE_BYTES = 20 * 1024 * 1024;
   var READER_SAFETY_LIMIT_BYTES = 50 * 1024 * 1024;
@@ -1594,8 +1593,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   var providerCaller = createGeminiVisionCaller({
     httpCaller: httpCaller,
-    getApiKey: getGeminiApiKey,
-    model: GEMINI_MODEL
+    getApiKey: getGeminiApiKey
   });
   var uiAdapter = createContributorUIAdapter({
     appLauncher: function appLauncher(pkg) {
