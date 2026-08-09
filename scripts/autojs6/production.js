@@ -859,7 +859,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   function visionProviderError(code) {
     return new VisionProviderError(code);
   }
-  var DEFAULT_MODEL = "gemini-2.0-flash";
+  var DEFAULT_MODEL = "gemini-3.6-flash";
   var DEFAULT_BASE_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
   var PROMPT = ["Analyze this image for a microstock photo listing.", "Return a JSON object with exactly two fields:", '1. "description": an English description under 2000 characters', "   suitable for a microstock photo listing.", '2. "keywords": an array of exactly 7 English keywords.', "Return only the JSON object with no additional text."].join(" ");
   function createGeminiVisionCaller() {
@@ -1529,7 +1529,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       throw new TypeError("maxSizeBytes must be a positive safe integer");
     }
   }
-  var GEMINI_MODEL = "gemini-2.0-flash";
+  var GEMINI_MODEL = "gemini-3.6-flash";
   var GEMINI_MAX_IMAGE_BYTES = 20 * 1024 * 1024;
   var PORTABLE_MAX_SIZE_BYTES = 20 * 1024 * 1024;
   var READER_SAFETY_LIMIT_BYTES = 50 * 1024 * 1024;
