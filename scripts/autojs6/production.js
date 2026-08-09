@@ -1665,6 +1665,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var bytes;
       var base64;
       var imageInput;
+      var err;
+      var e;
       for (i = 0; i < paths.length; i++) {
         filePath = paths[i];
         try {
@@ -1686,8 +1688,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           imageInput = {
             sourceUri: "file://".concat(filePath),
             mimeType: "image/jpeg",
-            data: base64,
-            byteLength: bytes.length
+            imageBase64: base64,
+            sizeBytes: bytes.length
           };
           imageInputs.push(imageInput);
           console.warn("[DEBUG] ImageInput created");
@@ -1708,7 +1710,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         console.warn("[DEBUG] Pipeline result: ".concat(JSON.stringify(pipelineResult, null, 2)));
         toast("Done: ".concat(pipelineResult.succeeded, " succeeded, ").concat(pipelineResult.failed, " failed out of ").concat(pipelineResult.totalImages, " images."));
         if (pipelineResult.errors.length > 0) {
-          console.warn("Errors:", JSON.stringify(pipelineResult.errors, null, 2));
+          for (e = 0; e < pipelineResult.errors.length; e++) {
+            err = pipelineResult.errors[e];
+            console.warn("[DEBUG] Error[".concat(e, "]: index=").concat(err.index, ", code=").concat(err.code, ", message=").concat(err.error ? err.error.message || String(err.error) : "unknown"));
+          }
         }
       }).catch(function (error) {
         toast("Error: ".concat(error.message));

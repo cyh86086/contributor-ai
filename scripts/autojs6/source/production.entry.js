@@ -230,6 +230,8 @@ function main() {
     var bytes;
     var base64;
     var imageInput;
+    var err;
+    var e;
     for (i = 0; i < paths.length; i++) {
       filePath = paths[i];
       try {
@@ -264,8 +266,8 @@ function main() {
         imageInput = {
           sourceUri: `file://${filePath}`,
           mimeType: "image/jpeg",
-          data: base64,
-          byteLength: bytes.length,
+          imageBase64: base64,
+          sizeBytes: bytes.length,
         };
         imageInputs.push(imageInput);
         console.warn(`[DEBUG] ImageInput created`);
@@ -300,10 +302,12 @@ function main() {
         );
 
         if (pipelineResult.errors.length > 0) {
-          console.warn(
-            "Errors:",
-            JSON.stringify(pipelineResult.errors, null, 2),
-          );
+          for (e = 0; e < pipelineResult.errors.length; e++) {
+            err = pipelineResult.errors[e];
+            console.warn(
+              `[DEBUG] Error[${e}]: index=${err.index}, code=${err.code}, message=${err.error ? err.error.message || String(err.error) : "unknown"}`,
+            );
+          }
         }
       })
       .catch((error) => {
