@@ -1586,12 +1586,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     toast("Contributor AI starting...");
     var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
     var input = dialogs.rawInput("Enter image file path:", defaultPath);
-    if (!input || input.trim().length === 0) {
+    if (!input || input.replace(/^\s+|\s+$/g, "").length === 0) {
       toast("No path entered. Exiting.");
       console.warn("[DEBUG] No path entered");
       return;
     }
-    var filePath = input.trim();
+    var filePath = input.replace(/^\s+|\s+$/g, "");
     console.warn("[DEBUG] User entered path: ".concat(filePath));
     toast("Processing: ".concat(filePath));
     var paths = [filePath];
