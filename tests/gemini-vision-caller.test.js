@@ -71,7 +71,7 @@ describe("Gemini Vision Caller V1.0", () => {
 
     assert.equal(mock.calls.length, 1);
     const call = mock.calls[0];
-    assert.ok(call.url.includes("gemini-1.5-pro:generateContent"));
+    assert.ok(call.url.includes("gemini-2.0-flash:generateContent"));
     assert.ok(call.url.includes("key=AIza-test-key"));
     assert.equal(call.method, "POST");
     assert.equal(call.headers["Content-Type"], "application/json");

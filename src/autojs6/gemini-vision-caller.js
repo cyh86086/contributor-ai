@@ -12,7 +12,7 @@
 import { executeHttpRequest, HttpAdapterError } from "../core/http-adapter.js";
 import { VisionProviderError } from "../core/vision-provider.js";
 
-const DEFAULT_MODEL = "gemini-1.5-pro";
+const DEFAULT_MODEL = "gemini-2.0-flash";
 const DEFAULT_BASE_ENDPOINT =
   "https://generativelanguage.googleapis.com/v1beta/models";
 

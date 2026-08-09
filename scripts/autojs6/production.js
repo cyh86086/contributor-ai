@@ -859,7 +859,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   function visionProviderError(code) {
     return new VisionProviderError(code);
   }
-  var DEFAULT_MODEL = "gemini-1.5-pro";
+  var DEFAULT_MODEL = "gemini-2.0-flash";
   var DEFAULT_BASE_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
   var PROMPT = ["Analyze this image for a microstock photo listing.", "Return a JSON object with exactly two fields:", '1. "description": an English description under 2000 characters', "   suitable for a microstock photo listing.", '2. "keywords": an array of exactly 7 English keywords.', "Return only the JSON object with no additional text."].join(" ");
   function createGeminiVisionCaller() {
