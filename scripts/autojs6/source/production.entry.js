@@ -110,50 +110,64 @@ const launcher = createLauncher({
 async function main() {
   toast("Contributor AI starting...");
 
-  // Ask user to input image file path(s), comma-separated for multiple
-  const rawPathInput = dialogs.rawInput(
-    "Enter image file path(s)\n(comma-separated for multiple):",
-    "/storage/emulated/0/DCIM/Camera/",
-  );
+  // Write instructions to a file for user to edit
+  var configPath = "/sdcard/contributor-ai/image-paths.txt";
+  var instructions =
+    "# Enter image file paths, one per line or comma-separated\n" +
+    "# Example:\n" +
+    "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg\n";
 
-  // Convert Java object to JS string
-  // dialogs.rawInput() returns a Java CharSequence wrapper in AutoJs6
-  var jsPathInput = "";
-  if (rawPathInput !== null && rawPathInput !== undefined) {
-    // Try multiple conversion methods
-    try {
-      // Method 1: Use Java String constructor with CharSequence
-      jsPathInput = new java.lang.String(rawPathInput);
-    } catch (_e1) {
-      try {
-        // Method 2: Use valueOf
-        jsPathInput = java.lang.String.valueOf(rawPathInput);
-      } catch (_e2) {
-        // Method 3: Concatenation fallback
-        jsPathInput = "" + rawPathInput;
+  files.write(configPath, instructions);
+  toast(`Please edit: ${configPath}`);
+
+  // Wait for user to edit the file using background thread
+  var originalContent = files.read(configPath);
+  var waitStart = Date.now();
+  var timeout = 120000; // 2 minutes
+  var currentContent;
+  var line;
+  var parts;
+  var k;
+  var trimmed;
+
+  // Use threads to poll without blocking UI
+  var pollingThread = threads.start(() => {
+    while (Date.now() - waitStart < timeout) {
+      sleep(1000);
+      currentContent = files.read(configPath);
+      if (currentContent !== originalContent) {
+        break;
       }
     }
-  }
+  });
 
-  if (jsPathInput.length === 0) {
+  // Wait for thread to finish or timeout
+  pollingThread.join(timeout);
+
+  // Read the edited content
+  var pathContent = files.read(configPath);
+  if (!pathContent || pathContent.length === 0) {
     toast("No paths entered.");
     return;
   }
 
-  // Log the raw input for debugging
-  console.warn(`[DEBUG] Raw path input length: ${jsPathInput.length}`);
-  console.warn(`[DEBUG] Raw path input: ${jsPathInput}`);
-
-  // Parse paths - use Java String methods directly
-  const rawPaths = jsPathInput.split(",");
-  const paths = [];
-  let j;
-  for (j = 0; j < rawPaths.length; j++) {
-    // Force Java String to JS string via template literal
-    const raw = `${rawPaths[j]}`;
-    const trimmed = raw.replace(/^\s+|\s+$/g, "");
-    if (trimmed.length > 0) {
-      paths.push(trimmed);
+  // Parse paths - filter out comment lines
+  var lines = pathContent.split("\n");
+  var paths = [];
+  var j;
+  for (j = 0; j < lines.length; j++) {
+    line = lines[j];
+    // Skip comments and empty lines
+    if (line.charAt(0) === "#" || line.length === 0) {
+      continue;
+    }
+    // Handle comma-separated on same line
+    parts = line.split(",");
+    for (k = 0; k < parts.length; k++) {
+      trimmed = parts[k].replace(/^\s+|\s+$/g, "");
+      if (trimmed.length > 0) {
+        paths.push(trimmed);
+      }
     }
   }
 

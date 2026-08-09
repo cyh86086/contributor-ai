@@ -1576,42 +1576,63 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   });
   function main() {
     return __async(this, null, _regenerator().m(function _callee13() {
-      var rawPathInput, jsPathInput, rawPaths, paths, j, raw, trimmed, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
+      var configPath, instructions, originalContent, waitStart, timeout, currentContent, line, parts, k, trimmed, pollingThread, pathContent, lines, paths, j, autoJsImages, imageInputs, i, filePath, img, bitmap, byteArrayOutputStream, bytes, base64, imageInput, pipelineResult, _t21;
       return _regenerator().w(function (_context13) {
         while (1) switch (_context13.p = _context13.n) {
           case 0:
             toast("Contributor AI starting...");
-            rawPathInput = dialogs.rawInput("Enter image file path(s)\n(comma-separated for multiple):", "/storage/emulated/0/DCIM/Camera/");
-            jsPathInput = "";
-            if (rawPathInput !== null && rawPathInput !== void 0) {
-              try {
-                jsPathInput = new java.lang.String(rawPathInput);
-              } catch (_e1) {
-                try {
-                  jsPathInput = java.lang.String.valueOf(rawPathInput);
-                } catch (_e2) {
-                  jsPathInput = "" + rawPathInput;
+            configPath = "/sdcard/contributor-ai/image-paths.txt";
+            instructions = "# Enter image file paths, one per line or comma-separated\n# Example:\n/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg\n";
+            files.write(configPath, instructions);
+            toast("Please edit: ".concat(configPath));
+            originalContent = files.read(configPath);
+            waitStart = Date.now();
+            timeout = 12e4;
+            pollingThread = threads.start(function () {
+              while (Date.now() - waitStart < timeout) {
+                sleep(1e3);
+                currentContent = files.read(configPath);
+                if (currentContent !== originalContent) {
+                  break;
                 }
               }
-            }
-            if (!(jsPathInput.length === 0)) {
+            });
+            pollingThread.join(timeout);
+            pathContent = files.read(configPath);
+            if (!(!pathContent || pathContent.length === 0)) {
               _context13.n = 1;
               break;
             }
             toast("No paths entered.");
             return _context13.a(2);
           case 1:
-            console.warn("[DEBUG] Raw path input length: ".concat(jsPathInput.length));
-            console.warn("[DEBUG] Raw path input: ".concat(jsPathInput));
-            rawPaths = jsPathInput.split(",");
+            lines = pathContent.split("\n");
             paths = [];
-            for (j = 0; j < rawPaths.length; j++) {
-              raw = "".concat(rawPaths[j]);
-              trimmed = raw.replace(/^\s+|\s+$/g, "");
+            j = 0;
+          case 2:
+            if (!(j < lines.length)) {
+              _context13.n = 5;
+              break;
+            }
+            line = lines[j];
+            if (!(line.charAt(0) === "#" || line.length === 0)) {
+              _context13.n = 3;
+              break;
+            }
+            return _context13.a(3, 4);
+          case 3:
+            parts = line.split(",");
+            for (k = 0; k < parts.length; k++) {
+              trimmed = parts[k].replace(/^\s+|\s+$/g, "");
               if (trimmed.length > 0) {
                 paths.push(trimmed);
               }
             }
+          case 4:
+            j++;
+            _context13.n = 2;
+            break;
+          case 5:
             console.warn("[DEBUG] Parsed paths count: ".concat(paths.length));
             for (j = 0; j < paths.length; j++) {
               console.warn("[DEBUG] Path[".concat(j, "]: ").concat(paths[j]));
@@ -1619,21 +1640,21 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             autoJsImages = images;
             imageInputs = [];
             i = 0;
-          case 2:
+          case 6:
             if (!(i < paths.length)) {
-              _context13.n = 7;
+              _context13.n = 11;
               break;
             }
             filePath = paths[i];
-            _context13.p = 3;
+            _context13.p = 7;
             img = autoJsImages.read(filePath);
             if (img) {
-              _context13.n = 4;
+              _context13.n = 8;
               break;
             }
             console.warn("Failed to read: ".concat(filePath));
-            return _context13.a(3, 6);
-          case 4:
+            return _context13.a(3, 10);
+          case 8:
             bitmap = img.getBitmap();
             byteArrayOutputStream = new java.io.ByteArrayOutputStream();
             bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
@@ -1648,37 +1669,37 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             imageInputs.push(imageInput);
             bitmap.recycle();
             img.recycle();
-            _context13.n = 6;
+            _context13.n = 10;
             break;
-          case 5:
-            _context13.p = 5;
+          case 9:
+            _context13.p = 9;
             _t21 = _context13.v;
             console.warn("Error processing ".concat(filePath, ": ").concat(_t21.message));
-          case 6:
+          case 10:
             i++;
-            _context13.n = 2;
+            _context13.n = 6;
             break;
-          case 7:
+          case 11:
             if (!(imageInputs.length === 0)) {
-              _context13.n = 8;
+              _context13.n = 12;
               break;
             }
             toast("No valid images loaded.");
             return _context13.a(2);
-          case 8:
+          case 12:
             toast("Loaded ".concat(imageInputs.length, " image(s). Processing..."));
-            _context13.n = 9;
+            _context13.n = 13;
             return launcher.run(imageInputs);
-          case 9:
+          case 13:
             pipelineResult = _context13.v;
             toast("Done: ".concat(pipelineResult.succeeded, " succeeded, ").concat(pipelineResult.failed, " failed out of ").concat(pipelineResult.totalImages, " images."));
             if (pipelineResult.errors.length > 0) {
               console.warn("Errors:", JSON.stringify(pipelineResult.errors, null, 2));
             }
-          case 10:
+          case 14:
             return _context13.a(2);
         }
-      }, _callee13, null, [[3, 5]]);
+      }, _callee13, null, [[7, 9]]);
     }));
   }
   main().catch(function (error) {
