@@ -1055,13 +1055,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                   options.timeout = timeoutMs;
                 }
                 _context9.p = 1;
+                safeLogger.warn("[DEBUG] HTTP calling: ".concat(sanitizeUrl(url)));
+                safeLogger.warn("[DEBUG] HTTP method: ".concat(options.method));
+                safeLogger.warn("[DEBUG] HTTP body length: ".concat(options.body ? options.body.length : 0));
                 response = httpClient.request(url, options);
+                safeLogger.warn("[DEBUG] HTTP response received");
                 _context9.n = 3;
                 break;
               case 2:
                 _context9.p = 2;
                 _t15 = _context9.v;
-                safeLogger.warn("HTTP request failed.");
+                safeLogger.warn("[DEBUG] HTTP request failed: ".concat(_t15.message || String(_t15)));
+                safeLogger.warn("[DEBUG] HTTP error stack: ".concat(_t15.stack || "no stack"));
                 throw new Error("The HTTP request failed.");
               case 3:
                 if (!(!response || _typeof(response) !== "object")) {
@@ -1113,6 +1118,17 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     return {
       warn: function warn() {}
     };
+  }
+  function sanitizeUrl(url) {
+    if (!url || typeof url !== "string") {
+      return "unknown";
+    }
+    try {
+      var parsed = new URL(url);
+      return "".concat(parsed.protocol, "//[host]").concat(parsed.pathname);
+    } catch (e) {
+      return "invalid-url";
+    }
   }
   function processQueue(_0) {
     return __async(this, arguments, function (_ref12) {

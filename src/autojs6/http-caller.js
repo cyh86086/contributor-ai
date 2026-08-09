@@ -34,9 +34,18 @@ export function createAutoJs6HttpCaller({ httpClient, logger } = {}) {
 
     let response;
     try {
+      safeLogger.warn(`[DEBUG] HTTP calling: ${sanitizeUrl(url)}`);
+      safeLogger.warn(`[DEBUG] HTTP method: ${options.method}`);
+      safeLogger.warn(
+        `[DEBUG] HTTP body length: ${options.body ? options.body.length : 0}`,
+      );
       response = httpClient.request(url, options);
+      safeLogger.warn(`[DEBUG] HTTP response received`);
     } catch (error) {
-      safeLogger.warn("HTTP request failed.");
+      safeLogger.warn(
+        `[DEBUG] HTTP request failed: ${error.message || String(error)}`,
+      );
+      safeLogger.warn(`[DEBUG] HTTP error stack: ${error.stack || "no stack"}`);
       throw new Error("The HTTP request failed.");
     }
 
@@ -82,4 +91,16 @@ function normalizeLogger(logger) {
     return logger;
   }
   return { warn() {} };
+}
+
+function sanitizeUrl(url) {
+  if (!url || typeof url !== "string") {
+    return "unknown";
+  }
+  try {
+    const parsed = new URL(url);
+    return `${parsed.protocol}//[host]${parsed.pathname}`;
+  } catch {
+    return "invalid-url";
+  }
 }
