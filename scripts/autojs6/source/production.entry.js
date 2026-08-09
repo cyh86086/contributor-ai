@@ -115,93 +115,14 @@ const launcher = createLauncher({
 // ── Main execution ────────────────────────────────────────────────────────
 
 function main() {
-  console.warn("[DEBUG] main() started");
-  toast("Contributor AI starting...");
-
   var waitCount;
   var input;
   var filePath;
-
-  // Use dialogs.rawInput to get image path from user
-  var defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
-  var rawInput = dialogs.rawInput("Enter image file path:", defaultPath);
-
-  // Debug: log the raw input details
-  console.warn(`[DEBUG] rawInput type: ${typeof rawInput}`);
-  console.warn(
-    `[DEBUG] rawInput constructor: ${rawInput ? rawInput.constructor : "null"}`,
-  );
-  console.warn(
-    `[DEBUG] rawInput toString: ${rawInput ? rawInput.toString() : "null"}`,
-  );
-  console.warn(
-    `[DEBUG] rawInput keys: ${rawInput ? Object.keys(rawInput).join(",") : "null"}`,
-  );
-
-  // rawInput is a Promise - wait for it to resolve
-  input = "";
-  if (rawInput && rawInput._value !== undefined) {
-    // Promise already resolved, get the value
-    input = String(rawInput._value);
-    console.warn(`[DEBUG] Promise _value: ${input}`);
-  } else if (rawInput && typeof rawInput.then === "function") {
-    // Promise not yet resolved - need to wait
-    console.warn("[DEBUG] Waiting for Promise to resolve...");
-    // Use a simple polling approach
-    waitCount = 0;
-    while (
-      waitCount < 50 &&
-      (!rawInput._value || rawInput._state !== "resolved")
-    ) {
-      java.lang.Thread.sleep(100);
-      waitCount++;
-    }
-    if (rawInput._value) {
-      input = String(rawInput._value);
-      console.warn(`[DEBUG] Promise resolved with: ${input}`);
-    } else {
-      console.warn("[DEBUG] Promise did not resolve in time");
-    }
-  }
-
-  if (input.length === 0) {
-    toast("No path entered. Exiting.");
-    console.warn("[DEBUG] No path entered");
-    return;
-  }
-
-  // Simple trim without regex
-  filePath = input;
-  while (
-    filePath.length > 0 &&
-    (filePath.charAt(0) === " " || filePath.charAt(0) === "\t")
-  ) {
-    filePath = filePath.substring(1);
-  }
-  while (
-    filePath.length > 0 &&
-    (filePath.charAt(filePath.length - 1) === " " ||
-      filePath.charAt(filePath.length - 1) === "\t")
-  ) {
-    filePath = filePath.substring(0, filePath.length - 1);
-  }
-  console.warn(`[DEBUG] User entered path: ${filePath}`);
-  toast(`Processing: ${filePath}`);
-
-  // Process the single image
-  var paths = [filePath];
-
-  console.warn(`[DEBUG] Parsed paths count: ${paths.length}`);
-  console.warn(`[DEBUG] Path[0]: ${paths[0]}`);
-
-  if (paths.length === 0) {
-    toast("No valid paths found.");
-    return;
-  }
-
-  // Save reference to AutoJs6 global images module before shadowing
-  var autoJsImages = images;
-  var imageInputs = [];
+  var defaultPath;
+  var rawInput;
+  var paths;
+  var autoJsImages;
+  var imageInputs;
   var i;
   var currentPath;
   var img;
@@ -213,87 +134,181 @@ function main() {
   var e;
   var err;
 
-  for (i = 0; i < paths.length; i++) {
-    currentPath = paths[i];
-    try {
-      console.warn(`[DEBUG] Reading image: ${currentPath}`);
-      img = autoJsImages.read(currentPath);
-      if (!img) {
-        console.warn(`Failed to read: ${currentPath}`);
-        continue;
+  try {
+    console.warn("[DEBUG] main() started");
+    toast("Contributor AI starting...");
+
+    // Use dialogs.rawInput to get image path from user
+    defaultPath = "/storage/emulated/0/DCIM/Camera/IMG_20260809_093300.jpg";
+    console.warn("[DEBUG] Calling dialogs.rawInput...");
+    rawInput = dialogs.rawInput("Enter image file path:", defaultPath);
+    console.warn("[DEBUG] dialogs.rawInput returned");
+
+    // Debug: log the raw input details
+    console.warn(`[DEBUG] rawInput type: ${typeof rawInput}`);
+    console.warn(
+      `[DEBUG] rawInput constructor: ${rawInput ? rawInput.constructor : "null"}`,
+    );
+    console.warn(
+      `[DEBUG] rawInput toString: ${rawInput ? rawInput.toString() : "null"}`,
+    );
+    console.warn(
+      `[DEBUG] rawInput keys: ${rawInput ? Object.keys(rawInput).join(",") : "null"}`,
+    );
+
+    // rawInput is a Promise - wait for it to resolve
+    input = "";
+    if (rawInput && rawInput._value !== undefined) {
+      // Promise already resolved, get the value
+      input = String(rawInput._value);
+      console.warn(`[DEBUG] Promise _value: ${input}`);
+    } else if (rawInput && typeof rawInput.then === "function") {
+      // Promise not yet resolved - need to wait
+      console.warn("[DEBUG] Waiting for Promise to resolve...");
+      // Use a simple polling approach
+      waitCount = 0;
+      while (
+        waitCount < 50 &&
+        (!rawInput._value || rawInput._state !== "resolved")
+      ) {
+        java.lang.Thread.sleep(100);
+        waitCount++;
       }
-      console.warn(`[DEBUG] Image read successfully`);
-
-      // Convert AutoJs6 Image to base64 for our pipeline
-      bitmap = img.getBitmap();
-      console.warn(
-        `[DEBUG] Bitmap obtained, size: ${bitmap.getWidth()}x${bitmap.getHeight()}`,
-      );
-      byteArrayOutputStream = new java.io.ByteArrayOutputStream();
-      bitmap.compress(
-        android.graphics.Bitmap.CompressFormat.JPEG,
-        90,
-        byteArrayOutputStream,
-      );
-      bytes = byteArrayOutputStream.toByteArray();
-      console.warn(`[DEBUG] Bytes length: ${bytes.length}`);
-      base64 = android.util.Base64.encodeToString(
-        bytes,
-        android.util.Base64.NO_WRAP,
-      );
-      console.warn(`[DEBUG] Base64 length: ${base64.length}`);
-
-      // Create ImageInput compatible with our portable core
-      imageInput = {
-        sourceUri: `file://${currentPath}`,
-        mimeType: "image/jpeg",
-        imageBase64: base64,
-        sizeBytes: bytes.length,
-      };
-      imageInputs.push(imageInput);
-      console.warn(`[DEBUG] ImageInput created`);
-
-      bitmap.recycle();
-      img.recycle();
-    } catch (error) {
-      console.warn(`Error processing ${currentPath}: ${error.message}`);
-      console.warn(`[DEBUG] Error stack: ${error.stack}`);
+      if (rawInput._value) {
+        input = String(rawInput._value);
+        console.warn(`[DEBUG] Promise resolved with: ${input}`);
+      } else {
+        console.warn("[DEBUG] Promise did not resolve in time");
+      }
     }
-  }
 
-  if (imageInputs.length === 0) {
-    toast("No valid images loaded.");
-    return;
-  }
+    if (input.length === 0) {
+      toast("No path entered. Exiting.");
+      console.warn("[DEBUG] No path entered");
+      return;
+    }
 
-  toast(`Loaded ${imageInputs.length} image(s). Processing...`);
+    // Simple trim without regex
+    filePath = input;
+    while (
+      filePath.length > 0 &&
+      (filePath.charAt(0) === " " || filePath.charAt(0) === "\t")
+    ) {
+      filePath = filePath.substring(1);
+    }
+    while (
+      filePath.length > 0 &&
+      (filePath.charAt(filePath.length - 1) === " " ||
+        filePath.charAt(filePath.length - 1) === "\t")
+    ) {
+      filePath = filePath.substring(0, filePath.length - 1);
+    }
+    console.warn(`[DEBUG] User entered path: ${filePath}`);
+    toast(`Processing: ${filePath}`);
 
-  // Run the full pipeline
-  console.warn(`[DEBUG] Starting pipeline with ${imageInputs.length} image(s)`);
-  launcher
-    .run(imageInputs)
-    .then((pipelineResult) => {
-      console.warn(
-        `[DEBUG] Pipeline result: ${JSON.stringify(pipelineResult, null, 2)}`,
-      );
-      toast(
-        `Done: ${pipelineResult.succeeded} succeeded, ${pipelineResult.failed} failed out of ${pipelineResult.totalImages} images.`,
-      );
+    // Process the single image
+    paths = [filePath];
 
-      if (pipelineResult.errors.length > 0) {
-        for (e = 0; e < pipelineResult.errors.length; e++) {
-          err = pipelineResult.errors[e];
-          console.warn(
-            `[DEBUG] Error[${e}]: index=${err.index}, code=${err.code}, message=${err.error ? err.error.message || String(err.error) : "unknown"}`,
-          );
+    console.warn(`[DEBUG] Parsed paths count: ${paths.length}`);
+    console.warn(`[DEBUG] Path[0]: ${paths[0]}`);
+
+    if (paths.length === 0) {
+      toast("No valid paths found.");
+      return;
+    }
+
+    // Save reference to AutoJs6 global images module before shadowing
+    autoJsImages = images;
+    imageInputs = [];
+
+    for (i = 0; i < paths.length; i++) {
+      currentPath = paths[i];
+      try {
+        console.warn(`[DEBUG] Reading image: ${currentPath}`);
+        img = autoJsImages.read(currentPath);
+        if (!img) {
+          console.warn(`Failed to read: ${currentPath}`);
+          continue;
         }
+        console.warn(`[DEBUG] Image read successfully`);
+
+        // Convert AutoJs6 Image to base64 for our pipeline
+        bitmap = img.getBitmap();
+        console.warn(
+          `[DEBUG] Bitmap obtained, size: ${bitmap.getWidth()}x${bitmap.getHeight()}`,
+        );
+        byteArrayOutputStream = new java.io.ByteArrayOutputStream();
+        bitmap.compress(
+          android.graphics.Bitmap.CompressFormat.JPEG,
+          90,
+          byteArrayOutputStream,
+        );
+        bytes = byteArrayOutputStream.toByteArray();
+        console.warn(`[DEBUG] Bytes length: ${bytes.length}`);
+        base64 = android.util.Base64.encodeToString(
+          bytes,
+          android.util.Base64.NO_WRAP,
+        );
+        console.warn(`[DEBUG] Base64 length: ${base64.length}`);
+
+        // Create ImageInput compatible with our portable core
+        imageInput = {
+          sourceUri: `file://${currentPath}`,
+          mimeType: "image/jpeg",
+          imageBase64: base64,
+          sizeBytes: bytes.length,
+        };
+        imageInputs.push(imageInput);
+        console.warn(`[DEBUG] ImageInput created`);
+
+        bitmap.recycle();
+        img.recycle();
+      } catch (error) {
+        console.warn(`Error processing ${currentPath}: ${error.message}`);
+        console.warn(`[DEBUG] Error stack: ${error.stack}`);
       }
-    })
-    .catch((error) => {
-      toast(`Error: ${error.message}`);
-      console.warn(`[DEBUG] Pipeline error: ${error.message}`);
-      console.warn(`[DEBUG] Pipeline error stack: ${error.stack}`);
-    });
+    }
+
+    if (imageInputs.length === 0) {
+      toast("No valid images loaded.");
+      return;
+    }
+
+    toast(`Loaded ${imageInputs.length} image(s). Processing...`);
+
+    // Run the full pipeline
+    console.warn(
+      `[DEBUG] Starting pipeline with ${imageInputs.length} image(s)`,
+    );
+    launcher
+      .run(imageInputs)
+      .then((pipelineResult) => {
+        console.warn(
+          `[DEBUG] Pipeline result: ${JSON.stringify(pipelineResult, null, 2)}`,
+        );
+        toast(
+          `Done: ${pipelineResult.succeeded} succeeded, ${pipelineResult.failed} failed out of ${pipelineResult.totalImages} images.`,
+        );
+
+        if (pipelineResult.errors.length > 0) {
+          for (e = 0; e < pipelineResult.errors.length; e++) {
+            err = pipelineResult.errors[e];
+            console.warn(
+              `[DEBUG] Error[${e}]: index=${err.index}, code=${err.code}, message=${err.error ? err.error.message || String(err.error) : "unknown"}`,
+            );
+          }
+        }
+      })
+      .catch((error) => {
+        toast(`Error: ${error.message}`);
+        console.warn(`[DEBUG] Pipeline error: ${error.message}`);
+        console.warn(`[DEBUG] Pipeline error stack: ${error.stack}`);
+      });
+  } catch (mainError) {
+    toast(`Main error: ${mainError.message}`);
+    console.warn(`[DEBUG] Main error: ${mainError.message}`);
+    console.warn(`[DEBUG] Main error stack: ${mainError.stack}`);
+  }
 }
 
 main();
