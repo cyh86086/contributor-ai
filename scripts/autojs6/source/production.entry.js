@@ -18,7 +18,7 @@ import { createLauncher } from "../../../src/core/launcher.js";
 
 // ── Configuration ──────────────────────────────────────────────────────────
 
-const GEMINI_MODEL = "gemini-1.5-pro";
+const GEMINI_MODEL = "gemini-2.0-flash";
 const GEMINI_MAX_IMAGE_BYTES = 20 * 1024 * 1024; // 20 MB
 const PORTABLE_MAX_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
 const READER_SAFETY_LIMIT_BYTES = 50 * 1024 * 1024; // 50 MB
