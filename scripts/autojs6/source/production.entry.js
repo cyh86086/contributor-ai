@@ -117,10 +117,22 @@ async function main() {
   );
 
   // Convert Java object to JS string
-  // dialogs.rawInput() may return various Java types; use java.lang.String.valueOf()
+  // dialogs.rawInput() returns a Java CharSequence wrapper in AutoJs6
   var jsPathInput = "";
   if (rawPathInput !== null && rawPathInput !== undefined) {
-    jsPathInput = java.lang.String.valueOf(rawPathInput);
+    // Try multiple conversion methods
+    try {
+      // Method 1: Use Java String constructor with CharSequence
+      jsPathInput = new java.lang.String(rawPathInput);
+    } catch (_e1) {
+      try {
+        // Method 2: Use valueOf
+        jsPathInput = java.lang.String.valueOf(rawPathInput);
+      } catch (_e2) {
+        // Method 3: Concatenation fallback
+        jsPathInput = "" + rawPathInput;
+      }
+    }
   }
 
   if (jsPathInput.length === 0) {
