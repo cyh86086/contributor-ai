@@ -5,15 +5,19 @@ function main() {
   var logLines = [];
   var root;
   var nodeCount;
+  var uniqueCount;
+  var skippedCount;
   var dir;
   var file;
   var writer;
+  var seenKeys;
+  var MAX_DEPTH;
   function log(msg) {
     console.warn(msg);
     logLines.push(msg);
   }
   auto.waitFor();
-  log("=== UI Discovery Tool ===");
+  log("=== UI Discovery Tool v2 (Dedup) ===");
   log("Time: ".concat(new Date().toISOString()));
   log("Switch to the Contributor app NOW! Capturing in 5 seconds...");
   toast("Switch to Contributor app! 5...");
@@ -37,6 +41,32 @@ function main() {
   log("[INFO] Root window found. Package: ".concat(root.packageName()));
   log("");
   nodeCount = 0;
+  uniqueCount = 0;
+  skippedCount = 0;
+  seenKeys = {};
+  MAX_DEPTH = 25;
+  function getNodeKey(node) {
+    var nodeId;
+    var nodeText;
+    var nodeDesc;
+    var nodeClass;
+    var nodeBounds;
+    var key;
+    nodeId = node.id() || "";
+    nodeText = node.text() || "";
+    nodeDesc = node.desc() || "";
+    nodeClass = node.className() || "";
+    nodeBounds = node.bounds();
+    key = "".concat(nodeId, "|").concat(nodeText, "|").concat(nodeDesc, "|").concat(nodeClass, "|");
+    if (nodeBounds) {
+      key += nodeBounds.left + "," + nodeBounds.top + "," + nodeBounds.right + "," + nodeBounds.bottom;
+    }
+    if (node.clickable()) key += "|C";
+    if (node.editable()) key += "|E";
+    if (node.scrollable()) key += "|S";
+    if (node.checkable()) key += "|K";
+    return key;
+  }
   function getIndent(depth) {
     var s = "";
     var k;
@@ -55,13 +85,29 @@ function main() {
     var nodeBounds;
     var childCount;
     var childNode;
+    var key;
+    var prevChildKey;
+    var childKey;
+    var consecutiveDups;
     if (!node) {
       return;
     }
+    if (depth > MAX_DEPTH) {
+      log("".concat(getIndent(depth), "[MAX DEPTH ").concat(MAX_DEPTH, " reached]"));
+      return;
+    }
     nodeCount++;
+    key = getNodeKey(node);
+    if (seenKeys[key]) {
+      seenKeys[key]++;
+      skippedCount++;
+      return;
+    }
+    seenKeys[key] = 1;
+    uniqueCount++;
     indent = getIndent(depth);
     parts = [];
-    parts.push("".concat(indent, "[#").concat(nodeCount, "]"));
+    parts.push("".concat(indent, "[U").concat(uniqueCount, "]"));
     nodeId = node.id();
     if (nodeId) {
       parts.push(" id=\"".concat(nodeId, "\""));
@@ -96,17 +142,46 @@ function main() {
     }
     log(parts.join(""));
     childCount = node.childCount();
+    prevChildKey = "";
+    consecutiveDups = 0;
     for (c = 0; c < childCount; c++) {
       childNode = node.child(c);
       if (childNode) {
+        childKey = getNodeKey(childNode);
+        if (childKey === prevChildKey) {
+          consecutiveDups++;
+          continue;
+        }
+        if (consecutiveDups > 0) {
+          log("".concat(getIndent(depth + 1), "[... ").concat(consecutiveDups, " duplicate siblings skipped]"));
+          consecutiveDups = 0;
+        }
+        prevChildKey = childKey;
         dumpNode(childNode, depth + 1);
       }
     }
+    if (consecutiveDups > 0) {
+      log("".concat(getIndent(depth + 1), "[... ").concat(consecutiveDups, " duplicate siblings skipped]"));
+    }
   }
   dumpNode(root, 0);
+  dupCount = 0;
+  log("");
+  log("=== Top Duplicate Elements (seen >5 times) ===");
+  for (key in seenKeys) {
+    if (seenKeys[key] > 5) {
+      dupCount++;
+      log("  ".concat(seenKeys[key], "x: ").concat(key));
+    }
+  }
+  if (dupCount === 0) {
+    log("  (none)");
+  }
   log("");
   log("=== Discovery Complete ===");
-  log("Total nodes: ".concat(nodeCount));
+  log("Total nodes traversed: ".concat(nodeCount));
+  log("Unique elements: ".concat(uniqueCount));
+  log("Skipped (global dup): ".concat(skippedCount));
   log("Package: ".concat(root.packageName()));
   try {
     dir = new java.io.File("/sdcard/contributor-ai");
@@ -124,6 +199,6 @@ function main() {
   } catch (fileErr) {
     log("[WARN] Could not save to file: ".concat(fileErr.message));
   }
-  toast("UI Discovery: ".concat(nodeCount, " elements found. Check log."));
+  toast("Discovery v2: ".concat(uniqueCount, " unique / ").concat(nodeCount, " total"));
 }
 main();

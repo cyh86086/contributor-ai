@@ -1,15 +1,14 @@
 /**
  * Runtime designation: AutoJs6 on Android device.
  *
- * UI Discovery Tool — dumps all UI elements on the current screen.
- * Run this script on each screen of the Contributor app to discover
- * the actual resource IDs, text labels, and class names needed for
- * UI automation selectors.
+ * UI Discovery Tool v2 — dumps unique UI elements on the current screen.
+ * Deduplicates Compose rendering layers and limits tree depth.
  *
  * Usage:
  * 1. Open the Contributor app to the target screen
  * 2. Run this script in AutoJs6
- * 3. Export the log and share it for selector configuration
+ * 3. Switch to Contributor app within 5 seconds
+ * 4. Export the log and share it for selector configuration
  */
 
 function main() {
@@ -18,9 +17,13 @@ function main() {
   var logLines = [];
   var root;
   var nodeCount;
+  var uniqueCount;
+  var skippedCount;
   var dir;
   var file;
   var writer;
+  var seenKeys;
+  var MAX_DEPTH;
 
   function log(msg) {
     console.warn(msg);
@@ -30,7 +33,7 @@ function main() {
   // Wait for accessibility service
   auto.waitFor();
 
-  log("=== UI Discovery Tool ===");
+  log("=== UI Discovery Tool v2 (Dedup) ===");
   log(`Time: ${new Date().toISOString()}`);
 
   // Countdown: give user time to switch to the Contributor app
@@ -62,8 +65,45 @@ function main() {
   log(`[INFO] Root window found. Package: ${root.packageName()}`);
   log("");
 
-  // Recursive UI tree dump
+  // Deduplication setup
   nodeCount = 0;
+  uniqueCount = 0;
+  skippedCount = 0;
+  seenKeys = {};
+  MAX_DEPTH = 25;
+
+  function getNodeKey(node) {
+    var nodeId;
+    var nodeText;
+    var nodeDesc;
+    var nodeClass;
+    var nodeBounds;
+    var key;
+
+    nodeId = node.id() || "";
+    nodeText = node.text() || "";
+    nodeDesc = node.desc() || "";
+    nodeClass = node.className() || "";
+    nodeBounds = node.bounds();
+    key = `${nodeId}|${nodeText}|${nodeDesc}|${nodeClass}|`;
+    if (nodeBounds) {
+      key +=
+        nodeBounds.left +
+        "," +
+        nodeBounds.top +
+        "," +
+        nodeBounds.right +
+        "," +
+        nodeBounds.bottom;
+    }
+    // Add interactive flags
+    if (node.clickable()) key += "|C";
+    if (node.editable()) key += "|E";
+    if (node.scrollable()) key += "|S";
+    if (node.checkable()) key += "|K";
+
+    return key;
+  }
 
   function getIndent(depth) {
     var s = "";
@@ -84,15 +124,34 @@ function main() {
     var nodeBounds;
     var childCount;
     var childNode;
+    var key;
+    var prevChildKey;
+    var childKey;
+    var consecutiveDups;
 
     if (!node) {
       return;
     }
+    if (depth > MAX_DEPTH) {
+      log(`${getIndent(depth)}[MAX DEPTH ${MAX_DEPTH} reached]`);
+      return;
+    }
+
     nodeCount++;
+    key = getNodeKey(node);
+
+    // Check if we've seen this exact node before (global dedup)
+    if (seenKeys[key]) {
+      seenKeys[key]++;
+      skippedCount++;
+      return;
+    }
+    seenKeys[key] = 1;
+    uniqueCount++;
 
     indent = getIndent(depth);
     parts = [];
-    parts.push(`${indent}[#${nodeCount}]`);
+    parts.push(`${indent}[U${uniqueCount}]`);
 
     nodeId = node.id();
     if (nodeId) {
@@ -136,21 +195,56 @@ function main() {
 
     log(parts.join(""));
 
-    // Recurse into children
+    // Recurse into children with sibling dedup
     childCount = node.childCount();
+    prevChildKey = "";
+    consecutiveDups = 0;
     for (c = 0; c < childCount; c++) {
       childNode = node.child(c);
       if (childNode) {
+        childKey = getNodeKey(childNode);
+        if (childKey === prevChildKey) {
+          consecutiveDups++;
+          continue;
+        }
+        if (consecutiveDups > 0) {
+          log(
+            `${getIndent(depth + 1)}[... ${consecutiveDups} duplicate siblings skipped]`,
+          );
+          consecutiveDups = 0;
+        }
+        prevChildKey = childKey;
         dumpNode(childNode, depth + 1);
       }
+    }
+    if (consecutiveDups > 0) {
+      log(
+        `${getIndent(depth + 1)}[... ${consecutiveDups} duplicate siblings skipped]`,
+      );
     }
   }
 
   dumpNode(root, 0);
 
+  // Summary: show duplicate counts for frequently seen keys
+  dupCount = 0;
+  log("");
+  log("=== Top Duplicate Elements (seen >5 times) ===");
+  for (key in seenKeys) {
+    if (seenKeys[key] > 5) {
+      dupCount++;
+      log(`  ${seenKeys[key]}x: ${key}`);
+    }
+  }
+  if (dupCount === 0) {
+    log("  (none)");
+  }
+
   log("");
   log("=== Discovery Complete ===");
-  log(`Total nodes: ${nodeCount}`);
+  log(`Total nodes traversed: ${nodeCount}`);
+  log(`Unique elements: ${uniqueCount}`);
+  log(`Skipped (global dup): ${skippedCount}`);
   log(`Package: ${root.packageName()}`);
 
   // Try to write log to file
@@ -171,7 +265,7 @@ function main() {
     log(`[WARN] Could not save to file: ${fileErr.message}`);
   }
 
-  toast(`UI Discovery: ${nodeCount} elements found. Check log.`);
+  toast(`Discovery v2: ${uniqueCount} unique / ${nodeCount} total`);
 }
 
 main();
