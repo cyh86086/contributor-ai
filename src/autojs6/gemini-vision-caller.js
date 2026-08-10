@@ -81,25 +81,46 @@ export function createGeminiVisionCaller({
 }
 
 function parseGeminiResponse(body) {
+  const debug = (msg) => {
+    if (typeof console !== "undefined" && typeof console.warn === "function") {
+      console.warn(msg);
+    }
+  };
+
   let parsed;
   try {
     parsed = JSON.parse(body);
-  } catch {
+    debug("[DEBUG] parseGeminiResponse: body parsed OK");
+  } catch (e) {
+    debug(`[DEBUG] parseGeminiResponse: body JSON.parse failed: ${e.message}`);
     throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
   }
 
   const text = extractText(parsed);
   if (typeof text !== "string" || text.length === 0) {
+    debug(
+      `[DEBUG] parseGeminiResponse: extractText failed, type=${typeof text}, len=${text ? text.length : 0}`,
+    );
     throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
   }
+  debug(
+    `[DEBUG] parseGeminiResponse: text extracted, len=${text.length}, first 50 chars: ${text.substring(0, 50)}`,
+  );
 
   // Strip markdown code fences (e.g. ```json ... ```)
   const cleanedText = stripCodeFences(text);
+  debug(
+    `[DEBUG] parseGeminiResponse: cleanedText len=${cleanedText.length}, first 50 chars: ${cleanedText.substring(0, 50)}`,
+  );
 
   let metadata;
   try {
     metadata = JSON.parse(cleanedText);
-  } catch {
+    debug("[DEBUG] parseGeminiResponse: cleanedText JSON.parse OK");
+  } catch (e) {
+    debug(
+      `[DEBUG] parseGeminiResponse: cleanedText JSON.parse failed: ${e.message}`,
+    );
     throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
   }
 
@@ -109,8 +130,10 @@ function parseGeminiResponse(body) {
     typeof metadata.description !== "string" ||
     !Array.isArray(metadata.keywords)
   ) {
+    debug(`[DEBUG] parseGeminiResponse: metadata validation failed`);
     throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
   }
+  debug("[DEBUG] parseGeminiResponse: success");
 
   return {
     description: metadata.description,
@@ -150,7 +173,28 @@ function stripCodeFences(text) {
   const fencePattern = /^```[a-zA-Z]*\n([\s\S]*?)\n?```$/;
   const match = text.match(fencePattern);
   if (match && match[1]) {
-    return match[1].trim();
+    const result = match[1];
+    // Manual trim for AutoJs6 Rhino engine
+    let trimmed = result;
+    while (
+      trimmed.length > 0 &&
+      (trimmed.charAt(0) === " " ||
+        trimmed.charAt(0) === "\n" ||
+        trimmed.charAt(0) === "\r" ||
+        trimmed.charAt(0) === "\t")
+    ) {
+      trimmed = trimmed.substring(1);
+    }
+    while (
+      trimmed.length > 0 &&
+      (trimmed.charAt(trimmed.length - 1) === " " ||
+        trimmed.charAt(trimmed.length - 1) === "\n" ||
+        trimmed.charAt(trimmed.length - 1) === "\r" ||
+        trimmed.charAt(trimmed.length - 1) === "\t")
+    ) {
+      trimmed = trimmed.substring(0, trimmed.length - 1);
+    }
+    return trimmed;
   }
   return text;
 }

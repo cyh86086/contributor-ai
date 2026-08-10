@@ -935,26 +935,40 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     };
   }
   function parseGeminiResponse(body) {
+    var debug = function debug(msg) {
+      if (typeof console !== "undefined" && typeof console.warn === "function") {
+        console.warn(msg);
+      }
+    };
     var parsed;
     try {
       parsed = JSON.parse(body);
+      debug("[DEBUG] parseGeminiResponse: body parsed OK");
     } catch (e) {
+      debug("[DEBUG] parseGeminiResponse: body JSON.parse failed: ".concat(e.message));
       throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
     }
     var text = extractText(parsed);
     if (typeof text !== "string" || text.length === 0) {
+      debug("[DEBUG] parseGeminiResponse: extractText failed, type=".concat(_typeof(text), ", len=").concat(text ? text.length : 0));
       throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
     }
+    debug("[DEBUG] parseGeminiResponse: text extracted, len=".concat(text.length, ", first 50 chars: ").concat(text.substring(0, 50)));
     var cleanedText = stripCodeFences(text);
+    debug("[DEBUG] parseGeminiResponse: cleanedText len=".concat(cleanedText.length, ", first 50 chars: ").concat(cleanedText.substring(0, 50)));
     var metadata;
     try {
       metadata = JSON.parse(cleanedText);
+      debug("[DEBUG] parseGeminiResponse: cleanedText JSON.parse OK");
     } catch (e) {
+      debug("[DEBUG] parseGeminiResponse: cleanedText JSON.parse failed: ".concat(e.message));
       throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
     }
     if (!metadata || _typeof(metadata) !== "object" || typeof metadata.description !== "string" || !Array.isArray(metadata.keywords)) {
+      debug("[DEBUG] parseGeminiResponse: metadata validation failed");
       throw new VisionProviderError("PROVIDER_RESPONSE_INVALID");
     }
+    debug("[DEBUG] parseGeminiResponse: success");
     return {
       description: metadata.description,
       keywords: metadata.keywords
@@ -978,7 +992,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     var fencePattern = /^```[a-zA-Z]*\n([\s\S]*?)\n?```$/;
     var match = text.match(fencePattern);
     if (match && match[1]) {
-      return match[1].trim();
+      var result = match[1];
+      var trimmed = result;
+      while (trimmed.length > 0 && (trimmed.charAt(0) === " " || trimmed.charAt(0) === "\n" || trimmed.charAt(0) === "\r" || trimmed.charAt(0) === "	")) {
+        trimmed = trimmed.substring(1);
+      }
+      while (trimmed.length > 0 && (trimmed.charAt(trimmed.length - 1) === " " || trimmed.charAt(trimmed.length - 1) === "\n" || trimmed.charAt(trimmed.length - 1) === "\r" || trimmed.charAt(trimmed.length - 1) === "	")) {
+        trimmed = trimmed.substring(0, trimmed.length - 1);
+      }
+      return trimmed;
     }
     return text;
   }
