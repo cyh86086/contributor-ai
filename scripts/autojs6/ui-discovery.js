@@ -15,7 +15,18 @@ function main() {
   auto.waitFor();
   log("=== UI Discovery Tool ===");
   log("Time: ".concat(new Date().toISOString()));
-  log("Please navigate to the target screen in the Contributor app.");
+  log("Switch to the Contributor app NOW! Capturing in 5 seconds...");
+  toast("Switch to Contributor app! 5...");
+  java.lang.Thread.sleep(1000);
+  toast("4...");
+  java.lang.Thread.sleep(1000);
+  toast("3...");
+  java.lang.Thread.sleep(1000);
+  toast("2...");
+  java.lang.Thread.sleep(1000);
+  toast("1... Capturing!");
+  java.lang.Thread.sleep(1000);
+  log("Capturing current screen...");
   log("");
   root = auto.rootInActiveWindow;
   if (!root) {
