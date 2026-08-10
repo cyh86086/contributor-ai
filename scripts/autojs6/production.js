@@ -489,11 +489,20 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       _ref6$packageName = _ref6.packageName,
       packageName = _ref6$packageName === void 0 ? DEFAULT_PACKAGE_NAME : _ref6$packageName,
       _ref6$waitMs = _ref6.waitMs,
-      waitMs = _ref6$waitMs === void 0 ? DEFAULT_WAIT_MS : _ref6$waitMs;
+      waitMs = _ref6$waitMs === void 0 ? DEFAULT_WAIT_MS : _ref6$waitMs,
+      _ref6$logger = _ref6.logger,
+      logger = _ref6$logger === void 0 ? {
+        warn: function warn() {}
+      } : _ref6$logger;
     validateAppLauncher(appLauncher);
     validateFinder(findDescription, "findDescription");
     validateFinder(findKeywords, "findKeywords");
     validateWaitMs(waitMs);
+    var log = function log(msg) {
+      if (logger && typeof logger.warn === "function") {
+        logger.warn(msg);
+      }
+    };
     return function uiAdapter2(_0) {
       return __async(this, arguments, function (_ref7) {
         var description = _ref7.description,
@@ -503,73 +512,92 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           return _regenerator().w(function (_context5) {
             while (1) switch (_context5.p = _context5.n) {
               case 0:
-                _context5.p = 0;
-                appLauncher(packageName);
-                _context5.n = 2;
-                break;
-              case 1:
+                log("[UI] Launching app: ".concat(packageName));
                 _context5.p = 1;
-                _t8 = _context5.v;
-                throw new Error("Could not launch the Contributor app.");
+                appLauncher(packageName);
+                log("[UI] App launched");
+                _context5.n = 3;
+                break;
               case 2:
                 _context5.p = 2;
-                _context5.n = 3;
-                return findDescription(waitMs);
+                _t8 = _context5.v;
+                log("[UI] App launch failed: ".concat(_t8.message));
+                throw new Error("Could not launch the Contributor app.");
               case 3:
-                descField = _context5.v;
-                _context5.n = 5;
-                break;
-              case 4:
+                log("[UI] Finding description field (timeout=".concat(waitMs, "ms)"));
                 _context5.p = 4;
-                _t9 = _context5.v;
-                throw new Error("Could not find the Description field.");
+                _context5.n = 5;
+                return findDescription(waitMs);
               case 5:
-                if (!(!descField || typeof descField.setText !== "function")) {
-                  _context5.n = 6;
-                  break;
-                }
-                throw new Error("The Description field does not support text entry.");
+                descField = _context5.v;
+                log("[UI] Description field found: ".concat(descField ? "yes" : "no"));
+                _context5.n = 7;
+                break;
               case 6:
                 _context5.p = 6;
-                descField.setText(description);
-                _context5.n = 8;
-                break;
+                _t9 = _context5.v;
+                log("[UI] Description field find failed: ".concat(_t9.message));
+                throw new Error("Could not find the Description field.");
               case 7:
-                _context5.p = 7;
-                _t0 = _context5.v;
-                throw new Error("Could not enter the description.");
+                if (!(!descField || typeof descField.setText !== "function")) {
+                  _context5.n = 8;
+                  break;
+                }
+                log("[UI] Description field invalid: descField=".concat(!!descField, ", hasSetText=").concat(descField ? _typeof(descField.setText) : "N/A"));
+                throw new Error("The Description field does not support text entry.");
               case 8:
-                _context5.p = 8;
-                _context5.n = 9;
-                return findKeywords(waitMs);
-              case 9:
-                kwField = _context5.v;
+                log("[UI] Setting description (length=".concat(description.length, ")"));
+                _context5.p = 9;
+                descField.setText(description);
+                log("[UI] Description set");
                 _context5.n = 11;
                 break;
               case 10:
                 _context5.p = 10;
-                _t1 = _context5.v;
-                throw new Error("Could not find the Keywords field.");
+                _t0 = _context5.v;
+                log("[UI] Description set failed: ".concat(_t0.message));
+                throw new Error("Could not enter the description.");
               case 11:
-                if (!(!kwField || typeof kwField.setText !== "function")) {
-                  _context5.n = 12;
-                  break;
-                }
-                throw new Error("The Keywords field does not support text entry.");
-              case 12:
-                keywordsText = Array.isArray(keywords) ? keywords.join(", ") : String(keywords);
-                _context5.p = 13;
-                kwField.setText(keywordsText);
+                log("[UI] Finding keywords field (timeout=".concat(waitMs, "ms)"));
+                _context5.p = 12;
+                _context5.n = 13;
+                return findKeywords(waitMs);
+              case 13:
+                kwField = _context5.v;
+                log("[UI] Keywords field found: ".concat(kwField ? "yes" : "no"));
                 _context5.n = 15;
                 break;
               case 14:
                 _context5.p = 14;
-                _t10 = _context5.v;
-                throw new Error("Could not enter the keywords.");
+                _t1 = _context5.v;
+                log("[UI] Keywords field find failed: ".concat(_t1.message));
+                throw new Error("Could not find the Keywords field.");
               case 15:
+                if (!(!kwField || typeof kwField.setText !== "function")) {
+                  _context5.n = 16;
+                  break;
+                }
+                log("[UI] Keywords field invalid: kwField=".concat(!!kwField, ", hasSetText=").concat(kwField ? _typeof(kwField.setText) : "N/A"));
+                throw new Error("The Keywords field does not support text entry.");
+              case 16:
+                keywordsText = Array.isArray(keywords) ? keywords.join(", ") : String(keywords);
+                log("[UI] Setting keywords (length=".concat(keywordsText.length, ")"));
+                _context5.p = 17;
+                kwField.setText(keywordsText);
+                log("[UI] Keywords set");
+                _context5.n = 19;
+                break;
+              case 18:
+                _context5.p = 18;
+                _t10 = _context5.v;
+                log("[UI] Keywords set failed: ".concat(_t10.message));
+                throw new Error("Could not enter the keywords.");
+              case 19:
+                log("[UI] All fields populated successfully");
+              case 20:
                 return _context5.a(2);
             }
-          }, _callee5, null, [[13, 14], [8, 10], [6, 7], [2, 4], [0, 1]]);
+          }, _callee5, null, [[17, 18], [12, 14], [9, 10], [4, 6], [1, 2]]);
         })();
       });
     };
@@ -1639,7 +1667,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     findKeywords: function findKeywords(timeout) {
       return id("keywords").findOne(timeout);
     },
-    packageName: CONTRIBUTOR_PACKAGE_NAME
+    packageName: CONTRIBUTOR_PACKAGE_NAME,
+    logger: console
   });
   var launcher = createLauncher({
     imageReader: imageReader,

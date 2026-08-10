@@ -19,44 +19,69 @@ export function createContributorUIAdapter({
   findKeywords,
   packageName = DEFAULT_PACKAGE_NAME,
   waitMs = DEFAULT_WAIT_MS,
+  logger = { warn() {} },
 } = {}) {
   validateAppLauncher(appLauncher);
   validateFinder(findDescription, "findDescription");
   validateFinder(findKeywords, "findKeywords");
   validateWaitMs(waitMs);
 
+  const log = (msg) => {
+    if (logger && typeof logger.warn === "function") {
+      logger.warn(msg);
+    }
+  };
+
   return async function uiAdapter({ description, keywords }) {
+    log(`[UI] Launching app: ${packageName}`);
     try {
       appLauncher(packageName);
-    } catch {
+      log("[UI] App launched");
+    } catch (e) {
+      log(`[UI] App launch failed: ${e.message}`);
       throw new Error("Could not launch the Contributor app.");
     }
 
+    log(`[UI] Finding description field (timeout=${waitMs}ms)`);
     let descField;
     try {
       descField = await findDescription(waitMs);
-    } catch {
+      log(`[UI] Description field found: ${descField ? "yes" : "no"}`);
+    } catch (e) {
+      log(`[UI] Description field find failed: ${e.message}`);
       throw new Error("Could not find the Description field.");
     }
 
     if (!descField || typeof descField.setText !== "function") {
+      log(
+        `[UI] Description field invalid: descField=${!!descField}, hasSetText=${descField ? typeof descField.setText : "N/A"}`,
+      );
       throw new Error("The Description field does not support text entry.");
     }
 
+    log(`[UI] Setting description (length=${description.length})`);
     try {
       descField.setText(description);
-    } catch {
+      log("[UI] Description set");
+    } catch (e) {
+      log(`[UI] Description set failed: ${e.message}`);
       throw new Error("Could not enter the description.");
     }
 
+    log(`[UI] Finding keywords field (timeout=${waitMs}ms)`);
     let kwField;
     try {
       kwField = await findKeywords(waitMs);
-    } catch {
+      log(`[UI] Keywords field found: ${kwField ? "yes" : "no"}`);
+    } catch (e) {
+      log(`[UI] Keywords field find failed: ${e.message}`);
       throw new Error("Could not find the Keywords field.");
     }
 
     if (!kwField || typeof kwField.setText !== "function") {
+      log(
+        `[UI] Keywords field invalid: kwField=${!!kwField}, hasSetText=${kwField ? typeof kwField.setText : "N/A"}`,
+      );
       throw new Error("The Keywords field does not support text entry.");
     }
 
@@ -64,11 +89,15 @@ export function createContributorUIAdapter({
       ? keywords.join(", ")
       : String(keywords);
 
+    log(`[UI] Setting keywords (length=${keywordsText.length})`);
     try {
       kwField.setText(keywordsText);
-    } catch {
+      log("[UI] Keywords set");
+    } catch (e) {
+      log(`[UI] Keywords set failed: ${e.message}`);
       throw new Error("Could not enter the keywords.");
     }
+    log("[UI] All fields populated successfully");
   };
 }
 

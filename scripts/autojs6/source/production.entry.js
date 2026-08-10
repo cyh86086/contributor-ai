@@ -98,6 +98,7 @@ const uiAdapter = createContributorUIAdapter({
   findDescription: (timeout) => id("description").findOne(timeout),
   findKeywords: (timeout) => id("keywords").findOne(timeout),
   packageName: CONTRIBUTOR_PACKAGE_NAME,
+  logger: console,
 });
 
 // Launcher
