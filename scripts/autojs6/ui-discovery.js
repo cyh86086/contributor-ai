@@ -1,7 +1,6 @@
 /* Contributor AI — UI Discovery Tool for AutoJs6. */
 function main() {
   var i;
-  var c;
   var logLines = [];
   var root;
   var nodeCount;
@@ -10,14 +9,14 @@ function main() {
   var dir;
   var file;
   var writer;
-  var seenKeys;
   var MAX_DEPTH;
+  var MAX_SIBLINGS;
   function log(msg) {
     console.warn(msg);
     logLines.push(msg);
   }
   auto.waitFor();
-  log("=== UI Discovery Tool v2 (Dedup) ===");
+  log("=== UI Discovery Tool v3 (Sibling Dedup) ===");
   log("Time: ".concat(new Date().toISOString()));
   log("Switch to the Contributor app NOW! Capturing in 5 seconds...");
   toast("Switch to Contributor app! 5...");
@@ -43,8 +42,8 @@ function main() {
   nodeCount = 0;
   uniqueCount = 0;
   skippedCount = 0;
-  seenKeys = {};
-  MAX_DEPTH = 25;
+  MAX_DEPTH = 30;
+  MAX_SIBLINGS = 50;
   function getNodeKey(node) {
     var nodeId;
     var nodeText;
@@ -59,7 +58,7 @@ function main() {
     nodeBounds = node.bounds();
     key = "".concat(nodeId, "|").concat(nodeText, "|").concat(nodeDesc, "|").concat(nodeClass, "|");
     if (nodeBounds) {
-      key += nodeBounds.left + "," + nodeBounds.top + "," + nodeBounds.right + "," + nodeBounds.bottom;
+      key += "".concat(nodeBounds.left, ",").concat(nodeBounds.top, ",").concat(nodeBounds.right, ",").concat(nodeBounds.bottom);
     }
     if (node.clickable()) key += "|C";
     if (node.editable()) key += "|E";
@@ -70,7 +69,7 @@ function main() {
   function getIndent(depth) {
     var s = "";
     var k;
-    for (k = 0; k < depth; k++) {
+    for (k = 0; k < depth && k < 15; k++) {
       s += "  ";
     }
     return s;
@@ -85,29 +84,21 @@ function main() {
     var nodeBounds;
     var childCount;
     var childNode;
-    var key;
     var prevChildKey;
     var childKey;
     var consecutiveDups;
+    var processed;
     if (!node) {
       return;
     }
     if (depth > MAX_DEPTH) {
-      log("".concat(getIndent(depth), "[MAX DEPTH ").concat(MAX_DEPTH, " reached]"));
       return;
     }
     nodeCount++;
-    key = getNodeKey(node);
-    if (seenKeys[key]) {
-      seenKeys[key]++;
-      skippedCount++;
-      return;
-    }
-    seenKeys[key] = 1;
     uniqueCount++;
     indent = getIndent(depth);
     parts = [];
-    parts.push("".concat(indent, "[U").concat(uniqueCount, "]"));
+    parts.push("".concat(indent, "[").concat(uniqueCount, "]"));
     nodeId = node.id();
     if (nodeId) {
       parts.push(" id=\"".concat(nodeId, "\""));
@@ -140,48 +131,49 @@ function main() {
     if (node.checkable()) {
       parts.push(" CHECKABLE");
     }
-    log(parts.join(""));
     childCount = node.childCount();
+    if (childCount > 0) {
+      parts.push(" children=".concat(childCount));
+    }
+    log(parts.join(""));
+    if (childCount === 0) {
+      return;
+    }
     prevChildKey = "";
     consecutiveDups = 0;
-    for (c = 0; c < childCount; c++) {
-      childNode = node.child(c);
-      if (childNode) {
-        childKey = getNodeKey(childNode);
-        if (childKey === prevChildKey) {
-          consecutiveDups++;
-          continue;
-        }
-        if (consecutiveDups > 0) {
-          log("".concat(getIndent(depth + 1), "[... ").concat(consecutiveDups, " duplicate siblings skipped]"));
-          consecutiveDups = 0;
-        }
-        prevChildKey = childKey;
-        dumpNode(childNode, depth + 1);
+    processed = 0;
+    for (i = 0; i < childCount && processed < MAX_SIBLINGS; i++) {
+      childNode = node.child(i);
+      if (!childNode) {
+        continue;
       }
+      childKey = getNodeKey(childNode);
+      if (childKey === prevChildKey) {
+        consecutiveDups++;
+        skippedCount++;
+        continue;
+      }
+      if (consecutiveDups > 0) {
+        log("".concat(getIndent(depth + 1), "[... ").concat(consecutiveDups, " duplicate siblings skipped]"));
+        consecutiveDups = 0;
+      }
+      prevChildKey = childKey;
+      processed++;
+      dumpNode(childNode, depth + 1);
     }
     if (consecutiveDups > 0) {
       log("".concat(getIndent(depth + 1), "[... ").concat(consecutiveDups, " duplicate siblings skipped]"));
     }
-  }
-  dumpNode(root, 0);
-  dupCount = 0;
-  log("");
-  log("=== Top Duplicate Elements (seen >5 times) ===");
-  for (key in seenKeys) {
-    if (seenKeys[key] > 5) {
-      dupCount++;
-      log("  ".concat(seenKeys[key], "x: ").concat(key));
+    if (i < childCount) {
+      log("".concat(getIndent(depth + 1), "[... ").concat(childCount - i, " more siblings not processed (limit ").concat(MAX_SIBLINGS, ")]"));
     }
   }
-  if (dupCount === 0) {
-    log("  (none)");
-  }
+  dumpNode(root, 0);
   log("");
   log("=== Discovery Complete ===");
   log("Total nodes traversed: ".concat(nodeCount));
-  log("Unique elements: ".concat(uniqueCount));
-  log("Skipped (global dup): ".concat(skippedCount));
+  log("Unique elements logged: ".concat(uniqueCount));
+  log("Skipped (sibling dup): ".concat(skippedCount));
   log("Package: ".concat(root.packageName()));
   try {
     dir = new java.io.File("/sdcard/contributor-ai");
@@ -199,6 +191,6 @@ function main() {
   } catch (fileErr) {
     log("[WARN] Could not save to file: ".concat(fileErr.message));
   }
-  toast("Discovery v2: ".concat(uniqueCount, " unique / ").concat(nodeCount, " total"));
+  toast("Discovery v3: ".concat(uniqueCount, " unique / ").concat(skippedCount, " skipped"));
 }
 main();

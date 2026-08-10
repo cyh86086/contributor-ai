@@ -1,8 +1,10 @@
 /**
  * Runtime designation: AutoJs6 on Android device.
  *
- * UI Discovery Tool v2 — dumps unique UI elements on the current screen.
- * Deduplicates Compose rendering layers and limits tree depth.
+ * UI Discovery Tool v3 — sibling-dedup only, no global dedup.
+ * Compose apps generate thousands of identical siblings at each level.
+ * This tool deduplicates consecutive siblings but keeps the full tree
+ * structure so that unique child branches are fully explored.
  *
  * Usage:
  * 1. Open the Contributor app to the target screen
@@ -13,7 +15,6 @@
 
 function main() {
   var i;
-  var c;
   var logLines = [];
   var root;
   var nodeCount;
@@ -22,8 +23,8 @@ function main() {
   var dir;
   var file;
   var writer;
-  var seenKeys;
   var MAX_DEPTH;
+  var MAX_SIBLINGS;
 
   function log(msg) {
     console.warn(msg);
@@ -33,10 +34,10 @@ function main() {
   // Wait for accessibility service
   auto.waitFor();
 
-  log("=== UI Discovery Tool v2 (Dedup) ===");
+  log("=== UI Discovery Tool v3 (Sibling Dedup) ===");
   log(`Time: ${new Date().toISOString()}`);
 
-  // Countdown: give user time to switch to the Contributor app
+  // Countdown
   log("Switch to the Contributor app NOW! Capturing in 5 seconds...");
   toast("Switch to Contributor app! 5...");
   java.lang.Thread.sleep(1000);
@@ -52,7 +53,6 @@ function main() {
   log("Capturing current screen...");
   log("");
 
-  // Get the root UI node
   root = auto.rootInActiveWindow;
   if (!root) {
     log(
@@ -65,12 +65,11 @@ function main() {
   log(`[INFO] Root window found. Package: ${root.packageName()}`);
   log("");
 
-  // Deduplication setup
   nodeCount = 0;
   uniqueCount = 0;
   skippedCount = 0;
-  seenKeys = {};
-  MAX_DEPTH = 25;
+  MAX_DEPTH = 30;
+  MAX_SIBLINGS = 50;
 
   function getNodeKey(node) {
     var nodeId;
@@ -87,16 +86,8 @@ function main() {
     nodeBounds = node.bounds();
     key = `${nodeId}|${nodeText}|${nodeDesc}|${nodeClass}|`;
     if (nodeBounds) {
-      key +=
-        nodeBounds.left +
-        "," +
-        nodeBounds.top +
-        "," +
-        nodeBounds.right +
-        "," +
-        nodeBounds.bottom;
+      key += `${nodeBounds.left},${nodeBounds.top},${nodeBounds.right},${nodeBounds.bottom}`;
     }
-    // Add interactive flags
     if (node.clickable()) key += "|C";
     if (node.editable()) key += "|E";
     if (node.scrollable()) key += "|S";
@@ -108,7 +99,7 @@ function main() {
   function getIndent(depth) {
     var s = "";
     var k;
-    for (k = 0; k < depth; k++) {
+    for (k = 0; k < depth && k < 15; k++) {
       s += "  ";
     }
     return s;
@@ -124,34 +115,24 @@ function main() {
     var nodeBounds;
     var childCount;
     var childNode;
-    var key;
     var prevChildKey;
     var childKey;
     var consecutiveDups;
+    var processed;
 
     if (!node) {
       return;
     }
     if (depth > MAX_DEPTH) {
-      log(`${getIndent(depth)}[MAX DEPTH ${MAX_DEPTH} reached]`);
       return;
     }
 
     nodeCount++;
-    key = getNodeKey(node);
-
-    // Check if we've seen this exact node before (global dedup)
-    if (seenKeys[key]) {
-      seenKeys[key]++;
-      skippedCount++;
-      return;
-    }
-    seenKeys[key] = 1;
     uniqueCount++;
 
     indent = getIndent(depth);
     parts = [];
-    parts.push(`${indent}[U${uniqueCount}]`);
+    parts.push(`${indent}[${uniqueCount}]`);
 
     nodeId = node.id();
     if (nodeId) {
@@ -193,61 +174,73 @@ function main() {
       parts.push(" CHECKABLE");
     }
 
+    childCount = node.childCount();
+    if (childCount > 0) {
+      parts.push(` children=${childCount}`);
+    }
+
     log(parts.join(""));
 
-    // Recurse into children with sibling dedup
-    childCount = node.childCount();
+    // Recurse into children with sibling-level dedup only
+    if (childCount === 0) {
+      return;
+    }
+
     prevChildKey = "";
     consecutiveDups = 0;
-    for (c = 0; c < childCount; c++) {
-      childNode = node.child(c);
-      if (childNode) {
-        childKey = getNodeKey(childNode);
-        if (childKey === prevChildKey) {
-          consecutiveDups++;
-          continue;
-        }
-        if (consecutiveDups > 0) {
-          log(
-            `${getIndent(depth + 1)}[... ${consecutiveDups} duplicate siblings skipped]`,
-          );
-          consecutiveDups = 0;
-        }
-        prevChildKey = childKey;
-        dumpNode(childNode, depth + 1);
+    processed = 0;
+
+    for (i = 0; i < childCount && processed < MAX_SIBLINGS; i++) {
+      childNode = node.child(i);
+      if (!childNode) {
+        continue;
       }
+
+      childKey = getNodeKey(childNode);
+      if (childKey === prevChildKey) {
+        consecutiveDups++;
+        skippedCount++;
+        continue;
+      }
+
+      // New unique sibling found
+      if (consecutiveDups > 0) {
+        log(
+          `${getIndent(depth + 1)}[... ${consecutiveDups} duplicate siblings skipped]`,
+        );
+        consecutiveDups = 0;
+      }
+
+      prevChildKey = childKey;
+      processed++;
+      dumpNode(childNode, depth + 1);
     }
+
+    // Flush remaining duplicate count
     if (consecutiveDups > 0) {
       log(
         `${getIndent(depth + 1)}[... ${consecutiveDups} duplicate siblings skipped]`,
+      );
+    }
+
+    // If we hit the max siblings limit, note it
+    if (i < childCount) {
+      log(
+        `${getIndent(depth + 1)}[... ${childCount - i} more siblings not processed (limit ${MAX_SIBLINGS})]`,
       );
     }
   }
 
   dumpNode(root, 0);
 
-  // Summary: show duplicate counts for frequently seen keys
-  dupCount = 0;
-  log("");
-  log("=== Top Duplicate Elements (seen >5 times) ===");
-  for (key in seenKeys) {
-    if (seenKeys[key] > 5) {
-      dupCount++;
-      log(`  ${seenKeys[key]}x: ${key}`);
-    }
-  }
-  if (dupCount === 0) {
-    log("  (none)");
-  }
-
   log("");
   log("=== Discovery Complete ===");
   log(`Total nodes traversed: ${nodeCount}`);
-  log(`Unique elements: ${uniqueCount}`);
-  log(`Skipped (global dup): ${skippedCount}`);
+  log(`Unique elements logged: ${uniqueCount}`);
+  log(`Skipped (sibling dup): ${skippedCount}`);
   log(`Package: ${root.packageName()}`);
 
-  // Try to write log to file
+  // Write log to file
   try {
     dir = new java.io.File("/sdcard/contributor-ai");
     if (!dir.exists()) {
@@ -265,7 +258,7 @@ function main() {
     log(`[WARN] Could not save to file: ${fileErr.message}`);
   }
 
-  toast(`Discovery v2: ${uniqueCount} unique / ${nodeCount} total`);
+  toast(`Discovery v3: ${uniqueCount} unique / ${skippedCount} skipped`);
 }
 
 main();
